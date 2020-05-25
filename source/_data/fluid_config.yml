@@ -1,0 +1,13 @@
+favicon: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico"
+
+index:
+  slogan:  # 首页副标题的独立设置
+    enable: true  # 为 false 则不显示任何内容
+    text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
+
+fun_features:
+  typing:
+    loop: true
+
+about:
+  avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
