@@ -10,6 +10,7 @@ fun_features:
     loop: true
 
 about:
+  introduce: DJMAX Respect V / 明日方舟 / Terraria # 支持 HTML
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
   name: mazixiang
   icons:
