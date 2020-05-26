@@ -1,5 +1,5 @@
 ---
-title: the-kiss-rules-in-programming
+title: 编程中的 KISS 原则
 date: 2020-05-25 09:23:53
 tags:
 ---
