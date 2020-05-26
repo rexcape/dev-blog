@@ -11,3 +11,9 @@ fun_features:
 
 about:
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
+  name: mazixiang
+  icons:
+    - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang' }
+
+navbar:
+  blog_title:
