@@ -5,16 +5,21 @@ index:
     enable: true  # 为 false 则不显示任何内容
     text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
 
-fun_features:
-  typing:
-    loop: true
-
 about:
   introduce: DJMAX Respect V / 明日方舟 / Terraria # 支持 HTML
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
   name: mazixiang
   icons:
     - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang' }
+    - { class: 'iconfont icon-email', link: 'mailto:mazixiang2012@gmail.com' }
+    - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/' }
 
 navbar:
   blog_title:
+
+post:
+  copyright:  # 版权声明
+    enable: true
+    content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！<br>如有侵权，<a href="mailto:mazixiang2012@gmail.com">请给我发邮件</a>，我会马上删除！'
+  prev_next:  # 文章底部上一篇下一篇功能
+    enable: false
