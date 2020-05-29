@@ -1,10 +1,8 @@
 favicon: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico"
 
 index:
-  banner_img: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/background/bg_5.png"  # 首页 Banner 头图，以下相同
-  banner_mask_alpha: 0.8  # 头图黑色蒙版的透明度，available: 0 - 1.0， 0 是完全透明（无蒙版），1 是完全不透明
   slogan:  # 首页副标题的独立设置
-    enable: false  # 为 false 则不显示任何内容
+    enable: true  # 为 false 则不显示任何内容
     text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
 
 about:
@@ -17,11 +15,15 @@ about:
     - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/' }
 
 navbar:
-  blog_title: lo0oser
+  blog_title: mazixiang
 
 post:
   copyright:  # 版权声明
     enable: true
-    content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！<br>如有侵权，<a href="mailto:mazixiang2012@gmail.com">请点击这里，给我发邮件</a>，我会马上删除！'
+    content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！<br>如有侵权，<a href="mailto:mazixiang2012@gmail.com">请<em>点击这里，给我发邮件<em></a>，我会马上删除！'
+  updated:  # 在文章开头显示文章更新时间，该时间默认是 md 文件更新时间，可通过 front-matter 中 `updated` 手动指定（和 date 一样格式）
+    enable: true
+    content: 本文最后更新于：  # 描述文字
+    relative: true  # 是否使用相对时间表示，比如："3 天前"
   prev_next:  # 文章底部上一篇下一篇功能
     enable: false
