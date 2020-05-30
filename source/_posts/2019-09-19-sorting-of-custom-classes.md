@@ -4,7 +4,7 @@ date: 2020-05-26 10:33:34
 tags: Java
 ---
 
-
+介绍两种 Java 自定义类的排序的方法
 <!--more-->
 
 ## 前言
@@ -59,7 +59,6 @@ public class Fruit implements Comparable<Fruit>{
         price = p;
     }
 
-    @Override
     public int compareTo(Fruit a) {
         return -Double.compare(this.weight, a.weight);  // 按照重量由大到小进行排序
     }
