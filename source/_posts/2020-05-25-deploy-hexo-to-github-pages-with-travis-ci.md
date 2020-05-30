@@ -1,7 +1,7 @@
 ---
 title: 通过 Travis CI 将 Hexo 博客部署到 GitHub Pages
 date: 2020-05-25 22:30:00
-tags: travis CI
+tags: Travis CI
 ---
 
 纯萌新遇到的一些坑

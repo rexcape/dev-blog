@@ -27,3 +27,7 @@ post:
     relative: true  # 是否使用相对时间表示，比如："3 天前"
   prev_next:  # 文章底部上一篇下一篇功能
     enable: false
+  toc:  # 文章右侧目录
+    enable: true
+    headingSelector: h2,h3,h4,h5,h6
+    collapseDepth: 0  # 层级的折叠深度，0 是全部折叠，6 是全部不折叠
