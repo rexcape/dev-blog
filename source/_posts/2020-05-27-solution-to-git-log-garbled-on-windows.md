@@ -1,7 +1,7 @@
 ---
 title: 解决 Windows 上 git log 乱码
-tags: git
 date: 2020-05-27 11:35:18
+tags: git
 ---
 
 解决大多数的 Windows 上 git log 乱码问题，注意是大多数问题
@@ -39,8 +39,8 @@ Linux系统上的环境变量需要使用 `export LANG=zh_CN.UTF-8` 来指定
 
 ## 参考
 
-[git log中文乱码](https://www.jianshu.com/p/fb47a39f3578)
+[git log中文乱码 - 简书](https://www.jianshu.com/p/fb47a39f3578)
 
-[git log 乱码解决方法](https://blog.csdn.net/qianggezhishen/article/details/80865143)
+[git log 乱码解决方法_git_qianggezhishen的专栏-CSDN博客](https://blog.csdn.net/qianggezhishen/article/details/80865143)
 
-[git log 中文乱码的解决方案](https://www.cnblogs.com/zhangxiaoliu/p/9226197.html)
+[git log 中文乱码的解决方案 - 张发财 - 博客园](https://www.cnblogs.com/zhangxiaoliu/p/9226197.html)
