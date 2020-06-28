@@ -111,9 +111,9 @@ pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
 第一行，实例化堆栈上的 `PointToPointHelper` 对象。
 
-第二行，告诉 `PointToPointHelper` 对象在创建 `PointToPointNetDevice` 对象时将值“5Mbps”（每秒5兆位）用作“DataRate”。
+第二行，告诉 `PointToPointHelper` 对象在创建 `PointToPointNetDevice` 对象时将值“5Mbps”（每秒5兆位）用作 `DataRate`。
 
-从更详细的角度来看，字符串“DataRate”对应于我们所谓的 `PointToPointNetDevice` 的 `Attribute`。如果查看类 `ns3::PointToPointNetDevice` 的文档并找到 `GetTypeId` 方法的文档，则会找到为设备定义的属性列表。其中包括“DataRate”属性。大多数用户可见的 `ns3` 对象都有相似的属性列表。我们将使用此机制轻松配置仿真而无需重新编译。
+从更详细的角度来看，字符串 `DataRate` 对应于我们所谓的 `PointToPointNetDevice` 的 `Attribute`。如果查看类 `ns3::PointToPointNetDevice` 的文档并找到 `GetTypeId` 方法的文档，则会找到为设备定义的属性列表。其中包括 `DataRate` 属性。大多数用户可见的 `ns3` 对象都有相似的属性列表。我们将使用此机制轻松配置仿真而无需重新编译。
 
 第三行就是指定延迟属性，告诉 `PointToPointHelper` 使用值“2ms”（两毫秒）作为其随后创建的每个点对点通道的传播延迟的值。
 
@@ -139,11 +139,11 @@ InternetStackHelper stack;
 stack.Install (nodes);
 ```
 
-`InternetStackHelper` 是一个拓扑帮助程序，它用于 `Internet` 堆栈，而 `PointToPointHelper` 则是点对点网络设备。`Install` 方法将 `NodeContainer` 作为参数。执行后，它将在节点容器中的每个节点上安装Internet堆栈（TCP，UDP，IP 等）。
+`InternetStackHelper` 是一个拓扑帮助程序，它用于 `Internet` 堆栈，而 `PointToPointHelper` 则是点对点网络设备。`Install` 方法将 `NodeContainer` 作为参数。执行后，它将在节点容器中的每个节点上安装 Internet 堆栈（TCP，UDP，IP 等）。
 
 ### Ipv4AddressHelper
 
-接下来，我们需要将节点上的设备与 IP 地址相关联。我们提供了一个拓扑助手来管理IP地址的分配。唯一用户可见的 API 是设置在执行实际地址分配时使用的基本 IP 地址和网络掩码（这是在助手内部的较低级别完成的）。
+接下来，我们需要将节点上的设备与 IP 地址相关联。我们提供了一个拓扑助手来管理IP地址的分配。唯一用户可见的 API 是设置在执行实际地址分配时使用的基本 IP 地址和网络掩码（这是在助手内部的较低级别完成的）
 
 ```c++
 Ipv4AddressHelper address;
@@ -173,7 +173,7 @@ serverApps.Start (Seconds (1.0));
 serverApps.Stop (Seconds (10.0));
 ```
 
-上面代码段的第一行代码声明了 `UdpEchoServerHelper`。和往常一样，这不是应用程序本身，而是用于帮助我们创建实际应用程序的对象。我们的约定之一是将必需的属性放在辅助构造函数中。在这种情况下，除非提供了客户端也知道端口号，否则该帮助程序将无济于事。我们需要将端口号作为构造函数的参数，而不是只是选择一个并希望一切都能解决。反过来，构造函数只对传递的值执行 `SetAttribute`。如果需要，可以稍后使用 `SetAttribute` 将“Port”属性设置为另一个值。
+上面代码段的第一行代码声明了 `UdpEchoServerHelper`。和往常一样，这不是应用程序本身，而是用于帮助我们创建实际应用程序的对象。我们的约定之一是将必需的属性放在辅助构造函数中。在这种情况下，除非提供了客户端也知道端口号，否则该帮助程序将无济于事。我们需要将端口号作为构造函数的参数，而不是只是选择一个并希望一切都能解决。反过来，构造函数只对传递的值执行 `SetAttribute`。如果需要，可以稍后使用 `SetAttribute` 将 `Port` 属性设置为另一个值。
 
 与许多其他帮助器对象相似，`UdpEchoServerHelper` 对象具有 `Install` 方法。正是此方法的执行实际上导致实例化基础回显服务器应用程序并将其附加到节点。有趣的是，就像我们已经看到的其他 `Install` 方法一样，`Install` 方法将 `NodeContainter` 作为参数。这实际上是传递给方法的内容，即使在这种情况下看起来也不是这样。这里有一个C++隐式转换正在工作，该转换获取 `node.Get(1)`的结果（返回指向节点对象的智能指针— `Ptr <Node>`），并将其用于构造函数中，然后传递给未命名的 `NodeContainer`。安装。如果您不知所措地在C++代码中找到了可以编译并运行得很好的特定方法签名，请寻找这些隐式转换。
 
