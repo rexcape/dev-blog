@@ -2,8 +2,10 @@
 title: 在 CentOS7 上安装 MySQL Community Server
 date: 2020-05-29 10:00:04
 tags:
-  - MySQL
-  - Linux
+- MySQL
+- Linux
+categories:
+- 实用
 ---
 
 对[tianranll - CentOS安装MySQL详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)的一些补充

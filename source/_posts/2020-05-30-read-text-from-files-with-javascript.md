@@ -2,13 +2,15 @@
 title: JavaScript 从选择的文件中读取文本
 date: 2020-05-30 10:03:45
 tags:
-  - JavaScript
-  - 基础知识
+- JavaScript
+- 基础知识
+categories:
+- 实用
 ---
-
 
 在开发词法分析器的前端页面时，需要允许用户从本地上传 c++ 文件，并将文件内容载入到编辑器中，本文介绍如何用 JavaScript 和 input 标签来实现网页加载文本文件内容（注意是加载内容）
 <!--more-->
+
 ## FileReader
 
 首先介绍一下 `FileReader`，FileReader 对象允许Web应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 对象指定要读取的文件或数据，可以用 `const reader = new FileReader();` 来初始化，详细部分在[FileReader - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader)中

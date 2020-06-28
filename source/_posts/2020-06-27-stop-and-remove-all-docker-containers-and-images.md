@@ -2,10 +2,13 @@
 title: 停止和删除 docker 所有的容器和镜像
 date: 2020-06-27 21:04:40
 tags:
-  - Docker
+- Docker
+categories:
+- 实用
 ---
 
 停止和删除 docker 所有的容器和镜像的简单方法，一句命令
+<!--more-->
 
 ##　停止所有 Docker 容器
 

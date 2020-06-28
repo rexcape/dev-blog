@@ -2,8 +2,11 @@
 title: scanf 格式字符串中的空格
 date: 2020-06-24 12:54:52
 tags:
-  - C语言
+- C 语言
+categories:
+- 踩坑
 ---
+
 scanf 语句中空格的问题
 <!--more-->
 

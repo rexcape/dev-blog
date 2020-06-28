@@ -1,7 +1,10 @@
 ---
 title: 解决 Windows 上 git log 乱码
 date: 2020-05-27 11:35:18
-tags: git
+tags:
+- git
+categories:
+- 踩坑
 ---
 
 解决大多数的 Windows 上 git log 乱码问题，注意是大多数问题

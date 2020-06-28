@@ -1,8 +1,12 @@
 ---
 title: Linux 常用解压命令
 date: 2020-05-26 09:00:00
-tags: Linux
+tags:
+- Linux
+categories:
+- 实用
 ---
+
 Linux 常用的解压命令
 <!-- more -->
 

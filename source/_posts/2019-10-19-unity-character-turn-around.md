@@ -1,11 +1,15 @@
 ---
 title: Unity 2D 平台跳跃游戏角色转身
 date: 2019-10-19 19:34:08
-tags: Unity 游戏引擎
+tags:
+- Unity 游戏引擎
+categories:
+- 实用
 ---
 
 Unity 2D 平台跳跃游戏角色转身的一些方法
 <!--more-->
+
 ## 方法1 - 设置 Transform 中 Scale 属性为-1
 
 具体实现方法如下

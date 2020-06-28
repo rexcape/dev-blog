@@ -2,8 +2,10 @@
 title: 将 HTML 元素居中的方法
 date: 2020-05-30 10:08:11
 tags:
-  - CSS
-  - 基础知识
+- CSS
+- 基础知识
+categories:
+- 实用
 ---
 三种将 HTML 元素居中的方法
 <!--more-->

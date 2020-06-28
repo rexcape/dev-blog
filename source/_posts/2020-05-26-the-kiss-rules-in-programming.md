@@ -2,11 +2,15 @@
 title: 编程中的 KISS 原则
 date: 2020-05-25 09:23:53
 tags:
-  - KISS
-  - 编程原则
+- KISS
+- 编程原则
+categories:
+- 思想
 ---
+
 参考[知乎文章 - 编程中的 kiss 原则是什么](https://zhuanlan.zhihu.com/p/110031390)
 <!-- more -->
+
 ## KISS表示的是什么
 
 KISS 是 Keep It Stupid Simple 或 Keep It Simple,Stupid 的缩写。
