@@ -10,7 +10,7 @@ categories:
 停止和删除 docker 所有的容器和镜像的简单方法，一句命令
 <!--more-->
 
-##　停止所有 Docker 容器
+## 停止所有 Docker 容器
 
 ```bash
 $ docker stop $(docker ps -aq)
@@ -19,7 +19,7 @@ $ docker stop $(docker ps -aq)
 
 其中 `docker ps -aq` 的作用是列出所有 `Docker` 容器的 ID
 
-##　删除所有 Docker 容器
+## 删除所有 Docker 容器
 
 ```bash
 $ docker rm $(docker ps -aq)
