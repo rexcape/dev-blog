@@ -6,13 +6,13 @@ index:
     text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
 
 about:
-  introduce: DJMAX Respect V / 明日方舟 / Terraria # 支持 HTML
+  introduce: 萌新 / 老年人 / 手残 / 废物 # 支持 HTML
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
   name: mazixiang
   icons:
-    - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang' }
-    - { class: 'iconfont icon-mail', link: 'mailto:mazixiang2012@gmail.com' }
-    - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/' }
+    - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang', tip: 'GitHub' }
+    - { class: 'iconfont icon-mail', link: 'mailto:mazixiang2012@gmail.com', tip: 'Mail' }
+    - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/', tip: 'Steam' }
 
 navbar:
   blog_title: mazixiang
