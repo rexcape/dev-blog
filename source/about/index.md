@@ -11,11 +11,19 @@ layout: about
 
 {% endnote %}
 
+## 分享
+
+### GitHub 项目分享
+
+{% btn https://raindrop.io/collection/12192241, Raindrop 收藏夹共享 %}
+
+### 免费软件分享
+
+{% btn https://raindrop.io/collection/12208875, Raindrop 收藏夹共享 %}
+
 ## 游戏
 
-萌新、老年人、手残
-
-### 音乐游戏
+### MUG
 
 音乐游戏主要玩 DJMAX Respect V 和 Malody 的 4K 模式，有时候也会玩喵赛克和 Muse Dash，想尝试类似于BeatMania IIDX 的 7K 音游，但是大于 4K 的我就反应不过来了...
 
@@ -27,9 +35,9 @@ RPG 游戏主要玩泰拉瑞亚（萌新），个人不喜欢饥荒那类限制�
 
 ### 移动端
 
-移动端主要玩明日方舟（萌新）和王者荣耀（白银 II 水平）
+移动端主要玩明日方舟（萌新）
 
-### 想交朋友
+### 交朋友
 
 明日方舟官方服务器 ID：93138687
 
@@ -43,16 +51,14 @@ telegram: mazixiang
 
 ## 学习
 
-废物
-
 ### 学业
 
-三线城市的 HUST 软件工程专业 2018 级垫底学生，学习成绩不好，除了游戏以外没啥兴趣
+HUST 的软件工程专业 2018 级垫底学生，学习成绩极其不好
 
 ### 编程语言
 
-学校教了 `C`、`C++`、`Java`，自学了 `Python`、`JavaScript`，目前正在学习 `Rust`
+学校已经教了 `C`、`C++`、`Java`，自学了 `Python`、`JavaScript`，目前正在学习 `Rust`、`TypeScript`
 
 ### 框架
 
-目前学了 `Python` 的 `Django` 框架，前端的 `React` 框架和 `Electron` 框架，正在学习 `Java` 的 `Spring` 全家桶
+目前学了 `Django` 框架，前端的 `React` 和 `Electron`，正在学习 `Spring` 全家桶

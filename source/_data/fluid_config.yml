@@ -6,7 +6,7 @@ index:
     text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
 
 about:
-  introduce: 萌新 / 老年人 / 手残 / 废物 # 支持 HTML
+  introduce: 极其无聊的一个人 # 支持 HTML
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
   name: mazixiang
   icons:
