@@ -17,3 +17,5 @@ deploy:
     branch: source
   local-dir: public
   target_branch: master
+after_script:
+  - echo 'blog.mazixiang.me' >> CNAME
