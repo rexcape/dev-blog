@@ -7,7 +7,7 @@ branches:
   only:
     - source # build master branch only
 script:
-  - echo 'blog.mazixiang.me' >> $TRAVIS_BUILD_DIR/CNAME
+  - ls $TRAVIS_BUILD_DIR
   - hexo generate # generate static files
 deploy:
   provider: pages
