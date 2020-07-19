@@ -1,6 +1,6 @@
 ---
 title: 配置 Windows Terminal
-date: 2020-07-19 17:57:06
+date: 2020-07-18 17:57:06
 tags:
 - Windows Terminal
 categories:
