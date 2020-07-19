@@ -9,6 +9,8 @@ branches:
 script:
   - ls $TRAVIS_BUILD_DIR
   - hexo generate # generate static files
+  - ls $TRAVIS_BUILD_DIR
+  - echo 'blog.mazixiang.me' >> $TRAVIS_BUILD_DIR/public/CNAME
 deploy:
   provider: pages
   skip-cleanup: true
