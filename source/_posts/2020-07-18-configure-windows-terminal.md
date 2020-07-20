@@ -3,6 +3,7 @@ title: 配置 Windows Terminal
 date: 2020-07-18 17:57:06
 tags:
 - Windows Terminal
+- 美化
 categories:
 - 实用
 ---
@@ -101,6 +102,10 @@ wt 项的默认值的数据就是右键菜单的文本内容，我将其配置�
 ```
 
 这样 `Windows Terminal` 的美化和配置就完成了
+
+## 了解更多
+
+更多配置信息可以通过 [Microsoft - Windows 终端](https://docs.microsoft.com/zh-cn/windows/terminal/) 去了解
 
 ## 参考
 
