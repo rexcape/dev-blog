@@ -85,6 +85,10 @@ wt 项的默认值的数据就是右键菜单的文本内容，我将其配置�
 
 ![wt 项配置](https://s1.ax1x.com/2020/07/19/UW82cQ.png)
 
+{% note primary %}
+如果想添加快捷键，新建的项默认值是 `通过 Terminal 打开 (&T)`，其中， `&` 后面是你想添加的快捷键
+{% endnote %}
+
 再在 wt 项下建立 command 项，默认值的数据是到达你的 `wt.exe` 的绝对路径，一般来说是 `C:\Users\[你的用户名]\AppData\Local\Microsoft\WindowsApps\wt.exe`
 
 ## 更改启动路径
