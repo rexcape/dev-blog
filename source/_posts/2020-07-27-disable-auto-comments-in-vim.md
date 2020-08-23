@@ -2,7 +2,7 @@
 title: Vim 关闭自动插入注释
 date: 2020-07-27 07:05:56
 tags:
-- Vim 编辑器
+- vim
 categories:
 - 实用
 ---
