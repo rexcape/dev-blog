@@ -11,6 +11,15 @@ layout: about
 
 {% endnote %}
 
+## 项目
+
+### lexical-analyzer-react
+
+用 [reactjs](https://zh-hans.reactjs.org/) 实现的简易词法分析器
+
+{% btn http://la.mazixiang.me, 示范页面 %} 
+{% btn https://github.com/mazixiang/lexical-analyzer-react, 源代码 %}
+
 ## 分享
 
 ### GitHub 项目分享
