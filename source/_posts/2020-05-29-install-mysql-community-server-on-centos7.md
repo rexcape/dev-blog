@@ -2,18 +2,19 @@
 title: 在 CentOS7 上安装 MySQL Community Server
 date: 2020-05-29 10:00:04
 tags:
-- MySQL
-- Linux
+  - MySQL
+  - Linux
 categories:
-- 实用
+  - 实用
 ---
 
-对[tianranll - CentOS安装MySQL详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)的一些补充
+对[tianranll - CentOS 安装 MySQL 详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)的一些补充
+
 <!--more-->
 
 ## 步骤
 
-[tianranll - CentOS安装MySQL详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)
+[tianranll - CentOS 安装 MySQL 详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)
 
 这个人已经讲的很详细了，我就是补充一下，讲解一下踩到的坑，另外，我是用虚拟机的方式来测试环境的，下面的一切操作都是基于 CentOS 虚拟机的情况下中执行的，容错率比较高。
 
@@ -42,7 +43,7 @@ categories:
 > create user 'userName'@'%' identified by 'your_password';
 ```
 
-我失败了之后查了好长一段时间，最后在[mysql8 grant授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT](https://www.jianshu.com/p/98a6d42e28c8)找到了解决方案，但是原作者好像忘了写那个 `identified` 后面的 `by` 了……
+我失败了之后查了好长一段时间，最后在[mysql8 grant 授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT](https://www.jianshu.com/p/98a6d42e28c8)找到了解决方案，但是原作者好像忘了写那个 `identified` 后面的 `by` 了……
 
 ## 开启 CentOS7 的防火墙 3306 端口
 
@@ -57,6 +58,6 @@ success
 
 ## 参考
 
-[tianranll - CentOS安装MySQL详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)
+[tianranll - CentOS 安装 MySQL 详解](https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24)
 
-[mysql8 grant授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT](https://www.jianshu.com/p/98a6d42e28c8)
+[mysql8 grant 授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT](https://www.jianshu.com/p/98a6d42e28c8)

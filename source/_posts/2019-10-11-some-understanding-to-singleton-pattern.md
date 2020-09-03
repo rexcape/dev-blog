@@ -97,5 +97,6 @@ public class Singleton {
 
 ## 参考
 
-- [runoob.com - 单例模式](https://www.runoob.com/design-pattern/singleton-pattern.html)
-- [refactoringguru.cn - 单例设计模式](https://refactoringguru.cn/design-patterns/singleton)
+[runoob.com - 单例模式](https://www.runoob.com/design-pattern/singleton-pattern.html)
+
+[refactoringguru.cn - 单例设计模式](https://refactoringguru.cn/design-patterns/singleton)

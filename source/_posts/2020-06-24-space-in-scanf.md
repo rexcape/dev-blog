@@ -2,12 +2,13 @@
 title: scanf 格式字符串中的空格
 date: 2020-06-24 12:54:52
 tags:
-- C 语言
+  - C 语言
 categories:
-- 踩坑
+  - 踩坑
 ---
 
 scanf 语句中空格的问题
+
 <!--more-->
 
 ## 格式说明符前
@@ -31,4 +32,4 @@ scanf("%d ", &a);
 
 [zh.cpprefernce.com](https://zh.cppreference.com/w/c/io/fscanf)
 
-[scanf语句中%d后面多加一个空格，为什么数据需要多输入一个？_百度知道](https://zhidao.baidu.com/question/620629950137762012.html)
+[scanf 语句中%d 后面多加一个空格，为什么数据需要多输入一个？\_百度知道](https://zhidao.baidu.com/question/620629950137762012.html)

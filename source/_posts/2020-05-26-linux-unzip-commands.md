@@ -2,12 +2,13 @@
 title: Linux 常用解压命令
 date: 2020-05-26 09:00:00
 tags:
-- Linux
+  - Linux
 categories:
-- 实用
+  - 实用
 ---
 
 Linux 常用的解压命令
+
 <!-- more -->
 
 ## 概述
@@ -54,10 +55,10 @@ $ tar -Jxvf filename.tar.xz
 $ tar -Zxvf filename.tar.Z
 ```
 
-注意Z大写
+注意 Z 大写
 
 ## 简便写法
 
-首先，使用 `tar --version` 查看版本，从1.15版本以后可以直接使用 `tar -xvf` 来智能识别格式
+首先，使用 `tar --version` 查看版本，从 1.15 版本以后可以直接使用 `tar -xvf` 来智能识别格式
 
 参考自[Linux 下的解压命令小结 - cursorhu](https://www.cnblogs.com/cursorhu/p/5891699.html)

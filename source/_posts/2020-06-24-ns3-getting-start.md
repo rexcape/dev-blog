@@ -2,13 +2,14 @@
 title: ns3 网络模拟软件的安装和起步
 date: 2020-06-24 19:23:29
 tags:
-- 计算机网络
-- ns3 网络模拟软件
+  - 计算机网络
+  - ns3 网络模拟软件
 categories:
-- 踩坑
+  - 踩坑
 ---
 
 ns3 网络模拟软件的安装和使用
+
 <!--more-->
 
 ## 运行环境
@@ -112,13 +113,13 @@ Hello Simulator
 
 ## 相关文章
 
-[NS3网络仿真（2）：first.py - jhcelue - 博客园](https://www.cnblogs.com/jhcelue/p/6905943.html)
+[NS3 网络仿真（2）：first.py - jhcelue - 博客园](https://www.cnblogs.com/jhcelue/p/6905943.html)
 
 这个是系列教程，作者很牛逼
 
-[NS3网络仿真_deep_keng的博客-CSDN博客_ns3使用netanim仿真wifi节点](https://blog.csdn.net/deep_kang/article/details/73350350)
+[NS3 网络仿真\_deep_keng 的博客-CSDN 博客\_ns3 使用 netanim 仿真 wifi 节点](https://blog.csdn.net/deep_kang/article/details/73350350)
 
-[用NS3进行虚拟仿真 - 简书](https://www.jianshu.com/p/fe77a15a1eb4)
+[用 NS3 进行虚拟仿真 - 简书](https://www.jianshu.com/p/fe77a15a1eb4)
 
 ## 参考
 

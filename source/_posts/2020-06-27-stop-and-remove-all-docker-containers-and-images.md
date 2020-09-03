@@ -2,12 +2,13 @@
 title: 停止和删除 docker 所有的容器和镜像
 date: 2020-06-27 21:04:40
 tags:
-- Docker
+  - Docker
 categories:
-- 实用
+  - 实用
 ---
 
 停止和删除 docker 所有的容器和镜像的简单方法，一句命令
+
 <!--more-->
 
 ## 停止所有 Docker 容器
@@ -37,4 +38,4 @@ $ docker rmi $(docker images -aq)
 
 ## 参考
 
-[停止、删除所有的docker容器和镜像 | 鸟窝](https://colobu.com/2018/05/15/Stop-and-remove-all-docker-containers-and-images/)
+[停止、删除所有的 docker 容器和镜像 | 鸟窝](https://colobu.com/2018/05/15/Stop-and-remove-all-docker-containers-and-images/)

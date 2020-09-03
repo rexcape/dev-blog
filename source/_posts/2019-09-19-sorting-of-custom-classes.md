@@ -2,12 +2,13 @@
 title: Java 自定义类的排序
 date: 2020-05-26 10:33:34
 tags:
-- Java
+  - Java
 categories:
-- 实用
+  - 实用
 ---
 
 两种 Java 自定义类的排序的方法
+
 <!--more-->
 
 ## 前言
@@ -15,7 +16,7 @@ categories:
 在 Java 中，类的实例默认是不可以进行比较和排序的，本文将解决以下两个问题：
 
 - 如何比较类同一个类的两个实例的大小？
-- 正常的Java数组是可以用 `Array.sort()` 进行排序的，前提是这些元素是可排序的，在自定义的类中怎么直接使用 `Array.sort()` 呢？
+- 正常的 Java 数组是可以用 `Array.sort()` 进行排序的，前提是这些元素是可排序的，在自定义的类中怎么直接使用 `Array.sort()` 呢？
 
 ## 介绍 Comparable
 
@@ -32,8 +33,8 @@ public interface Comparable<T> {
 
 ### Comparable 的说明
 
-- T表示可以与此对象进行比较的对象的类型
-- 此接口只有一个方法 `compareTo`，比较此对象与指定对象的顺序，小于返回负整数，大于返回正整数，等于返回0
+- T 表示可以与此对象进行比较的对象的类型
+- 此接口只有一个方法 `compareTo`，比较此对象与指定对象的顺序，小于返回负整数，大于返回正整数，等于返回 0
 
 ### Comparable 的示例
 
@@ -104,7 +105,7 @@ public interface Comparator<T> {
 ### 使用 Comparator 的注意事项
 
 - 若一个类要实现 Comparator 接口，必须要有`compare`函数，`equals`函数可写可不写
-- `int compare(T o1, T o2)`函数是比较o1和o2的大小，返回负数意味着 o1 比 o2 小，返回 0 意味着 o1 等于 o2，返回正数代表 o1 大于 o2
+- `int compare(T o1, T o2)`函数是比较 o1 和 o2 的大小，返回负数意味着 o1 比 o2 小，返回 0 意味着 o1 等于 o2，返回正数代表 o1 大于 o2
 
 ### Comparator 的示例
 
@@ -124,7 +125,7 @@ Comparable 相当于“内部比较器”，而 Comparator 相当于“外部比
 
 ## 参考
 
-[java学习--自定义类的实例的大小比较和排序](https://www.cnblogs.com/gaoBlog/p/10754935.html)
+[java 学习--自定义类的实例的大小比较和排序](https://www.cnblogs.com/gaoBlog/p/10754935.html)
 
 [Comparable 官方文档](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html?is-external=true)
 

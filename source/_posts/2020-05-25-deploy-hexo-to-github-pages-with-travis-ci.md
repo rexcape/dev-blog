@@ -2,12 +2,13 @@
 title: 通过 Travis CI 将 Hexo 博客部署到 GitHub Pages
 date: 2020-05-25 22:30:00
 tags:
-- Travis CI
+  - Travis CI
 categories:
-- 踩坑
+  - 踩坑
 ---
 
 纯萌新遇到的一些坑
+
 <!--more-->
 
 ## 流程
@@ -16,7 +17,7 @@ categories:
 
 ## Travis CI 介绍
 
-Travis CI是一个持续集成工具，因为我只使用了一天，还不太了解。详细原理可以去搜一下，这里就简单讲一下：就是你提交了一次 `commit` 后，这个工具按照你的 repo 里的 `.travis.yml` 来自动执行一些操作，如果构建通过了显示 `passing`，不通过显示 `failing`。
+Travis CI 是一个持续集成工具，因为我只使用了一天，还不太了解。详细原理可以去搜一下，这里就简单讲一下：就是你提交了一次 `commit` 后，这个工具按照你的 repo 里的 `.travis.yml` 来自动执行一些操作，如果构建通过了显示 `passing`，不通过显示 `failing`。
 
 ## 问题
 
@@ -73,7 +74,3 @@ deploy:
   local-dir: public
   target_branch: master
 ```
-
-## 心得
-
-再也不折腾了，真的费劲！

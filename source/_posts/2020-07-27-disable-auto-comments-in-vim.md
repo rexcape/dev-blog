@@ -2,9 +2,9 @@
 title: Vim 关闭自动插入注释
 date: 2020-07-27 07:05:56
 tags:
-- vim
+  - vim
 categories:
-- 实用
+  - 实用
 ---
 
 介绍如何关闭 Vim 编辑器的自动插入注释功能

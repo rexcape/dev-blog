@@ -2,12 +2,13 @@
 title: Travis CI 的构建目录中添加文件
 date: 2020-07-19 20:42:54
 tags:
-- Travis CI
+  - Travis CI
 categories:
-- 踩坑
+  - 踩坑
 ---
 
 在 Travis CI 的构建目录中添加文件的方法
+
 <!--more-->
 
 ## 背景
@@ -32,4 +33,4 @@ script:
 
 ## 参考
 
-[emmby - travis-ci - Travis yml，我如何得到Travis的工作目录？](https://kb.kutu66.com/travis-ci/post_1642424)
+[emmby - travis-ci - Travis yml，我如何得到 Travis 的工作目录？](https://kb.kutu66.com/travis-ci/post_1642424)

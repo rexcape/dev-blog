@@ -2,13 +2,14 @@
 title: 美化 PowerShell
 date: 2020-07-20 11:36:06
 tags:
-- PowerShell
-- 美化
+  - PowerShell
+  - 美化
 categories:
-- 实用
+  - 实用
 ---
 
 最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何用 oh-my-posh 美化 PowerShell
+
 <!--more-->
 
 ## 开放许可
@@ -53,7 +54,7 @@ Set-Theme Paradox
 
 ## 参考
 
-[PowerShell因为在此系统中禁止执行脚本解决方法 - Asharp - 博客园](https://www.cnblogs.com/zhaozhan/archive/2012/06/01/2529384.html)
+[PowerShell 因为在此系统中禁止执行脚本解决方法 - Asharp - 博客园](https://www.cnblogs.com/zhaozhan/archive/2012/06/01/2529384.html)
 
 [JanDeDobbeleer/oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh)
 

@@ -2,13 +2,14 @@
 title: 配置 Windows Terminal
 date: 2020-07-18 17:57:06
 tags:
-- Windows Terminal
-- 美化
+  - Windows Terminal
+  - 美化
 categories:
-- 实用
+  - 实用
 ---
 
 最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何配置与美化 Windows Terminal
+
 <!--more-->
 
 ## 打开 Windows Terminal 配置文件
@@ -121,4 +122,4 @@ wt 项的默认值的数据就是右键菜单的文本内容，我将其配置�
 
 手动添加注册表
 
-[Huelse - 将Windows Terminal添加到右键菜单](https://blog.csdn.net/u011532601/article/details/106305373)
+[Huelse - 将 Windows Terminal 添加到右键菜单](https://blog.csdn.net/u011532601/article/details/106305373)

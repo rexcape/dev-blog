@@ -2,10 +2,10 @@
 title: Vimium 的介绍和使用
 date: 2020-08-22 22:11:11
 tags:
-- vim
-- Chrome
+  - vim
+  - Chrome
 categories:
-- 实用
+  - 实用
 ---
 
 介绍 Vimium 以及基本用法

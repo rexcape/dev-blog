@@ -2,13 +2,14 @@
 title: Ubuntu 通过 apt 安装 nodejs
 date: 2020-06-17 13:49:21
 tags:
-- Linux
-- Nodejs
+  - Linux
+  - Nodejs
 categories:
-- 实用
+  - 实用
 ---
 
 Ubuntu 通过 apt 安装 nodejs 的方法
+
 <!--more-->
 
 ## 方法
