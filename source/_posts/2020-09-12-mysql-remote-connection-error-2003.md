@@ -1,5 +1,5 @@
 ---
-title: mysql-remote-connection-error-2003
+title: MySQL Server 8 的远程连接错误 ERROR 2003 解决办法
 date: 2020-09-12 22:02:26
 tags:
   - MySQL
@@ -139,4 +139,4 @@ ERROR 2003 解决方法：[MySQL 远程访问报错 ERROR 2003 (HY000):Cant conn
 
 ### 对 bind-address 属性的解释
 
-官方：[MySQL :: MySQL 8.0 Reference Manual :: 5.1.8 Server System Variables](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_tmpdir)
+官方：[MySQL :: MySQL 8.0 Reference Manual :: 5.1.8 Server System Variables](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_tmpdir)，Chrome 80 以上点击 [此链接](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#docs-body:~:text=a-,bind_address%20system)，可以直达 `bind-address` 处
