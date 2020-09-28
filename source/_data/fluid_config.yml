@@ -23,6 +23,7 @@ dark_mode:   # 主题暗色模式，开启后菜单中会出现切换按钮，�
 about:
   avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
   name: mazixiang
+  introduce: "没有天赋"
   icons:
     - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang', tip: 'GitHub' }
     - { class: 'iconfont icon-mail', link: 'mailto:mazixiang2012@gmail.com', tip: 'Mail' }
