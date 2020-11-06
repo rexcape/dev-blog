@@ -1,15 +1,13 @@
 sudo: false
 language: node_js
 node_js:
-  - 10 # use nodejs v10 LTS
+  - 14 # use nodejs v14 LTS
 cache: npm
 branches:
   only:
     - source # build master branch only
 script:
   - hexo generate # generate static files
-  - touch $TRAVIS_BUILD_DIR/public/CNAME
-  - echo 'blog.mazixiang.me' >> $TRAVIS_BUILD_DIR/public/CNAME
 deploy:
   provider: pages
   skip-cleanup: true
