@@ -8,6 +8,7 @@ branches:
     - source # build master branch only
 script:
   - hexo generate # generate static files
+  - touch $TRAVIS_BUILD_DIR/public/CNAME
   - echo 'blog.mazixiang.me' >> $TRAVIS_BUILD_DIR/public/CNAME
 deploy:
   provider: pages
