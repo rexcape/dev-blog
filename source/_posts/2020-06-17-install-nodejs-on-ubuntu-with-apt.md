@@ -12,6 +12,10 @@ Ubuntu 通过 apt 安装 nodejs 的方法
 
 <!--more-->
 
+## 更新
+
+由于 Nodejs 更新速度较快，不建议使用此种方式，建议使用 [nvm](https://github.com/nvm-sh/nvm) 或者 [nodenv](https://github.com/nodenv/nodenv)
+
 ## 方法
 
 ### 14.x
@@ -31,12 +35,4 @@ sudo apt-get install -y nodejs
 ### 10.x
 
 ```bash
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-## 参考
-
-[Installing Node.js via package manager | Node.js](https://nodejs.org/en/download/package-manager/)
-
-[distributions/README.md at master · nodesource/distributions](https://github.com/nodesource/distributions/blob/master/README.md)
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bashttps://github.com/nodenv/nodenvs](https://github.com/nodesource/distributions/blob/master/README.md)
