@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>Ubuntu 设置锐捷客户端为自启动</title>
+    <link href="/2020/10/19/set-ruijie-client-to-self-start-on-ubuntu/"/>
+    <url>/2020/10/19/set-ruijie-client-to-self-start-on-ubuntu/</url>
+    
+    <content type="html"><![CDATA[<p>如何用 Linux 的 systemd 让锐捷客户端自启动</p><a id="more"></a><h2 id="我为什么要换为-Ubuntu"><a href="#我为什么要换为-Ubuntu" class="headerlink" title="我为什么要换为 Ubuntu"></a>我为什么要换为 Ubuntu</h2><p>Windows 10 系统实在没法用来开发，最近遇到的问题：</p><ul><li>PowerShell Git 客户端显示 Git log 乱码，按照网上大多数教程都没用</li><li>PowerShell Python 下虚拟环境 Virtualenv 显示颜色过于鲜艳</li><li>没有原生 GCC、G++ 编译器，安装 MinGW 频繁报错</li><li>系统的大多数编程环境（如 Python）无法一键进行更新</li></ul><p>实在用不下去，添加了 Ubuntu 系统，和 Windows 10 组了一个双系统，总体来说兼容性很好，没有发生致命错误，小错误倒是一堆，而且还有很多必须要用但是不兼容的软件，例如本文章的锐捷客户端，所以来记录一下如何配置锐捷客户端并且设置为自启动</p><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>硬件环境：DELL G3 3579</p><p>操作系统：Ubuntu 20.04LTS</p><h2 id="官方客户端"><a href="#官方客户端" class="headerlink" title="官方客户端"></a>官方客户端</h2><p>锐捷的官方客户端需要网卡加载以后再运行，没法进行 <code>systemd</code> 配置，所以不使用官方客户端</p><h2 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h2><p>这里使用 minieap 作为认证客户端，minieap 的 <a href="https://github.com/updateing/minieap">GitHub 链接</a></p><p>首先，克隆仓库</p><pre><code class="hljs bash">$ git <span class="hljs-built_in">clone</span> https://github.com/updateing/minieap.git<span class="hljs-comment"># clone github repo</span></code></pre><p>转到仓库 <code>cd minieap</code></p><p>安装依赖 <code>sudo apt install gcc g++ cmake</code></p><p>进行编译 <code>make</code></p><p>可以直接使用 <code>$&#123;你的 minieap 目录路径&#125;/minieap -h</code> 来查看文档，说明基本命令</p><pre><code class="hljs bash">$ <span class="hljs-variable">$&#123;你的 minieap 目录路径&#125;</span>/minieap -u <span class="hljs-variable">$&#123;你的用户名&#125;</span> -p <span class="hljs-variable">$&#123;你的密码&#125;</span> -n <span class="hljs-variable">$&#123;你的网卡名&#125;</span> -b 1<span class="hljs-comment"># -b 1 是在后台运行的意思</span></code></pre><p>就可以使用基本的认证功能了</p><h2 id="设置开机自启动"><a href="#设置开机自启动" class="headerlink" title="设置开机自启动"></a>设置开机自启动</h2><h3 id="新方案"><a href="#新方案" class="headerlink" title="新方案"></a>新方案</h3><p>使用一段事件之后，发现旧办法似乎只能在重新启动时生效，在纯开机时无法生效，这里介绍一种新的办法：通过 systemd 系统服务管理来设置开机启动，下面介绍步骤：</p><p>使用管理员权限在 <code>/lib/systemd/system/</code> 下建立新文件 <code>minieap.service</code></p><pre><code class="hljs bash">$ sudo touch /lib/systemd/system/minieap.service<span class="hljs-comment"># create minieap.service in /lib/systemd/system/</span></code></pre><p>使用文本编辑器打开此文件，这里使用 vim 文本编辑器</p><pre><code class="hljs bash">$ sudo vim /lib/systemd/system/minieap.service<span class="hljs-comment"># edit /lib/systemd/system/minieap.service with vim</span></code></pre><p>输入如下内容</p><pre><div class="caption"><span>text</span></div><code class="hljs plain">[Unit]Description&#x3D;Minieap authentication serviceAfter&#x3D;etcd.service[Service]Type&#x3D;simpleExecStart&#x3D;sudo &#x2F;opt&#x2F;minieap&#x2F;minieapExecStop&#x3D;sudo &#x2F;opt&#x2F;minieap&#x2F;minieap -kRestartSec&#x3D;10Restart&#x3D;on-failure[Install]WantedBy&#x3D;multi-user.target</code></pre><p>简单介绍一下各个字段</p><ul><li>Description：此服务单元的描述，可以随便写</li><li>After：在 etcd.service 服务之后启动</li><li>Type：此服务的类型，simple 是最普通的类型</li><li>ExecStart：启动此服务时候进行的脚本</li><li>ExecStop：停止此服务时候进行的脚本</li><li>RestartSec：systemd 重启服务之前，需要等待的秒数</li><li>Restart：sshd 退出知乎，systemd 的重启方式，on-failure 表示任何以外的失败，将重启 sshd，如果 sshd 正常停止，他就不会重启</li><li>WantedBy：表示该服务所在的 Target，systemd 的默认启动 Target 是 multi-user.target</li></ul><p>编辑完毕后执行 <code>sudo systemctl enable minieap.service</code> 命令设置开机自启动</p><h3 id="旧方案（可能会失效）"><a href="#旧方案（可能会失效）" class="headerlink" title="旧方案（可能会失效）"></a>旧方案（可能会失效）</h3><p>打开程序坞中的 <code>Startup Applications</code>，添加一条任务，名称是 minieap，命令是 <code>$&#123;你的 minieap 目录路径&#125;/minieap -u $&#123;你的用户名&#125; -p $&#123;你的密码&#125; -n $&#123;你的网卡名&#125; -b 1</code> 即可完成设置</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><h3 id="minieap-用法"><a href="#minieap-用法" class="headerlink" title="minieap 用法"></a>minieap 用法</h3><p>minieap 的 <a href="https://github.com/updateing/minieap">GitHub 链接</a></p><h3 id="systemd-资料"><a href="#systemd-资料" class="headerlink" title="systemd 资料"></a>systemd 资料</h3><p><a href="https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html">Systemd 入门教程：实战篇 - 阮一峰的网络日志</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>PowerShell 快速复制文件内容到剪贴板</title>
+    <link href="/2020/09/14/copy-file-content-with-powershell/"/>
+    <url>/2020/09/14/copy-file-content-with-powershell/</url>
+    
+    <content type="html"><![CDATA[<p>介绍使用 Windows PowerShell 快速复制文件内容到剪贴板的方法</p><a id="more"></a><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>假设要复制当前目录下的 <code>file.txt</code>，打开 PowerShell，输入</p><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">Get-Content</span> file.txt | clip</code></pre><p>即可将 <code>file.txt</code> 的内容复制到剪贴板</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>PowerShell</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>MySQL Server 8 的远程连接错误 ERROR 2003 解决办法</title>
+    <link href="/2020/09/12/mysql-remote-connection-error-2003/"/>
+    <url>/2020/09/12/mysql-remote-connection-error-2003/</url>
+    
+    <content type="html"><![CDATA[<p>简单介绍 MySQL Server 8 的远程连接错误 ERROR 2003 解决办法</p><a id="more"></a><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>购买了一台阿里云服务器，但是我的域名没法备案，无法用来存放网页，所以想将其作为数据库服务器，在服务器上运行了 MySQL Server 8.0 数据库软件，之后发现无法通过 DataGrip 软件连接，开始排查原因。</p><h2 id="服务器环境"><a href="#服务器环境" class="headerlink" title="服务器环境"></a>服务器环境</h2><p>服务器是阿里云的最低配服务器，安装的是 Ubuntu20.04 - LTS 系统，有基础的开发环境</p><h2 id="数据库用户问题"><a href="#数据库用户问题" class="headerlink" title="数据库用户问题"></a>数据库用户问题</h2><p>远程连接数据库并且通过 MySQL Shell 创建并授权一个用户</p><pre><code class="hljs SQL"><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;tone&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">identified</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123123&#x27;</span>;<span class="hljs-keyword">grant</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">privileges</span> <span class="hljs-keyword">on</span> *.* <span class="hljs-keyword">to</span> <span class="hljs-string">&#x27;tone&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">grant</span> <span class="hljs-keyword">option</span>;</code></pre><p>之后打开本地电脑上面的软件，发现 DataGrip 报错，输出</p><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">[08S01] Communications link failureThe last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.java.net.ConnectException: Connection refused: connect.</code></pre><p>怀疑是密码的问题，于是查看了一下，默认的密码格式为 <code>caching_sha2_password</code>，但 <code>root</code> 用户的密码格式为 <code>mysql_native_password</code>，所以进行了操作修改了密码格式</p><pre><code class="hljs SQL"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;zhangsan&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">IDENTIFIED</span> <span class="hljs-keyword">WITH</span> mysql_native_password <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;zhangsan111&#x27;</span>;</code></pre><p>发现仍然无法连接</p><h2 id="防火墙端口问题"><a href="#防火墙端口问题" class="headerlink" title="防火墙端口问题"></a>防火墙端口问题</h2><p>查阅网上对 <code>jdbc</code> 的 <code>java.net.ConnectException: Connection refused: connect.</code> 的说明，可能是端口问题，于是开始排查服务器的防火墙。</p><p>首先，打开阿里云控制台的安全组，将 MySQL 运行的端口（默认为 3306）对所有 IP 地址开放，还是无法连接，然后在 Linux 上安装 nmap 软件查看开放的端口</p><pre><code class="hljs bash">$ sudo apt install nmap...$ nmap localhostStarting Nmap 7.80 ( https://nmap.org ) at 2020-09-12 22:22 CSTNmap scan report <span class="hljs-keyword">for</span> localhost (127.0.0.1)Host is up (0.0000030s latency).Other addresses <span class="hljs-keyword">for</span> localhost (not scanned): ::1Not shown: 997 closed portsPORT     STATE SERVICE22/tcp   open  ssh80/tcp   open  http3306/tcp open  mysqlNmap <span class="hljs-keyword">done</span>: 1 IP address (1 host up) scanned <span class="hljs-keyword">in</span> 0.05 seconds</code></pre><p>发现所有端口均开放正常，也没有防火墙之类的问题，于是继续排查问题</p><h2 id="服务器端配置"><a href="#服务器端配置" class="headerlink" title="服务器端配置"></a>服务器端配置</h2><p>为了更加精确地排查错误，我使用了 Ubuntu - WSL 安装了 MySQL-Client-8.0</p><pre><code class="hljs bash">$ sudo apt install mysql-client-8.0...</code></pre><p>使用本地的 MySQL 客户端连接服务器后，才精准地定位到了错误：</p><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">Enter password:ERROR 2003 (HY000): Can&#39;t connect to MySQL server on &#39;47.101.58.125&#39; (111)</code></pre><p>于是开始上网查找 ERROR 2003 的解决方法，发现了提示：ERROR 2003 有可能和服务器端的配置有关系，马上找到 <code>/etc/mysql/my.cnf</code></p><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">!includedir &#x2F;etc&#x2F;mysql&#x2F;conf.d&#x2F;!includedir &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;</code></pre><p>发现有两个目录：</p><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">&#x2F;etc&#x2F;mysql&#x2F;conf.d├── mysql.cnf└── mysqldump.cnf&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d├── mysql.cnf└── mysqld.cnf</code></pre><p>分别查看这四个文件，发现只有 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 有一些内容，其中，网上的资料说可能与 <code>bind-address=127.0.0.1</code> 有关系，而这个文件正好有一行，所以尝试修改为我的服务器的 IP 地址，发现不行。于是去查了一下有关这个属性的资料，得知，这个属性是指定 TCP/IP 的配置，将其注释掉，重启 MySQL 服务，DataGrip 连接成功，MySQL 客户端连接成功。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我本以为远程连接服务器上的数据库是非常简单的，只需要一个用户和密码就可以连接了。但是，实际操作服务器时，还是有很多的细节没有注意，导致了多次的失败，所以对于任何事情一定要多去实践，只有多实践才能知道有哪些不足。纸上得来终觉浅，绝知此事要躬行。</p><p>许多事情，不要觉得简单就去用图形界面，拿这次举例，DataGrip 是 JetBrains 公司推出的带有图形界面的数据库管理软件，但是他连接失败只报出了 <code>java.net.ConnectException</code> 错误，导致我排查错误的方向不对，而命令行上面的 <code>mysql-client</code> 直接报告了错误的详细信息，让我有了更精准的排查方式。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><h3 id="数据库用户"><a href="#数据库用户" class="headerlink" title="数据库用户"></a>数据库用户</h3><p>创建用户并授权：<a href="http://netsite.win/2018/06/13/mysql/mysql8%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%8F%8A%E6%8E%88%E6%9D%83-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5-%E5%9D%91/">mysql8 创建用户及授权-远程连接(坑) | 永无止境</a></p><p>修改密码格式：<a href="https://blog.csdn.net/qq_22860341/article/details/85061819">mysql8 创建用户并授权_飞奔的波大爷的博客-CSDN 博客</a></p><h3 id="防火墙和端口"><a href="#防火墙和端口" class="headerlink" title="防火墙和端口"></a>防火墙和端口</h3><p>对 <code>java.net.ConnectException: Connection refused: connect.</code> 错误的解决方法：<a href="https://blog.csdn.net/u011314442/article/details/80926682">解决： java.net.ConnectException: Connection refused: connect_愿我如星君如月 … 夜夜流光相皎洁 …-CSDN 博客</a></p><p>查看正在使用的端口：<a href="https://blog.csdn.net/q361239731/article/details/53180126">linux 如何查看正在使用的端口_萝卜 Master 的博客-CSDN 博客</a></p><p>查看开放的端口：<a href="https://www.cnblogs.com/kerrycode/p/5609010.html">Linux 查看服务器开放的端口号 - 潇湘隐者 - 博客园</a></p><h3 id="服务器端配置问题"><a href="#服务器端配置问题" class="headerlink" title="服务器端配置问题"></a>服务器端配置问题</h3><p>ERROR 2003 解决方法：<a href="https://blog.csdn.net/qustdjx/article/details/26937325">MySQL 远程连接 ERROR 2003 (HY000):Cant connect to MySQL server onXXXXX(111) 的问题_qustdjx 的博客-CSDN 博客</a></p><p>ERROR 2003 解决方法：<a href="https://blog.csdn.net/a5nan/article/details/72864249">MySQL 远程访问报错 ERROR 2003 (HY000):Cant connect to MySQL server onXXXXX(111)_没事就写点-CSDN 博客</a></p><h3 id="对-bind-address-属性的解释"><a href="#对-bind-address-属性的解释" class="headerlink" title="对 bind-address 属性的解释"></a>对 bind-address 属性的解释</h3><p>官方：<a href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_tmpdir">MySQL :: MySQL 8.0 Reference Manual :: 5.1.8 Server System Variables</a>，Chrome 80 以上点击 <a href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#docs-body:~:text=a-,bind_address%20system">此链接</a>，可以直达 <code>bind-address</code> 处</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MySQL</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Vimium 的介绍和使用</title>
+    <link href="/2020/08/22/introduction-to-vimium/"/>
+    <url>/2020/08/22/introduction-to-vimium/</url>
+    
+    <content type="html"><![CDATA[<p>介绍 Vimium 以及基本用法</p><a id="more"></a><h2 id="介绍-Vimium"><a href="#介绍-Vimium" class="headerlink" title="介绍 Vimium"></a>介绍 Vimium</h2><p>Vimium <a href="https://vimium.github.io/">官网链接</a></p><p><a href="https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb">插件 Chrome 商店地址</a></p><p>官网介绍：Vimium 是 Google Chrome 浏览器的扩展程序，它提供了 Vim 精神用于导航和控制的键盘快捷键。</p><p>对于一部分熟练使用 Vim 文本编辑器的程序员而言，这款插件可以极为简化浏览网页的过程。</p><p>你也可以自定义 Vimium 的所有快捷键</p><h2 id="默认快捷键表"><a href="#默认快捷键表" class="headerlink" title="默认快捷键表"></a>默认快捷键表</h2><p><img src="https://s1.ax1x.com/2020/08/23/dwEY2d.png" alt="Vimium 默认快捷键表"></p><h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p>介绍 Vimium 插件的基础使用</p><div class="note note-warning">            <p>注意：以下说明全部基于 Vimium 的默认快捷键，所有快捷键区分大小写</p>          </div><h3 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h3><p>使用 <code>h</code>、<code>j</code>、<code>k</code>、<code>l</code> 来作为左、下、上、右的基础移动，使用 <code>gg</code>、<code>G</code>来访问网页的开头和结尾（和 <code>Vim</code> 编辑器相同）。</p><p>使用 <code>u</code> 和 <code>d</code> 来进行半页的向上、向下滚动。</p><h3 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h3><p>使用 <code>H</code>、<code>L</code> 来进行页面的后退和前进</p><p>使用 <code>f</code> 来显示当前页面所有可跳转的 URL，选择后在当前页面跳转</p><p>使用 <code>F</code> 来显示当前页面所有可跳转的 URL，选择后在新标签页跳转</p><h3 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h3><p>使用 <code>t</code> 来新建标签页</p><p>使用 <code>J</code>（或者 <code>gT</code>）、<code>K</code>（或者 <code>gt</code>）来向左右选择标签页</p><p>使用 <code>x</code> 来关闭标签页</p><p>使用 <code>X</code> 来恢复上一个关闭的标签页</p><h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>使用 <code>o</code> 来在当前页面打开 URL、书签或者历史</p><p>使用 <code>O</code> 来在新标签页打开 URL、书签或者历史</p><p>使用 <code>b</code> 来在当前页面打开书签</p><p>使用 <code>B</code> 来在新标签页打开书签</p><p>使用 <code>T</code> 来在已经打开的页面中搜索</p><h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><p>使用 <code>/</code> 来进入查找模式</p><p>使用 <code>n</code> 来查看下一个匹配结果</p><p>使用 <code>N</code> 来查看上一个匹配结果</p><h3 id="刷新"><a href="#刷新" class="headerlink" title="刷新"></a>刷新</h3><p>使用 <code>r</code> 来刷新页面</p><h2 id="定制"><a href="#定制" class="headerlink" title="定制"></a>定制</h2><p>打开插件选项可以看到一系列配置</p><p><code>Excluded URLs and keys</code> 是在指定 URL 排除指定的按键</p><p><code>Custom key mappings</code> 是重新定义按键映射，示例如下</p><pre><code class="hljs vimscript">&quot; 这是注释# 这也是注释# 将 j 键映射到向下滚动map j scrollDown# 解除 j 键的绑定unmap j# 解除所有键的绑定unmapAll</code></pre><p>更多配置请自行探索</p><h2 id="另外的浏览器"><a href="#另外的浏览器" class="headerlink" title="另外的浏览器"></a>另外的浏览器</h2><p>QuteBrowser 同样是用 vim 的思想设计的浏览器，相关资料请移步其<a href="https://qutebrowser.org/">官方网站</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>vim</tag>
+      
+      <tag>Chrome</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux Cat 命令</title>
+    <link href="/2020/07/30/linux-cat/"/>
+    <url>/2020/07/30/linux-cat/</url>
+    
+    <content type="html"><![CDATA[<p>介绍 cat 命令的用法</p><a id="more"></a><h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p><code>Linux</code> 中的 <code>cat</code> 命令用于输出文件内容，基础用法如下</p><pre><code class="hljs bash">cat ([args]) [filename]</code></pre><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><table><thead><tr><th align="center">短参数</th><th align="center">长参数</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>-A</code></td><td align="center"><code>--show-all</code></td><td align="center">等价于 <code>-vET</code></td></tr><tr><td align="center"><code>-b</code></td><td align="center"><code>--number-nonblank</code></td><td align="center">对非空行输出行编号</td></tr><tr><td align="center"><code>-e</code></td><td align="center"></td><td align="center">等价于 <code>-vE</code></td></tr><tr><td align="center"><code>-E</code></td><td align="center"><code>--show-ends</code></td><td align="center">在每行的结束处显示 <code>$</code></td></tr><tr><td align="center"><code>-n</code></td><td align="center"><code>--number</code></td><td align="center">输出所有的行的编号</td></tr><tr><td align="center"><code>-s</code></td><td align="center"><code>--sqeeze-black</code></td><td align="center">不输出多行空行</td></tr><tr><td align="center"><code>-t</code></td><td align="center"></td><td align="center">等价于 <code>-vT</code></td></tr><tr><td align="center"><code>-T</code></td><td align="center"><code>--show-tabs</code></td><td align="center">将跳格字符显示为 <code>^I</code></td></tr><tr><td align="center"><code>-V</code></td><td align="center"><code>--show-nonprinting</code></td><td align="center">使用 <code>^</code> 和 <code>M-</code> 引用，除了 <code>LFD</code> 和 <code>TAB</code> 之外</td></tr></tbody></table><h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><h3 id="输出文件内容"><a href="#输出文件内容" class="headerlink" title="输出文件内容"></a>输出文件内容</h3><p>显示文件 <code>FILE</code> 的内容</p><pre><code class="hljs bash">cat FILE</code></pre><p>显示文件 <code>FILE</code> 的内容加上行号，需要加上参数 <code>-n</code>。行号从 <code>1</code> 开始。使用 <code>-n</code> 参数时，所有空行也会显示行号</p><pre><code class="hljs bash">cat -n FILE</code></pre><p>忽略掉空行，用 <code>-b</code></p><pre><code class="hljs bash">cat -b FILE</code></pre><p>当遇到有连续两行以上的空白行，就代换为一行的空白行，可以使用 <code>-s</code> 参数</p><pre><code class="hljs bash">cat -s FILE</code></pre><h3 id="保存内容"><a href="#保存内容" class="headerlink" title="保存内容"></a>保存内容</h3><p>将标准输入保存到文件 <code>FILE</code> 中，如果文件已经存在，则覆盖掉原来的</p><pre><code class="hljs bash">cat &gt; FILE</code></pre><p>将标准输入追加到文件 <code>FILE</code> 末尾</p><pre><code class="hljs bash">cat &gt;&gt; FILE</code></pre><h3 id="合并文件"><a href="#合并文件" class="headerlink" title="合并文件"></a>合并文件</h3><p>将两个文件 <code>FILE1</code> 和 <code>FILE2</code> 的内容合并为一个文件 <code>FILE</code></p><pre><code class="hljs bash">cat FILE1 FILE2 &gt; FILE</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://my.oschina.net/HJCui/blog/756476">HJCui,HJCui,Linux 中 用 cat 输出文件内容 - HJCui 嘀咕屋,OSCHINA 博客</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Vim 关闭自动插入注释</title>
+    <link href="/2020/07/26/disable-auto-comments-in-vim/"/>
+    <url>/2020/07/26/disable-auto-comments-in-vim/</url>
+    
+    <content type="html"><![CDATA[<p>介绍如何关闭 Vim 编辑器的自动插入注释功能</p><a id="more"></a><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><code>Vim</code> 编辑器下，当你输入了一整行注释</p><pre><code class="hljs c++"><span class="hljs-comment">// This is the comment</span></code></pre><p>再按下回车，<code>Vim</code> 编辑器会自动给你在新的一行加上 <code>//</code>，这在有的时候非常不方便，我希望关闭这一项功能</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在你的 <code>.vimrc</code> 中加入</p><pre><div class="caption"><span>script</span></div><code class="hljs vim"><span class="hljs-keyword">autocmd</span> FileType * <span class="hljs-keyword">setlocal</span> formatoptions-=<span class="hljs-keyword">c</span> formatoptions-=r formatoptions-=<span class="hljs-keyword">o</span></code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://vim.fandom.com/wiki/Disable_automatic_comment_insertion">Disable automatic comment insertion | Vim Tips Wiki | Fandom</a></p><p>给出了更多种解决方案，包括针对单种编程语言</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>vim</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>美化 PowerShell</title>
+    <link href="/2020/07/20/beautify-powershell/"/>
+    <url>/2020/07/20/beautify-powershell/</url>
+    
+    <content type="html"><![CDATA[<p>最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何用 oh-my-posh 美化 PowerShell</p><a id="more"></a><h2 id="开放许可"><a href="#开放许可" class="headerlink" title="开放许可"></a>开放许可</h2><p>首次在计算机上启动 <code>Windows PowerShell</code> 时，现用执行策略很可能是 Restricted（默认设置），这个策略是禁止运行任何脚本的，要想打开，只需在<strong>有管理员权限的</strong> <code>PowerShell</code> 下输入 <code>set-executionpolicy remotesigned</code>即可。</p><h2 id="安装-oh-my-posh"><a href="#安装-oh-my-posh" class="headerlink" title="安装 oh-my-posh"></a>安装 oh-my-posh</h2><p>根据 <a href="https://github.com/JanDeDobbeleer/oh-my-posh#installation">oh-my-posh 的说明</a>，执行以下命令：</p><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">Install-Module</span> posh<span class="hljs-literal">-git</span> <span class="hljs-literal">-Scope</span> CurrentUser&gt; <span class="hljs-built_in">Install-Module</span> <span class="hljs-built_in">oh</span><span class="hljs-literal">-my</span><span class="hljs-literal">-posh</span> <span class="hljs-literal">-Scope</span> CurrentUser</code></pre><p>如果有选项全通过就可以了</p><h2 id="配置-oh-my-posh"><a href="#配置-oh-my-posh" class="headerlink" title="配置 oh-my-posh"></a>配置 oh-my-posh</h2><p>在 powershell 中输入 <code>notepad $PROFILE</code>，用记事本打开配置文件，将如下文本添加到其中即可成功配置。</p><pre><div class="caption"><span>posh-git</span></div><code class="hljs powershellImport-Module">Import-Module oh-my-poshSet-Theme Paradox</code></pre><h2 id="安装-PowerLine-字体"><a href="#安装-PowerLine-字体" class="headerlink" title="安装 PowerLine 字体"></a>安装 PowerLine 字体</h2><p>此时通过 Windows Terminal 等软件打开会出现无法显示字符的情况，需要从 <a href="https://github.com/microsoft/cascadia-code/releases">microsoft/cascadia-code</a> 或者其他途径安装 <code>PowerLine</code> 字体，最后将终端软件（如 <code>Windows Terminal</code> 的字体配置改为你下载的那个字体。</p><pre><code class="hljs json">&quot;defaults&quot;:&#123;    <span class="hljs-comment">// Put settings here that you want to apply to all profiles.</span>    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>,    <span class="hljs-attr">&quot;startingDirectory&quot;</span>: <span class="hljs-string">&quot;.&quot;</span>,    <span class="hljs-attr">&quot;fontFace&quot;</span>: <span class="hljs-string">&quot;Cascadia Mono PL&quot;</span>&#125;,</code></pre><p>这里推荐一个字体网站 <a href="https://www.nerdfonts.com/">Nerd Fonts</a>，有很多 <code>PowerLine</code> 字体。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/zhaozhan/archive/2012/06/01/2529384.html">PowerShell 因为在此系统中禁止执行脚本解决方法 - Asharp - 博客园</a></p><p><a href="https://github.com/JanDeDobbeleer/oh-my-posh">JanDeDobbeleer/oh-my-posh</a></p><p><a href="https://docs.microsoft.com/zh-cn/windows/terminal/tutorials/powerline-setup">Microsoft - 教程：在 Windows 终端中设置 Powerline</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>美化</tag>
+      
+      <tag>PowerShell</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Travis CI 的构建目录中添加文件</title>
+    <link href="/2020/07/19/add-custom-files-in-travisci-building-directory/"/>
+    <url>/2020/07/19/add-custom-files-in-travisci-building-directory/</url>
+    
+    <content type="html"><![CDATA[<p>在 Travis CI 的构建目录中添加文件的方法</p><a id="more"></a><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>GitHub Pages</code> 中，要自定义域名需要添加一个 <code>CNAME</code> 文件，内容是你的域名，但是 <code>Travis CI</code> 自动构建每次都是把所有文件删除再更新库，每次我都要手动添加 <code>CNAME</code> 文件？所以开始寻找构建目录添加自己的文件的方法</p><h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p><code>Travis CI</code> 的构建环境里面有一个环境变量 <code>$TRAVIS_BUILD_DIR</code>，这个环境变量就是构建的文件夹，首先我用 <code>ls</code> 命令查看了该文件夹下的内容，发现是博客 <code>GitHub</code> 仓库的 <code>source</code> 分支的文件</p><p>得出结论：CI 系统把构建目录下的 <code>public</code> 目录部署到 <code>GitHub Pages</code> 的主分支</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 <code>.travis.yml</code> 文件的 <code>script</code> 项下添加命令即可，本例是 <code>Hexo</code> 的博客，要在生成目录也就是 <code>public</code> 文件夹下添加<code>CNAME</code> 文件，将 <code>script</code> 项改为如下所示即可达到目的</p><pre><code class="hljs yaml"><span class="hljs-attr">script:</span>  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span>  <span class="hljs-bullet">-</span> <span class="hljs-string">echo</span> <span class="hljs-string">&#x27;blog.mazixiang.me&#x27;</span> <span class="hljs-string">&gt;&gt;</span> <span class="hljs-string">$TRAVIS_BUILD_DIR/public/CNAME</span></code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://kb.kutu66.com/travis-ci/post_1642424">emmby - travis-ci - Travis yml，我如何得到 Travis 的工作目录？</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Travis CI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>配置 Windows Terminal</title>
+    <link href="/2020/07/18/configure-windows-terminal/"/>
+    <url>/2020/07/18/configure-windows-terminal/</url>
+    
+    <content type="html"><![CDATA[<p>最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何配置与美化 Windows Terminal</p><a id="more"></a><h2 id="打开-Windows-Terminal-配置文件"><a href="#打开-Windows-Terminal-配置文件" class="headerlink" title="打开 Windows Terminal 配置文件"></a>打开 Windows Terminal 配置文件</h2><p>在 <code>Windows Terminal</code> 窗口下按 <code>Ctrl + ,</code> （或者点击新建标签页旁边的向下箭头-设置）来用编辑器打开配置文件，我的电脑中是用 <code>VS Code</code> 打开的</p><h2 id="Dracula-主题"><a href="#Dracula-主题" class="headerlink" title="Dracula 主题"></a>Dracula 主题</h2><p>去 <a href="https://draculatheme.com/windows-terminal">Dracula 主题网站的 Windows Terminal 页面</a>，将主题的配置复制到 <code>schemes</code> 项下面</p><pre><code class="hljs json">&quot;schemes&quot;: [    &#123;        <span class="hljs-attr">&quot;name&quot;</span> : <span class="hljs-string">&quot;Dracula&quot;</span>,        <span class="hljs-attr">&quot;background&quot;</span> : <span class="hljs-string">&quot;#272935&quot;</span>,        <span class="hljs-attr">&quot;black&quot;</span> : <span class="hljs-string">&quot;#21222C&quot;</span>,        <span class="hljs-attr">&quot;blue&quot;</span> : <span class="hljs-string">&quot;#BD93F9&quot;</span>,        <span class="hljs-attr">&quot;cyan&quot;</span> : <span class="hljs-string">&quot;#8BE9FD&quot;</span>,        <span class="hljs-attr">&quot;foreground&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,        <span class="hljs-attr">&quot;green&quot;</span> : <span class="hljs-string">&quot;#50FA7B&quot;</span>,        <span class="hljs-attr">&quot;purple&quot;</span> : <span class="hljs-string">&quot;#FF79C6&quot;</span>,        <span class="hljs-attr">&quot;red&quot;</span> : <span class="hljs-string">&quot;#FF5555&quot;</span>,        <span class="hljs-attr">&quot;white&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,        <span class="hljs-attr">&quot;yellow&quot;</span> : <span class="hljs-string">&quot;#FFB86C&quot;</span>,        <span class="hljs-attr">&quot;brightBlack&quot;</span> : <span class="hljs-string">&quot;#6272A4&quot;</span>,        <span class="hljs-attr">&quot;brightBlue&quot;</span> : <span class="hljs-string">&quot;#D6ACFF&quot;</span>,        <span class="hljs-attr">&quot;brightCyan&quot;</span> : <span class="hljs-string">&quot;#A4FFFF&quot;</span>,        <span class="hljs-attr">&quot;brightGreen&quot;</span> : <span class="hljs-string">&quot;#69FF94&quot;</span>,        <span class="hljs-attr">&quot;brightPurple&quot;</span> : <span class="hljs-string">&quot;#FF92DF&quot;</span>,        <span class="hljs-attr">&quot;brightRed&quot;</span> : <span class="hljs-string">&quot;#FF6E6E&quot;</span>,        <span class="hljs-attr">&quot;brightWhite&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,        <span class="hljs-attr">&quot;brightYellow&quot;</span> : <span class="hljs-string">&quot;#FFFFA5&quot;</span>    &#125;]</code></pre><p>之后在 <code>Profiles</code> 中的 <code>defaults</code> 下配置默认主题</p><pre><code class="hljs json">&quot;defaults&quot;:&#123;    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>&#125;</code></pre><h2 id="添加到右键菜单"><a href="#添加到右键菜单" class="headerlink" title="添加到右键菜单"></a>添加到右键菜单</h2><h3 id="自动添加注册表"><a href="#自动添加注册表" class="headerlink" title="自动添加注册表"></a>自动添加注册表</h3><p>新建 <code>wt.reg</code> 文件，用记事本打开，将如下代码拷贝到其中</p><pre><code class="hljs reg">Windows Registry Editor Version 5.00[HKEY_CLASSES_ROOT\Directory\Background\shell\wt]@&#x3D;&quot;Windows Terminal Here&quot;&quot;Extended&quot;&#x3D;&quot;&quot;[HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]@&#x3D;&quot;C:\\Users\\你的用户名\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe&quot;</code></pre><h3 id="手动添加注册表"><a href="#手动添加注册表" class="headerlink" title="手动添加注册表"></a>手动添加注册表</h3><p>按下 <code>Win + R</code> 打开运行，输入 <code>regedit</code> 打开注册表编辑器，找到 <code>HKEY_CLASSES_ROOT\Directory\Background\shell</code>，新建一项（名字随便起，这里叫做 wt）</p><p><img src="https://s1.ax1x.com/2020/07/19/UW3rz4.png" alt="新建 wt 项"></p><p>wt 项的默认值的数据就是右键菜单的文本内容，我将其配置为“通过 Terminal 打开”</p><p>再新建一个字符串值，名称为 <code>Icon</code>，数据是 Windows Terminal 图标的绝对路径（可以通过网上下载到 <code>Windows Terminal</code> 的图标</p><p>我的 wt 项配置如下</p><p><img src="https://s1.ax1x.com/2020/07/19/UW82cQ.png" alt="wt 项配置"></p><div class="note note-primary">            <p>如果想添加快捷键，新建的项默认值是 <code>通过 Terminal 打开 (&amp;T)</code>，其中， <code>&amp;</code> 后面是你想添加的快捷键</p>          </div><p>再在 wt 项下建立 command 项，默认值的数据是到达你的 <code>wt.exe</code> 的绝对路径，一般来说是 <code>C:\Users\[你的用户名]\AppData\Local\Microsoft\WindowsApps\wt.exe</code></p><h2 id="更改启动路径"><a href="#更改启动路径" class="headerlink" title="更改启动路径"></a>更改启动路径</h2><p>经过以上操作，完成了右键菜单的添加，这部分介绍如何更改默认的启动路径</p><p>在配置文件 <code>settings.json</code> 中，<code>Profiles</code> 下面的 <code>defaults</code> 下配置默认启动路径，让每次的启动路径都是右键点击的路径</p><pre><code class="hljs json">&quot;defaults&quot;:&#123;    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>,    <span class="hljs-attr">&quot;startingDirectory&quot;</span>: <span class="hljs-string">&quot;.&quot;</span>&#125;</code></pre><p>这样 <code>Windows Terminal</code> 的美化和配置就完成了</p><h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>更多配置信息可以通过 <a href="https://docs.microsoft.com/zh-cn/windows/terminal/">Microsoft - Windows 终端</a> 去了解</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="draculatheme.com">Dracula 主题网站</a></p><p>自动添加注册表</p><p><a href="https://gist.github.com/Garwih/b4ec0d853e0f3093874e919ace7fce2f">Garwih - 将 Windows Terminal 添加到右键菜单</a></p><p>手动添加注册表</p><p><a href="https://blog.csdn.net/u011532601/article/details/106305373">Huelse - 将 Windows Terminal 添加到右键菜单</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Windows Terminal</tag>
+      
+      <tag>美化</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>我安装的 VSCode 插件</title>
+    <link href="/2020/07/14/my-vscode-extensions/"/>
+    <url>/2020/07/14/my-vscode-extensions/</url>
+    
+    <content type="html"><![CDATA[<p>我安装的 VSCode 插件及主要功能</p><a id="more"></a><h2 id="功能插件"><a href="#功能插件" class="headerlink" title="功能插件"></a>功能插件</h2><table><thead><tr><th align="center">插件</th><th align="center">功能</th></tr></thead><tbody><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=kevinkyang.auto-comment-blocks">Auto Comment Blocks</a></td><td align="center">自动生成注释块</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments">Better Comments</a></td><td align="center">代码中的人性化注释，比如警告、质疑、高亮、TODO 等</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2">Bracket Pair Colorizer 2</a></td><td align="center">括号颜色高亮</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++</a></td><td align="center">C/C++语法扩展</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode">Code Time</a></td><td align="center">统计写代码的时间</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors">Comment Anchors</a></td><td align="center">在评论或字符串中放置锚点,从而使导航大型文件更加容易。</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=stackbreak.comment-divider">Comment Divider</a></td><td align="center">快速分隔注释</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview">Data Preview</a></td><td align="center">用表格、文本、图标方式预览 json 等数据文件</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=docsmsft.docs-markdown">docs-markdown</a></td><td align="center">Markdown 写作帮助</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint</a></td><td align="center">ECMAScript 代码提示</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens">GitLens</a></td><td align="center">Git 加强</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.jshint">jshint</a></td><td align="center">JavaScript 语言提示</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a></td><td align="center">实时预览 Web 页面</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare">Live Share</a></td><td align="center">共享代码</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one">Markdown All in One</a></td><td align="center">Markdown 写作工具</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced">Markdown Preview Enhanced</a></td><td align="center">更强力的 Markdown 预览</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint">markdownlint</a></td><td align="center">Markdown 写作提示</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense">npm Intellisense</a></td><td align="center">可自动完成导入语句中的 npm 模块</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense">Path Intellisense</a></td><td align="center">路径自动补全</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=pnp.polacode">Polacode</a></td><td align="center">将代码转换为图片</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode">Prettier</a></td><td align="center">前端代码美化工具</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote - SSH</a></td><td align="center">SSH 远程开发</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl">Remote - WSL</a></td><td align="center">WSL 开发</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=rust-lang.rust">Rust</a></td><td align="center">Rust 语言工具</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree">Todo Tree</a></td><td align="center">快速查看代码中的 TODO</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces">Trailing Spaces</a></td><td align="center">突出显示代码后面多余的空格</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WebTemplateStudio-dev-nightly">Web Template Studio</a></td><td align="center">互联网应用框架脚手架，会捆绑安装 Azure 相关插件</td></tr></tbody></table><h2 id="主题插件"><a href="#主题插件" class="headerlink" title="主题插件"></a>主题插件</h2><table><thead><tr><th align="center">插件</th><th align="center">功能</th></tr></thead><tbody><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula">Dracula Official</a></td><td align="center">Dracula 主题</td></tr><tr><td align="center"><a href="https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme">Material Icon Theme</a></td><td align="center">Material 图标风格</td></tr></tbody></table>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>VSCode</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>第一个 ns3 脚本</title>
+    <link href="/2020/06/28/first-ns3-script/"/>
+    <url>/2020/06/28/first-ns3-script/</url>
+    
+    <content type="html"><![CDATA[<p>你的第一个 ns3 脚本</p><a id="more"></a><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>这个脚本是 <code>ns-*/examples/first.cc</code>，是官方示例，本文对于这个脚本进行讲解，大部分是 Google 翻译的，来源见<a href="#%E5%8F%82%E8%80%83">参考</a></p><p>本文的 <code>ns3</code> 版本为 3.30.1，<strong>不同版本的脚本可能会不相同</strong>，请参考官方的最新文档</p><h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>请确认你已经完成了 <code>./waf -d debug --enable-examples --enable-tests configure</code></p><p>为了配置项目以执行包含示例和测试的调试版本。还需要执行 <code>./waf</code> 来建立项目。因此，现在如果您查看目录 <code>../../build/debug/ns3</code>，您将找到<a href="#%E6%A8%A1%E5%9D%97%E5%8C%85%E5%90%AB">模块包含</a>中的四个模块包含文件。您可以查看这些文件的内容，发现它们确实在其各自的模块中包含了所有公共包含文件。</p><h2 id="模块包含"><a href="#模块包含" class="headerlink" title="模块包含"></a>模块包含</h2><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;ns3/core-module.h&quot;</span></span><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;ns3/network-module.h&quot;</span></span><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;ns3/internet-module.h&quot;</span></span><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;ns3/point-to-point-module.h&quot;</span></span><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;ns3/applications-module.h&quot;</span></span></code></pre><p>为了帮助我们的高级脚本用户处理系统中存在的大量包含文件，我们根据相对较大的模块对包含进行分组。我们提供了一个包含文件，该文件将递归加载每个模块中使用的所有包含文件。不必精确地查找所需的头文件，也不必正确地获取许多依赖关系，而是使您能够以较大的粒度加载一组文件。这不是最有效的方法，但是它无疑使编写脚本变得更加容易。</p><p>在构建过程中，每个 ns3 包含文件都放置在一个名为 <code>ns3</code> 的目录中（在构建目录下），以帮助避免包含文件名冲突。<code>ns3/core-module.h</code>文件与 ns3 模块相对应，您可以在下载的发行版本的 <code>src/core</code> 目录中找到该文件。如果列出此目录，则会发现大量的头文件。进行构建时，<code>Waf</code> 会根据您的配置将公共头文件放在相应的 <code>build/debug</code> 或 <code>build/optimized</code> 目录下的 <code>ns3</code> 目录中。<code>Waf</code> 还将自动生成一个模块包含文件，以加载所有公共头文件。</p><h2 id="ns3-命名空间"><a href="#ns3-命名空间" class="headerlink" title="ns3 命名空间"></a>ns3 命名空间</h2><pre><code class="hljs c++"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> ns3;</code></pre><p><code>ns3</code> 的实现是在 <code>ns3</code> 的命名空间实现的，所以先导入命名空间，之后就不使用复杂的 <code>ns3::</code> 了。如果你不明白这个请参考 c++ 的 <code>using namespace std;</code></p><h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><pre><code class="hljs c++">NS_LOG_COMPONENT_DEFINE (<span class="hljs-string">&quot;FirstScriptExample&quot;</span>);</code></pre><p>可以查阅官方文档来了解函数的作用，这条语句是通过引用特定名称来启用和禁用控制台消息日志记录</p><h2 id="main-函数"><a href="#main-函数" class="headerlink" title="main 函数"></a>main 函数</h2><p>首先声明 main 函数，就像其他的 c++ 文件一样</p><pre><code class="hljs c++"><span class="hljs-keyword">int</span>main (<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])&#123;</code></pre><p>将时间分辨率设置为 1 纳秒，同时 1 纳秒也是默认值</p><pre><code class="hljs c++">Time::SetResolution (Time::NS);</code></pre><p>分辨率是可以表示的最小时间值（以及两个时间值之间的最小可表示差异）。您可以只更改一次分辨率。实现这种灵活性的机制有点占用内存，因此，在明确设置分辨率后，我们将释放内存，以防止进一步的更新。（如果未明确设置分辨率，则默认为一纳秒，并且在模拟开始时会释放内存。）</p><p>下两行用于启用 <code>Echo Client</code> 和 <code>Echo Server</code> 应用程序中内置的两个日志记录组件：</p><pre><code class="hljs c++">LogComponentEnable(<span class="hljs-string">&quot;UdpEchoClientApplication&quot;</span>, LOG_LEVEL_INFO);LogComponentEnable(<span class="hljs-string">&quot;UdpEchoServerApplication&quot;</span>, LOG_LEVEL_INFO);</code></pre><p>如果阅读了日志记录组件文档，会发现可以在每个组件上启用许多级别的日志记录详细程度/详细信息。这两行代码为回显客户端和服务器启用了 INFO 级别的调试日志记录。这将让应用程序在仿真期间发送和接收数据包时打印出消息。</p><p>接下来，我们将直接从事创建拓扑和运行仿真的工作。我们使用拓扑帮助器对象使这项工作尽可能容易。</p><h2 id="拓补助手"><a href="#拓补助手" class="headerlink" title="拓补助手"></a>拓补助手</h2><h3 id="NodeContainer"><a href="#NodeContainer" class="headerlink" title="NodeContainer"></a>NodeContainer</h3><p>接下来两行代码实际上将创建 ns-3 Node 对象，该对象代表模拟中的计算机。</p><pre><code class="hljs c++">NodeContainer nodes;nodes.Create (<span class="hljs-number">2</span>);</code></pre><p>在继续之前，让我们找到 <code>NodeContainer</code> 类的文档。进入给定类的文档的另一种方法是通过 <code>Doxygen</code> 页面中的 <code>Classes</code> 选项卡。应该看到出现了一组新的选项卡，其中一个是“类列表”。在该选项卡下，您将看到所有 ns-3 类的列表。向下滚动，找到 <code>ns3::NodeContainer</code>。</p><p>节点是我们的关键抽象之一。这表示一类的计算机，我们将向其中添加协议栈，应用程序和外围设备卡。<code>NodeContainer</code> 拓扑帮助器提供了一种方便的方法来创建，管理和访问我们为运行模拟而创建的任何 <code>Node</code> 对象。上面的第一行只声明了一个 <code>NodeContainer</code>，我们称之为节点。第二行在节点对象上调用 <code>Create</code> 方法，并要求容器创建两个节点。如文档中所述，这个容器将调用 <code>ns3</code> 系统，以适当地创建两个 <code>Node</code> 对象，并在内部存储指向这些对象的指针。</p><p>脚本中的节点不执行任何操作。构建拓扑的下一步是将我们的节点连接到网络中。我们支持的最简单的网络形式是两个节点之间的单点对点链接。我们将在此处构建这些链接之一。</p><h3 id="PointToPointHelper"><a href="#PointToPointHelper" class="headerlink" title="PointToPointHelper"></a>PointToPointHelper</h3><p>我们正在以一种您会非常熟悉的模式构建点对点连接，使用拓扑帮助器对象来完成将链接放在一起所需的低级工作。回想一下，我们的两个关键抽象是 <code>NetDevice</code> 和 <code>Channel</code>。在现实世界中，这些术语大致对应于外围卡和网络电缆。通常，这两件事紧密地绑在一起，不能互换，例如，以太网设备和无线通道。我们的拓扑助手遵循这种紧密的联系，因此您将使用单个 <code>PointToPointHelper</code> 在此脚本中配置和连接 <code>ns-3 PointToPointNetDevice</code> 和 <code>PointToPointChannel</code> 对象。</p><pre><code class="hljs c++">PointToPointHelper pointToPoint;pointToPoint.SetDeviceAttribute (<span class="hljs-string">&quot;DataRate&quot;</span>, StringValue (<span class="hljs-string">&quot;5Mbps&quot;</span>));pointToPoint.SetChannelAttribute (<span class="hljs-string">&quot;Delay&quot;</span>, StringValue (<span class="hljs-string">&quot;2ms&quot;</span>));</code></pre><p>第一行，实例化堆栈上的 <code>PointToPointHelper</code> 对象。</p><p>第二行，告诉 <code>PointToPointHelper</code> 对象在创建 <code>PointToPointNetDevice</code> 对象时将值“5Mbps”（每秒 5 兆位）用作 <code>DataRate</code>。</p><p>从更详细的角度来看，字符串 <code>DataRate</code> 对应于我们所谓的 <code>PointToPointNetDevice</code> 的 <code>Attribute</code>。如果查看类 <code>ns3::PointToPointNetDevice</code> 的文档并找到 <code>GetTypeId</code> 方法的文档，则会找到为设备定义的属性列表。其中包括 <code>DataRate</code> 属性。大多数用户可见的 <code>ns3</code> 对象都有相似的属性列表。我们将使用此机制轻松配置仿真而无需重新编译。</p><p>第三行就是指定延迟属性，告诉 <code>PointToPointHelper</code> 使用值“2ms”（两毫秒）作为其随后创建的每个点对点通道的传播延迟的值。</p><h3 id="NetDeviceContainer"><a href="#NetDeviceContainer" class="headerlink" title="NetDeviceContainer"></a>NetDeviceContainer</h3><p>在脚本的这一点上，我们有一个包含两个节点的 <code>NodeContainer</code>。我们有一个准备好的 <code>PointToPointHelper</code>，可以用来制作 <code>PointToPointNetDevices</code> 并在它们之间连接 <code>PointToPointChannel</code> 对象。就像我们使用 <code>NodeContainer</code> 拓扑帮助对象创建用于仿真的节点一样，我们将要求 <code>PointToPointHelper</code> 完成为我们创建，配置和安装设备的工作。我们将需要具有所有已创建的 <code>NetDevice</code> 对象的列表，因此我们使用 <code>NetDeviceContainer</code> 来保存它们，就像使用 <code>NodeContainer</code> 来保存所创建的节点一样。以下两行代码，</p><pre><code class="hljs c++">NetDeviceContainer devices;devices = pointToPoint.Install (nodes);</code></pre><p>将完成设备和通道的配置。第一行声明上述设备容器，第二行进行繁重的操作。<code>PointToPointHelper</code> 的 <code>Install</code> 方法将 <code>NodeContainer</code> 作为参数。在内部，将创建一个 <code>NetDeviceContainer</code>。对于 <code>NodeContainer</code> 中的每个节点（点对点链接必须恰好有两个），将创建一个 <code>PointToPointNetDevice</code> 并将其保存在设备容器中。创建一个 <code>PointToPointChannel</code> 并连接了两个 <code>PointToPointNetDevices</code>。当由 <code>PointToPointHelper</code> 创建对象时，先前在帮助器中设置的属性用于初始化创建的对象中的相应属性。</p><p>执行 <code>pointToPoint.Install (nodes)</code> 调用之后，我们将有两个节点，每个节点都具有一个已安装的点对点网络设备以及它们之间的单个点对点通道。两个设备都将配置为以每秒 5 兆位的速度在具有 2 毫秒传输延迟的通道上传输数据。</p><h3 id="InternetStackHelper"><a href="#InternetStackHelper" class="headerlink" title="InternetStackHelper"></a>InternetStackHelper</h3><p>现在，我们已经配置了节点和设备，但是我们的节点上没有安装任何协议栈。接下来的两行代码将解决这一问题。</p><pre><code class="hljs c++">InternetStackHelper <span class="hljs-built_in">stack</span>;<span class="hljs-built_in">stack</span>.Install (nodes);</code></pre><p><code>InternetStackHelper</code> 是一个拓扑帮助程序，它用于 <code>Internet</code> 堆栈，而 <code>PointToPointHelper</code> 则是点对点网络设备。<code>Install</code> 方法将 <code>NodeContainer</code> 作为参数。执行后，它将在节点容器中的每个节点上安装 Internet 堆栈（TCP，UDP，IP 等）。</p><h3 id="Ipv4AddressHelper"><a href="#Ipv4AddressHelper" class="headerlink" title="Ipv4AddressHelper"></a>Ipv4AddressHelper</h3><p>接下来，我们需要将节点上的设备与 IP 地址相关联。我们提供了一个拓扑助手来管理 IP 地址的分配。唯一用户可见的 API 是设置在执行实际地址分配时使用的基本 IP 地址和网络掩码（这是在助手内部的较低级别完成的）</p><pre><code class="hljs c++">Ipv4AddressHelper address;address.SetBase (<span class="hljs-string">&quot;10.1.1.0&quot;</span>, <span class="hljs-string">&quot;255.255.255.0&quot;</span>);Ipv4InterfaceContainer interfaces = address.Assign (devices);</code></pre><p>声明一个 <code>Ipv4AddressHelper</code> 对象，并告诉它应该开始使用掩码 <code>255.255.255.0</code> 从网络 <code>10.1.1.0</code> 分配 IP 地址，以定义可分配的位。默认情况下，分配的地址将从 1 开始并单调增加，因此从该基址分配的第一个地址将是 <code>10.1.1.1</code>，然后是 <code>10.1.1.2</code>，依此类推。底层 <code>ns3</code> 系统实际上会记住分配的所有 IP 地址，如果您不小心使同一地址产生两次，将会产生致命错误（顺便说一句，这很难调试）。</p><p>下一行，执行实际的地址分配。在 <code>ns3</code> 中，我们使用 <code>Ipv4Interface</code> 对象在 IP 地址和设备之间建立关联。就像有时我们需要由助手创建的网络设备列表以供将来参考时，有时我们也需要 <code>Ipv4Interface</code> 对象的列表。<code>Ipv4InterfaceContainer</code> 提供了此功能。</p><p>现在，我们已经建立了一个点对点网络，安装了堆栈并分配了 IP 地址。此时，我们需要生成流量的应用程序。</p><h2 id="应用程序"><a href="#应用程序" class="headerlink" title="应用程序"></a>应用程序</h2><p>ns3 系统的另一个核心抽象是应用程序。在此脚本中，我们使用 ns3 核心应用程序类 <code>UdpEchoServerApplication</code> 和 <code>UdpEchoClientApplication</code> 的两个特化。就像前面的解释一样，我们使用辅助对象来帮助配置和管理基础对象。在这里，我们使用 <code>UdpEchoServerHelper</code> 和 <code>UdpEchoClientHelper</code> 对象来让模拟更简单。</p><h3 id="UdpEchoServerHelper"><a href="#UdpEchoServerHelper" class="headerlink" title="UdpEchoServerHelper"></a>UdpEchoServerHelper</h3><p>示例脚本 <code>first.cc</code> 中的以下代码行用于在我们先前创建的节点之一上设置 UDP 回显服务器应用程序（Udp echo server application）。</p><pre><code class="hljs c++"><span class="hljs-function">UdpEchoServerHelper <span class="hljs-title">echoServer</span> <span class="hljs-params">(<span class="hljs-number">9</span>)</span></span>;ApplicationContainer serverApps = echoServer.Install (nodes.Get (<span class="hljs-number">1</span>));serverApps.Start (Seconds (<span class="hljs-number">1.0</span>));serverApps.Stop (Seconds (<span class="hljs-number">10.0</span>));</code></pre><p>上面代码段的第一行代码声明了 <code>UdpEchoServerHelper</code>。和往常一样，这不是应用程序本身，而是用于帮助我们创建实际应用程序的对象。我们的约定之一是将必需的属性放在辅助构造函数中。在这种情况下，除非提供了客户端也知道端口号，否则该帮助程序将无济于事。我们需要将端口号作为构造函数的参数，而不是只是选择一个并希望一切都能解决。反过来，构造函数只对传递的值执行 <code>SetAttribute</code>。如果需要，可以稍后使用 <code>SetAttribute</code> 将 <code>Port</code> 属性设置为另一个值。</p><p>与许多其他帮助器对象相似，<code>UdpEchoServerHelper</code> 对象具有 <code>Install</code> 方法。正是此方法的执行实际上导致实例化基础回显服务器应用程序并将其附加到节点。有趣的是，就像我们已经看到的其他 <code>Install</code> 方法一样，<code>Install</code> 方法将 <code>NodeContainter</code> 作为参数。这实际上是传递给方法的内容，即使在这种情况下看起来也不是这样。这里有一个 C++隐式转换正在工作，该转换获取 <code>node.Get(1)</code>的结果（返回指向节点对象的智能指针— <code>Ptr &lt;Node&gt;</code>），并将其用于构造函数中，然后传递给未命名的 <code>NodeContainer</code>。安装。如果您不知所措地在 C++代码中找到了可以编译并运行得很好的特定方法签名，请寻找这些隐式转换。</p><p>现在，我们看到 <code>echoServer.Install</code> 将在用于管理节点的 <code>NodeContainer</code> 的索引号为 1 的节点上安装 <code>UdpEchoServerApplication</code>。<code>Install</code> 将返回一个容器，该容器保存由助手创建的所有应用程序的指针（在本例中，因为我们传递了一个包含一个节点的 <code>NodeContainer</code>，所以指向一个应用程序）。</p><p>应用程序需要一些时间来“开始”生成流量，并且可能需要花费一些时间来“停止”。我们都提供。这些时间是使用 <code>ApplicationContainer</code> 方法 <code>Start</code> 和 <code>Stop</code> 设置的。这些方法采用时间参数。在这种情况下，我们使用显式的 C++ 转换序列获取 C++ 浮点数 1.0，并使用 <code>Seconds</code> 强制转换将其转换为 <code>ns3</code> 的 <code>Time</code>对象。请注意，转换规则可能由模型作者控制，并且 C++ 有其自己的规则，因此您不能总是仅假设参数将为您自动地转换。</p><p>第四行和第五行将导致回显服务器应用程序在仿真中的一秒钟启动（启用自身），并在仿真中的十秒钟停止（禁用自身）。由于我们已经声明了要在十秒执行的模拟事件（应用程序停止事件），因此模拟将至少持续十秒钟。</p><h3 id="UdpEchoClientHelper"><a href="#UdpEchoClientHelper" class="headerlink" title="UdpEchoClientHelper"></a>UdpEchoClientHelper</h3><p>回显客户端应用程序的建立方法与服务器类似。有一个由 <code>UdpEchoClientHelper</code> 管理的基础<code>UdpEchoClientApplication</code>。</p><pre><code class="hljs c++"><span class="hljs-function">UdpEchoClientHelper <span class="hljs-title">echoClient</span> <span class="hljs-params">(interfaces.GetAddress (<span class="hljs-number">1</span>), <span class="hljs-number">9</span>)</span></span>;echoClient.SetAttribute (<span class="hljs-string">&quot;MaxPackets&quot;</span>, UintegerValue (<span class="hljs-number">1</span>));echoClient.SetAttribute (<span class="hljs-string">&quot;Interval&quot;</span>, TimeValue (Seconds (<span class="hljs-number">1.0</span>)));echoClient.SetAttribute (<span class="hljs-string">&quot;PacketSize&quot;</span>, UintegerValue (<span class="hljs-number">1024</span>));ApplicationContainer clientApps = echoClient.Install (nodes.Get (<span class="hljs-number">0</span>));clientApps.Start (Seconds (<span class="hljs-number">2.0</span>));clientApps.Stop (Seconds (<span class="hljs-number">10.0</span>));</code></pre><p>但是，对于回显应用程序的客户端，我们需要设置五个不同的属性。前两个属性是在构造 <code>UdpEchoClientHelper</code> 时设置的。我们将传递的参数（用于内部）传递给助手，以根据我们的约定设置 <code>RemoteAddress</code> 和 <code>RemotePort</code> 属性，以在助手构造函数中创建所需的 <code>Attributes</code> 参数。</p><p>我们已经使用了 <code>Ipv4InterfaceContainer</code> 来跟踪分配给设备的 IP 地址。接口容器中的第 0 个接口将与节点容器中的第 0 个节点的 IP 地址相对应。接口容器中的第一接口对应于节点容器中第一节点的 IP 地址。因此，在第一行代码中（从上面开始），我们正在创建帮助程序并告诉它，因此将客户端的远程地址设置为分配给服务器所在节点的 IP 地址。我们还告诉它安排将数据包发送到端口 9。</p><p><code>MaxPackets</code> 属性告诉客户端我们允许其在模拟过程中发送的最大数据包数。<code>Interval</code> 属性告诉客户端在数据包之间等待多长时间，<code>PacketSize</code> 属性告诉客户端其数据包有效载荷应该有多大。通过这种特殊的属性组合，我们告诉客户端发送一个 1024 字节的数据包。</p><p>与回显服务器端一样，我们告诉回显客户端启动和停止，但是在这里，我们在启用服务器后一秒钟（在仿真两秒钟后）启动客户端。</p><h2 id="模拟器"><a href="#模拟器" class="headerlink" title="模拟器"></a>模拟器</h2><p>此时，我们需要做的是实际运行仿真。这是使用全局函数 <code>Simulator::Run</code> 完成的。</p><pre><code class="hljs c++">Simulator::Run ();</code></pre><p>当我们之前调用方法 <code>serverApps.Start</code> <code>serverApps.Stop</code> <code>clientApps.Start</code> <code>clientApps.Stop</code> 时，我们实际上将模拟器中的事件开始时间安排为 1.0 秒，2.0 秒，将两个事件安排为 10.0 秒。调用 <code>Simulator::Run</code> 时，系统将开始浏览预定事件列表并执行它们。首先，它将在 1.0 秒处运行事件，这将启用回显服务器应用程序（此事件可能进而安排许多其他事件）。然后它将运行安排在 t = 2.0 秒内的事件，这将启动回显客户端应用程序。同样，此事件可以安排更多事件。回显客户端应用程序中的开始事件实现将通过向服务器发送数据包来开始模拟的数据传输阶段。</p><p>将数据包发送到服务器的操作将触发一系列事件，这些事件将在后台自动安排，并将根据我们在脚本中设置的各种定时参数执行数据包回显的机制。</p><p>最终，由于我们只发送一个数据包（将 <code>MaxPackets</code> 属性设置为一个），因此由单个客户端回显请求触发的事件链将逐渐减少，并且模拟将进入空闲状态。一旦发生这种情况，剩下的事件将是服务器和客户端的 <code>Stop</code> 事件。当执行这些事件时，没有其他事件可处理，并且 <code>Simulator::Run</code> 返回。仿真完成。</p><p>剩下的就是清理。这是通过调用全局函数 <code>Simulator::Destroy</code> 来完成的。在执行辅助函数（或低级 <code>ns3</code> 代码）时，他们进行了排列，以便将钩子插入模拟器中以销毁所有已创建的对象。您不必自己跟踪任何这些对象-您要做的就是调用 <code>Simulator::Destroy</code> 并退出。<code>ns3</code> 系统为您处理了最困难的部分。我们第一个 <code>ns3</code> 脚本剩余的行 first.cc 就是这样做的：</p><pre><code class="hljs c++">  Simulator::Destroy ();  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;&#125;</code></pre><h2 id="模拟器什么时候会停止"><a href="#模拟器什么时候会停止" class="headerlink" title="模拟器什么时候会停止"></a>模拟器什么时候会停止</h2><p><code>ns3</code> 是离散事件（DE）模拟器。在这种模拟器中，每个事件都与其执行时间相关联，并且通过以模拟时间的时间顺序执行事件来进行模拟。事件可能会导致安排将来的事件（例如，计时器可能会将自己重新安排为在下一个时间间隔到期）。</p><p>初始事件通常由每个对象触发，例如，IPv6 将调度路由器广告，邻居请求等，应用程序调度第一个数据包发送事件等。</p><p>处理事件时，它可能会生成零个，一个或多个事件。在执行模拟时，将消耗事件，但是可能会（或可能不会）生成更多事件。当事件队列中没有其他事件时，或者发现特殊的 Stop 事件时，模拟将自动停止。<code>Stop</code> 事件是通过<code>Simulator::Stop(stopTime);</code>函数创建的。</p><p>在典型情况下，必须使用 <code>Simulator::Stop</code> 来停止模拟：发生自持事件时。自我维持（或重复发生）的事件是总是自行重新安排时间的事件。因此，它们始终将事件队列保持为非空。</p><p>有许多包含重复事件的协议和模块，例如：</p><ul><li>FlowMonitor-定期检查丢失的数据包</li><li>RIPng-定期广播路由表更新</li></ul><p>在这些情况下，必须使用 <code>Simulator::Stop</code> 才能正常停止模拟。另外，当 <code>ns3</code> 处于仿真模式时，使用 <code>RealtimeSimulator</code> 来使仿真时钟与机器时钟保持一致，并且 <code>Simulator::Stop</code> 是停止该过程所必需的。</p><p>本教程中的许多仿真程序都未明确调用 <code>Simulator::Stop</code>，因为事件队列将自动用尽事件。但是，这些程序还将接受对 <code>Simulator::Stop</code> 的调用。例如，第一个示例程序中的以下附加语句将安排在 11 秒时显式停止：</p><pre><code class="hljs c++">+  Simulator::Stop (Seconds (<span class="hljs-number">11.0</span>));   Simulator::Run ();   Simulator::Destroy ();   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; &#125;</code></pre><p>上面的内容实际上不会改变此程序的行为，因为此特定的模拟自然会在 10 秒后结束。但是，如果要将以上语句中的停止时间从 11 秒更改为 1 秒，您会注意到模拟会在任何输出打印到屏幕之前停止（因为输出发生在模拟时间的 2 秒左右）。</p><p>重要的是在调用 <code>Simulator::Run</code> 之前先调用 <code>Simulator::Stop</code>否则，<code>Simulator::Run</code> 可能永远不会将控制权返回给主程序以执行停止！</p><h2 id="构建你的脚本"><a href="#构建你的脚本" class="headerlink" title="构建你的脚本"></a>构建你的脚本</h2><p>构建简单的脚本非常简单。您所要做的就是将脚本放到临时目录中，如果您运行 Waf，它将自动生成。试试吧切换回顶层目录后，将 <code>examples/tutorial/first.cc</code> 复制到 <code>scratch</code> 目录。</p><pre><code class="hljs bash">$ cp examples/tutorial/first.cc scratch/myfirst.cc</code></pre><p>现在使用 waf 构建第一个示例脚本：</p><pre><code class="hljs bash">$ ./wafWaf: Entering directory `/home/craigdo/repos/ns-3-allinone/ns-3-dev/build<span class="hljs-string">&#x27;</span><span class="hljs-string">[614/708] cxx: scratch/myfirst.cc -&gt; build/debug/scratch/myfirst_3.o</span><span class="hljs-string">[706/708] cxx_link: build/debug/scratch/myfirst_3.o -&gt; build/debug/scratch/myfirst</span><span class="hljs-string">Waf: Leaving directory `/home/craigdo/repos/ns-3-allinone/ns-3-dev/build&#x27;</span><span class="hljs-string">&#x27;build&#x27;</span> finished successfully (2.357s)</code></pre><p>现在，您可以运行该示例（请注意，如果在 <code>scratch</code> 目录中构建程序，则必须在 <code>scratch</code> 目录<strong>外</strong>运行该程序）：</p><pre><code class="hljs bash">$ ./waf --run scratch/myfirstWaf: Entering directory `/home/craigdo/repos/ns-3-allinone/ns-3-dev/build<span class="hljs-string">&#x27;</span><span class="hljs-string">Waf: Leaving directory `/home/craigdo/repos/ns-3-allinone/ns-3-dev/build&#x27;</span><span class="hljs-string">&#x27;build&#x27;</span> finished successfully (0.418s)Sent 1024 bytes to 10.1.1.2Received 1024 bytes from 10.1.1.1Received 1024 bytes from 10.1.1.2</code></pre><p>在这里，您会看到构建系统检查以确保已构建文件，然后运行它。您会看到 echo 客户端上的日志记录组件表明它已向 10.1.1.2 上的 Echo Server 发送了一个 1024 字节的数据包。您还可以看到回显服务器上的日志记录组件说它已从 10.1.1.1 接收到 1024 个字节。回显服务器以静默方式回显数据包，您会看到回显客户端日志，它已从服务器接收回数据包。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.nsnam.org/docs/release/3.30/tutorial/html/conceptual-overview.html#a-first-ns-3-script">Conceptual Overview — Tutorial</a></p><p><a href="https://blog.51cto.com/3240611/1641583">NS-3 入门[2]脚本与编译运行-针挑土-51CTO 博客</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+      <tag>ns3 网络模拟软件</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>停止和删除 docker 所有的容器和镜像</title>
+    <link href="/2020/06/27/stop-and-remove-all-docker-containers-and-images/"/>
+    <url>/2020/06/27/stop-and-remove-all-docker-containers-and-images/</url>
+    
+    <content type="html"><![CDATA[<p>停止和删除 docker 所有的容器和镜像的简单方法，一句命令</p><a id="more"></a><h2 id="停止所有-Docker-容器"><a href="#停止所有-Docker-容器" class="headerlink" title="停止所有 Docker 容器"></a>停止所有 Docker 容器</h2><pre><code class="hljs bash">$ docker stop $(docker ps -aq)<span class="hljs-comment"># 你的所有 Docker 容器的 ID</span></code></pre><p>其中 <code>docker ps -aq</code> 的作用是列出所有 <code>Docker</code> 容器的 ID</p><h2 id="删除所有-Docker-容器"><a href="#删除所有-Docker-容器" class="headerlink" title="删除所有 Docker 容器"></a>删除所有 Docker 容器</h2><pre><code class="hljs bash">$ docker rm $(docker ps -aq)<span class="hljs-comment"># 你的所有 Docker 容器的 ID</span></code></pre><h2 id="删除所有-Docker-镜像"><a href="#删除所有-Docker-镜像" class="headerlink" title="删除所有 Docker 镜像"></a>删除所有 Docker 镜像</h2><pre><code class="hljs bash">$ docker rmi $(docker images -aq)<span class="hljs-comment"># 你的所有 Docker 镜像的 ID</span></code></pre><p>其中 <code>docker images -aq</code> 的作用是列出所有 <code>Docker</code> 镜像的 ID</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://colobu.com/2018/05/15/Stop-and-remove-all-docker-containers-and-images/">停止、删除所有的 docker 容器和镜像 | 鸟窝</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ns3 网络模拟软件的安装和起步</title>
+    <link href="/2020/06/24/ns3-getting-start/"/>
+    <url>/2020/06/24/ns3-getting-start/</url>
+    
+    <content type="html"><![CDATA[<p>ns3 网络模拟软件的安装和使用</p><a id="more"></a><h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>运行 <code>ns3</code> 需要安装 <code>Linux</code> 虚拟机或者是 <code>WSL</code>，Windows 无法直接跑，本文中使用 <code>VMWare Workstation 15.5</code> 的 <code>Ubuntu 20.04LTS</code> 为环境，其他 <code>Linux</code> 发行版本大同小异，请前往参考中的官网文档</p><p>建议用 <code>WSL</code> 跑，虚拟机会消耗一些性能</p><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>首先，进入<a href="https://www.nsnam.org/releases/">ns 的 release 网页（官方）</a></p><p><img src="https://s1.ax1x.com/2020/06/24/Nwenq1.png" alt="website"></p><p>下载最新版本的 tar 包，传入虚拟机中，使用 <code>tar -xvf</code> 命令解压文件，得到文件夹，我的是 <code>ns-allinone-3.30.1</code></p><h2 id="使用-apt-安装依赖"><a href="#使用-apt-安装依赖" class="headerlink" title="使用 apt 安装依赖"></a>使用 apt 安装依赖</h2><p>首先使用以下命令安装依赖</p><pre><code class="hljs bash">$ sudo apt install g++ python3...g++ is already the newest version (4:9.3.0-1ubuntu2).python3 is already the newest version (3.8.2-0ubuntu2).0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.</code></pre><p><code>Ununtu 20.04LTS</code> 版本中已经安装好了 <code>g++</code> 和 <code>Python3</code></p><h2 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h2><p>确保工作目录是在 <code>ns-allinone-3.30.1</code> 下，在命令行中执行如下命令开始构建，时间可能会很长，请耐心等待。</p><pre><code class="hljs bash">$ ./build.py --enable-tests --enable-examples...Leaving directory `./ns-3.30.1<span class="hljs-string">&#x27;</span></code></pre><p>得到以下输出，说明构建成功</p><p><img src="https://s1.ax1x.com/2020/06/24/Nwmb9S.jpg" alt="构建成功"></p><p>如果失败，请删除文件夹重新再来一遍（我就是这么做的，重来了几遍，最后可以正常运行了）</p><h2 id="进一步构建"><a href="#进一步构建" class="headerlink" title="进一步构建"></a>进一步构建</h2><p>据官方文档所说，上一步是构建好运行时需要的库，这一步是进行真实构建。</p><p>切换工作目录到文件夹中的 <code>ns-*</code> 目录（我的是 <code>ns-3.30.1</code>），在命令行中执行如下命令，向 Waf 解释它应该进行包括示例和测试的优化构建</p><pre><code class="hljs bash">$ ./waf clean<span class="hljs-string">&#x27;clean&#x27;</span> finished successfully (0.398s)$ ./waf configure --build-profile=optimized --enable-examples --enable-tests...<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.899s)</code></pre><p>切换回包含示例和测试的调试（debug）版本。</p><pre><code class="hljs bash">$ ./waf clean$ ./waf configure --build-profile=debug --enable-examples --enable-tests...<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.618s)</code></pre><p>开始构建</p><pre><code class="hljs bash">$ ./waf...<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (20m15.146s)...</code></pre><p>如果出现了下图的结果，说明构建成功</p><p><img src="https://s1.ax1x.com/2020/06/24/NwuTSS.jpg" alt="进一步构建成功"></p><h2 id="测试-ns3（可跳过）"><a href="#测试-ns3（可跳过）" class="headerlink" title="测试 ns3（可跳过）"></a>测试 ns3（可跳过）</h2><p>命令行中执行 <code>./test.py</code> 来运行测试脚本，出现一大堆 <code>PASS</code> 说明测试成功（图就不放了，太大了）</p><p>这个时间很长，如果没耐心可以跳过，基本上来说前几步正常进行的话都没问题</p><h2 id="运行一个脚本"><a href="#运行一个脚本" class="headerlink" title="运行一个脚本"></a>运行一个脚本</h2><p>命令行中执行如下命令</p><pre><code class="hljs bash">$ ./waf --run hello-simulatorBuild commands will be stored <span class="hljs-keyword">in</span> build/compile_commands.json<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (0.844s)Hello Simulator</code></pre><p>出现和上面相同的结果说明运行成功，成功入门</p><h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="https://www.cnblogs.com/jhcelue/p/6905943.html">NS3 网络仿真（2）：first.py - jhcelue - 博客园</a></p><p>这个是系列教程，作者很牛逼</p><p><a href="https://blog.csdn.net/deep_kang/article/details/73350350">NS3 网络仿真_deep_keng 的博客-CSDN 博客_ns3 使用 netanim 仿真 wifi 节点</a></p><p><a href="https://www.jianshu.com/p/fe77a15a1eb4">用 NS3 进行虚拟仿真 - 简书</a></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.nsnam.org/wiki/Installation">ns3 官方安装指南（英）</a></p><p><a href="https://www.nsnam.org/docs/release/3.30/tutorial/html/getting-started.html">ns3 官方构建文档（英）</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+      <tag>ns3 网络模拟软件</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>scanf 格式字符串中的空格</title>
+    <link href="/2020/06/24/space-in-scanf/"/>
+    <url>/2020/06/24/space-in-scanf/</url>
+    
+    <content type="html"><![CDATA[<p>scanf 语句中空格的问题</p><a id="more"></a><h2 id="格式说明符前"><a href="#格式说明符前" class="headerlink" title="格式说明符前"></a>格式说明符前</h2><pre><code class="hljs c"><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;a);<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot; %c&quot;</span>, &amp;c);</code></pre><p>第二行中 <code>%c</code> 前加空格，会消耗 <code>%d</code> 后的所有后继空白符，然后读取一个 <code>char</code></p><h2 id="格式说明符后"><a href="#格式说明符后" class="headerlink" title="格式说明符后"></a>格式说明符后</h2><pre><code class="hljs c"><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d &quot;</span>, &amp;a);</code></pre><p>这种写法在你输入数字后，<code>scanf</code> 会<strong>跳过所有空格字符，包括回车符</strong>，直到遇到不是空格字符才退出，<strong>不建议这么写</strong></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zh.cppreference.com/w/c/io/fscanf">zh.cpprefernce.com</a></p><p><a href="https://zhidao.baidu.com/question/620629950137762012.html">scanf 语句中%d 后面多加一个空格，为什么数据需要多输入一个？_百度知道</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C 语言</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ubuntu 通过 apt 安装 nodejs</title>
+    <link href="/2020/06/17/install-nodejs-on-ubuntu-with-apt/"/>
+    <url>/2020/06/17/install-nodejs-on-ubuntu-with-apt/</url>
+    
+    <content type="html"><![CDATA[<p>Ubuntu 通过 apt 安装 nodejs 的方法</p><a id="more"></a><h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>由于 Nodejs 更新速度较快，不建议使用此种方式，建议使用 <a href="https://github.com/nvm-sh/nvm">nvm</a> 或者 <a href="https://github.com/nodenv/nodenv">nodenv</a></p><p>官方文档不建议使用管理员权限进行安装，<a href="https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally">Resolving EACCES permissions errors when installing packages globally</a></p><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="14-x"><a href="#14-x" class="headerlink" title="14.x"></a>14.x</h3><pre><code class="hljs bash">curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -sudo apt-get install -y nodejs</code></pre><h3 id="12-x"><a href="#12-x" class="headerlink" title="12.x"></a>12.x</h3><pre><code class="hljs bash">curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -sudo apt-get install -y nodejs</code></pre><h3 id="10-x"><a href="#10-x" class="headerlink" title="10.x"></a>10.x</h3><pre><code class="hljs bash">curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -sudo apt-get install -y nodejs</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+      <tag>Nodejs</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>将 HTML 元素居中的方法</title>
+    <link href="/2020/05/30/align-items-to-center-using-css/"/>
+    <url>/2020/05/30/align-items-to-center-using-css/</url>
+    
+    <content type="html"><![CDATA[<p>三种将 HTML 元素居中的方法</p><a id="more"></a><h2 id="左右居中"><a href="#左右居中" class="headerlink" title="左右居中"></a>左右居中</h2><p>当元素的 <code>display</code> 属性为 <code>inline</code> 或者 <code>inline-block</code> 时，将<strong>父元素</strong>设定为 <code>text-align: center;</code> 即可左右居中</p><p>当元素的 <code>display</code> 属性为 <code>block</code> 时，将<strong>元素本身</strong>的 <code>margin-left</code> 和 <code>margin-right</code> 设定为 <code>auto</code> 即可左右居中</p><h2 id="上下居中"><a href="#上下居中" class="headerlink" title="上下居中"></a>上下居中</h2><h3 id="position-absolute"><a href="#position-absolute" class="headerlink" title="position: absolute"></a>position: absolute</h3><p>使用 <code>position: absolute</code> 时，可以参考如下代码</p><pre><code class="hljs CSS"><span class="hljs-selector-id">#center</span> &#123;  <span class="hljs-attribute">position</span>: absolute;  <span class="hljs-attribute">top</span>: <span class="hljs-number">50%</span>;  <span class="hljs-attribute">left</span>: <span class="hljs-number">50%</span>;  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateX</span>(-<span class="hljs-number">50%</span>) <span class="hljs-built_in">translateY</span>(-<span class="hljs-number">50%</span>);&#125;</code></pre><h3 id="flexbox"><a href="#flexbox" class="headerlink" title="flexbox"></a>flexbox</h3><p>flexbox 自带 <code>justify-content</code> 和 <code>align-items</code> 两个属性，分别设定主轴和交叉轴的对齐方式，将这两个属性都设置为 <code>center</code> 即可上下左右居中对齐</p><pre><code class="hljs CSS"><span class="hljs-selector-tag">body</span> &#123;  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">100vh</span>;  <span class="hljs-attribute">display</span>: flex;  <span class="hljs-attribute">justify-content</span>: center;  <span class="hljs-attribute">align-items</span>: center;&#125;</code></pre><h3 id="display-table"><a href="#display-table" class="headerlink" title="display: table"></a>display: table</h3><p>HTML 的 <code>table</code> 元素有一个 <code>valign</code> 属性，是用来设定垂直方向的对齐，可以通过 CSS 将其他元素的 <code>display</code> 属性设定为 <code>table</code> 去将它当作一个 <code>table</code> 去显示</p><pre><code class="hljs CSS"><span class="hljs-selector-tag">body</span> &#123;  <span class="hljs-attribute">display</span>: table;  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">100vh</span>;&#125;# <span class="hljs-selector-tag">center</span> &#123;  <span class="hljs-attribute">display</span>: table-cell;  <span class="hljs-attribute">vertical-align</span>: middle;  <span class="hljs-attribute">text-align</span>: center;&#125;</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>position: absolute 方法是对其元素本身，调整元素本身的属性即可</p><p>flexbox、display: table 方法是对其元素内容，先将容器调整为与画面大小相同，然后再设定他的内容的对齐方式</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.bilibili.com/video/BV1o7411G7dq">CodingStartup - [HTML] 上下左右置中对齐的三种方法_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CSS</tag>
+      
+      <tag>基础知识</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>JavaScript 从选择的文件中读取文本</title>
+    <link href="/2020/05/30/read-text-from-files-with-javascript/"/>
+    <url>/2020/05/30/read-text-from-files-with-javascript/</url>
+    
+    <content type="html"><![CDATA[<p>在开发词法分析器的前端页面时，需要允许用户从本地上传 c++ 文件，并将文件内容载入到编辑器中，本文介绍如何用 JavaScript 和 input 标签来实现网页加载文本文件内容（注意是加载内容）</p><a id="more"></a><h2 id="FileReader"><a href="#FileReader" class="headerlink" title="FileReader"></a>FileReader</h2><p>首先介绍一下 <code>FileReader</code>，FileReader 对象允许 Web 应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 对象指定要读取的文件或数据，可以用 <code>const reader = new FileReader();</code> 来初始化，详细部分在<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader">FileReader - Web API 接口参考 | MDN</a>中</p><h2 id="读取-Input-标签文件内容"><a href="#读取-Input-标签文件内容" class="headerlink" title="读取 Input 标签文件内容"></a>读取 Input 标签文件内容</h2><p>以下是示例代码</p><pre><code class="hljs JavaScript"><span class="hljs-comment">// 获取 input 标签对应的元素</span><span class="hljs-keyword">const</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);<span class="hljs-comment">// 读取文件</span><span class="hljs-keyword">const</span> file = fileInput.files[<span class="hljs-number">0</span>];</code></pre><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);<span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];<span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();<span class="hljs-keyword">let</span> text;reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;  text = reader.result;&#125;);reader.readAsText(file);</code></pre><h2 id="在-React-有状态组件中实现"><a href="#在-React-有状态组件中实现" class="headerlink" title="在 React 有状态组件中实现"></a>在 React 有状态组件中实现</h2><pre><code class="hljs JavaScript"><span class="hljs-function"><span class="hljs-title">handleFileChange</span>(<span class="hljs-params"></span>)</span> &#123;  <span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);  <span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];  <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();  reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;    <span class="hljs-built_in">this</span>.setState(&#123;      text: reader.result,    &#125;);    fileInput.value = <span class="hljs-string">&quot;&quot;</span>;  &#125;);  reader.readAsText(file);&#125;</code></pre><blockquote><p>注意：因为是加载文件，所以加载完一次后要清除所选文件，否则下次加载同样的文件无法触发 <code>handleFileCHange</code> 函数，无法使状态改变了</p></blockquote><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader">FileReader - Web API 接口参考 | MDN</a></p><p><a href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023022494381696">操作文件 - 廖雪峰的官方网站</a></p><p><a href="https://blog.csdn.net/cuixiping/article/details/37526871">用 Javascript 清空(重置)文件类型的 INPUT 元素的值<em>javascript</em>无心的专栏-CSDN 博客</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>基础知识</tag>
+      
+      <tag>JavaScript</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>在 CentOS7 上安装 MySQL Community Server</title>
+    <link href="/2020/05/29/install-mysql-community-server-on-centos7/"/>
+    <url>/2020/05/29/install-mysql-community-server-on-centos7/</url>
+    
+    <content type="html"><![CDATA[<p>对<a href="https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24">tianranll - CentOS 安装 MySQL 详解</a>的一些补充</p><a id="more"></a><h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p><a href="https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24">tianranll - CentOS 安装 MySQL 详解</a></p><p>这个人已经讲的很详细了，我就是补充一下，讲解一下踩到的坑，另外，我是用虚拟机的方式来测试环境的，下面的一切操作都是基于 CentOS 虚拟机的情况下中执行的，容错率比较高。</p><h2 id="MySQL-Yum-Repo-安装链接"><a href="#MySQL-Yum-Repo-安装链接" class="headerlink" title="MySQL Yum Repo 安装链接"></a>MySQL Yum Repo 安装链接</h2><p>这个链接是在 <a href="https://dev.mysql.com/downloads/repo/yum/">MySQL Community Downloads - MySQL Yum Repository</a> 下找到的，根据 Linux 版本来选取，比如说我安装的是 CentOS7 就选择 RedHat Enterprise Linux 7</p><p><img src="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200528085819.png" alt="选择 RedHat Enterprise Linux 7"></p><p>点击之后出来的这个页面，复制下面的 <code>no thanks</code> 链接地址</p><p><img src="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200528090827.png" alt="复制链接地址"></p><p>你的 <code>wget</code> 命令后面应该接的是这个复制的地址（如果你想安装最新的版本）</p><h2 id="远程连接问题"><a href="#远程连接问题" class="headerlink" title="远程连接问题"></a>远程连接问题</h2><p>对应文章的 6. 允许 root 远程访问</p><p><strong>从 MySQL 8.0 以后，不可以再直接使用 <code>GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39; WITH GRANT OPTION;</code> 来给权限了，可以用下面的命令来代替</strong></p><pre><code class="hljs sql"><span class="hljs-comment">-- 1. 使用alter user</span>&gt; alter user set user.host=&#x27;%&#x27; where user.user=&#x27;root&#x27;;<span class="hljs-comment">-- 2. 使用create user</span>&gt; create user &#x27;userName&#x27;@&#x27;%&#x27; identified by &#x27;your_password&#x27;;</code></pre><p>我失败了之后查了好长一段时间，最后在<a href="https://www.jianshu.com/p/98a6d42e28c8">mysql8 grant 授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT</a>找到了解决方案，但是原作者好像忘了写那个 <code>identified</code> 后面的 <code>by</code> 了……</p><h2 id="开启-CentOS7-的防火墙-3306-端口"><a href="#开启-CentOS7-的防火墙-3306-端口" class="headerlink" title="开启 CentOS7 的防火墙 3306 端口"></a>开启 CentOS7 的防火墙 3306 端口</h2><p>不开启端口，是无法使用远程连接的，参考<a href="https://blog.csdn.net/achang21/article/details/52538049">CentOS 7 开放防火墙端口命令</a>，在终端执行</p><pre><code class="hljs bash">$ firewall-cmd --zone=public --add-port=3306/tcp --permanentsuccess$ firewall-cmd --reloadsuccess</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://juejin.im/post/5d07cf13f265da1bd522cfb6#heading-24">tianranll - CentOS 安装 MySQL 详解</a></p><p><a href="https://www.jianshu.com/p/98a6d42e28c8">mysql8 grant 授权报错：ERROR 1410 (42000): You are not allowed to create a user with GRANT</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+      <tag>MySQL</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>CSS 常用单位</title>
+    <link href="/2020/05/28/commonly-used-css-units/"/>
+    <url>/2020/05/28/commonly-used-css-units/</url>
+    
+    <content type="html"><![CDATA[<p>简单介绍 CSS 常用单位</p><a id="more"></a><h2 id="px"><a href="#px" class="headerlink" title="px"></a>px</h2><p><code>px</code> 是最常用的<strong>绝对单位</strong>，全称是 <code>pixel</code> ，代表屏幕上的像素点，用法如下</p><pre><code class="hljs css"><span class="hljs-selector-tag">div</span> &#123;  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">18px</span>;&#125;</code></pre><h2 id="em"><a href="#em" class="headerlink" title="em"></a>em</h2><p><code>em</code> 是一个相对单位，代表相对父元素字体大小的倍数，用法如下</p><pre><code class="hljs css"><span class="hljs-selector-tag">div</span> &#123;  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;&#125;<span class="hljs-selector-tag">div</span> <span class="hljs-selector-tag">h1</span> &#123;  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.8em</span>;&#125;</code></pre><p>此时的 <code>div</code> 中的 <code>h1</code> 元素字体大小为 <code>20px * 0.8em = 16px</code></p><h2 id="rem"><a href="#rem" class="headerlink" title="rem"></a>rem</h2><p><code>rem</code> 也是一个相对单位，代表相对根（root）元素字体大小的倍数，用法如下</p><pre><code class="hljs css"><span class="hljs-selector-tag">html</span> &#123;  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">10px</span>;&#125;<span class="hljs-selector-tag">h1</span> &#123;  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.8rem</span>;&#125;</code></pre><p>此时的 <code>div</code> 中的 <code>h1</code> 元素字体大小为 <code>10px * 0.8em = 8px</code>，并且不受父容器字体大小的限制</p><h2 id="vw-和-vh"><a href="#vw-和-vh" class="headerlink" title="vw 和 vh"></a>vw 和 vh</h2><p><code>vw</code> 和 <code>vh</code> 即是 <code>viewport width</code> 和 <code>viewport height</code> 的缩写，<code>viewport</code> 是目前看到的画面的大小，他们的值只能是 1 - 100，<code>50vw</code> 是占画面宽度的一半，<code>50vh</code> 是占画面高度的一半</p><p>经常用到的是 <code>100vh</code> 和 <code>100 vw</code>，用来做水平垂直居中都很方便</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.bilibili.com/video/BV1d441167e9">CodingStartup - 5 个常用的 CSS 单位</a></p><p><a href="https://zhuanlan.zhihu.com/p/28915418">知乎 - css 单位中 px 和 em,rem 的区别</a></p><p><a href="https://www.w3.org/Style/Examples/007/units.zh_CN.html">w3.org - 网页样式表 CSS 提示以及技巧</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CSS</tag>
+      
+      <tag>基础知识</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>解决 Windows 上 git log 乱码</title>
+    <link href="/2020/05/27/solution-to-git-log-garbled-on-windows/"/>
+    <url>/2020/05/27/solution-to-git-log-garbled-on-windows/</url>
+    
+    <content type="html"><![CDATA[<p>解决大多数的 Windows 上 git log 乱码问题，注意是大多数问题</p><a id="more"></a><h2 id="Linux-系统"><a href="#Linux-系统" class="headerlink" title="Linux 系统"></a>Linux 系统</h2><p>Linux 系统上的环境变量需要使用 <code>export LANG=zh_CN.UTF-8</code> 来指定</p><p>永久写入需要把 <code>export</code> 语句直接写入 <code>.bashrc</code> 或者 <code>.zshrc</code> 中</p><h2 id="检查环境变量"><a href="#检查环境变量" class="headerlink" title="检查环境变量"></a>检查环境变量</h2><p>打开 cmd 或者 powershell，输入</p><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">echo</span> %LANG%</code></pre><p>查看 <code>LANG</code> 变量，如果输出 <code>zh_CN.UTF-8</code> 则继续进行，如果输出别的，新建一个环境变量 <code>LANG</code>，值设为 <code>zh_CN.UTF-8</code>，重启 cmd</p><h2 id="修改-git-config"><a href="#修改-git-config" class="headerlink" title="修改 git config"></a>修改 git config</h2><p>在 cmd 或者 powershell 中，输入</p><pre><code class="hljs powershell">&gt; git config -<span class="hljs-literal">-global</span> i18n.commitencoding utf<span class="hljs-literal">-8</span>&gt; git config -<span class="hljs-literal">-global</span> i18n.logoutputencoding utf<span class="hljs-literal">-8</span></code></pre><p>并新建一条环境变量 <code>LESSCHARSET</code>，值设为 <code>utf-8</code></p><h2 id="暂时设置环境变量"><a href="#暂时设置环境变量" class="headerlink" title="暂时设置环境变量"></a>暂时设置环境变量</h2><p>在 cmd 或者 powershell 中输入 <code>set LANG=zh_CN.UTF-8</code>，可以暂时起作用，但重新启动后就没用了</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.jianshu.com/p/fb47a39f3578">git log 中文乱码 - 简书</a></p><p><a href="https://blog.csdn.net/qianggezhishen/article/details/80865143">git log 乱码解决方法_git_qianggezhishen 的专栏-CSDN 博客</a></p><p><a href="https://www.cnblogs.com/zhangxiaoliu/p/9226197.html">git log 中文乱码的解决方案 - 张发财 - 博客园</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>git</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java 自定义类的排序</title>
+    <link href="/2020/05/26/sorting-of-custom-classes/"/>
+    <url>/2020/05/26/sorting-of-custom-classes/</url>
+    
+    <content type="html"><![CDATA[<p>两种 Java 自定义类的排序的方法</p><a id="more"></a><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Java 中，类的实例默认是不可以进行比较和排序的，本文将解决以下两个问题：</p><ul><li>如何比较类同一个类的两个实例的大小？</li><li>正常的 Java 数组是可以用 <code>Array.sort()</code> 进行排序的，前提是这些元素是可排序的，在自定义的类中怎么直接使用 <code>Array.sort()</code> 呢？</li></ul><h2 id="介绍-Comparable"><a href="#介绍-Comparable" class="headerlink" title="介绍 Comparable"></a>介绍 Comparable</h2><p>Comparabe 是一个排序接口，如果一个类支持 <code>Comparable</code> 接口，就意味着该类支持排序排序。实现了 <code>Comparable</code> 接口的类的对象的列表或数组可以通过 <code>Arrays.sort()</code> 进行自动排序，此外，实现此接口的对象可以用作有序映射中的键或有序集合中的集合，无需指定比较器。</p><h3 id="Comparable-的定义"><a href="#Comparable-的定义" class="headerlink" title="Comparable 的定义"></a>Comparable 的定义</h3><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Comparable</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(T o)</span></span>;&#125;</code></pre><h3 id="Comparable-的说明"><a href="#Comparable-的说明" class="headerlink" title="Comparable 的说明"></a>Comparable 的说明</h3><ul><li>T 表示可以与此对象进行比较的对象的类型</li><li>此接口只有一个方法 <code>compareTo</code>，比较此对象与指定对象的顺序，小于返回负整数，大于返回正整数，等于返回 0</li></ul><h3 id="Comparable-的示例"><a href="#Comparable-的示例" class="headerlink" title="Comparable 的示例"></a>Comparable 的示例</h3><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FruitTest</span> </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;      Fruit[] a = <span class="hljs-keyword">new</span> Fruit[<span class="hljs-number">3</span>];      a[<span class="hljs-number">0</span>] = <span class="hljs-keyword">new</span> Fruit(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>);      a[<span class="hljs-number">1</span>] = <span class="hljs-keyword">new</span> Fruit(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>);      a[<span class="hljs-number">2</span>] = <span class="hljs-keyword">new</span> Fruit(<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>);      Arrays.sort(a);      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;        System.out.println(a[i].getWeight() + <span class="hljs-string">&quot; &quot;</span> + a[i].getSugar() + <span class="hljs-string">&quot; &quot;</span> + a[i].getPrice());      &#125;    &#125;&#125;<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Fruit</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparable</span>&lt;<span class="hljs-title">Fruit</span>&gt;</span>&#123;    <span class="hljs-keyword">private</span> <span class="hljs-keyword">double</span> weight;  <span class="hljs-comment">// 重量</span>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">double</span> sugar;  <span class="hljs-comment">// 含糖量</span>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">double</span> price;  <span class="hljs-comment">// 价格</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Fruit</span><span class="hljs-params">(<span class="hljs-keyword">double</span> w, <span class="hljs-keyword">double</span> s, <span class="hljs-keyword">double</span> p)</span> </span>&#123;        weight = w;        sugar = s;        price = p;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Fruit a)</span> </span>&#123;        <span class="hljs-keyword">return</span> -Double.compare(<span class="hljs-keyword">this</span>.weight, a.weight);  <span class="hljs-comment">// 按照重量由大到小进行排序</span>    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">getWeight</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">return</span> weight;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">getSugar</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">return</span> sugar;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">getPrice</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">return</span> price;    &#125;&#125;</code></pre><p>上面的程序输出为</p><blockquote><p>7.0 8.0 9.0<br>4.0 5.0 6.0<br>1.0 2.0 3.0</p></blockquote><p>说明排序成功</p><h2 id="介绍-Comparator"><a href="#介绍-Comparator" class="headerlink" title="介绍 Comparator"></a>介绍 Comparator</h2><p>Comparator 是一个比较接口，如果要控制某个类的次序，而该类本身不支持排序，那么可以建立一个“该类的比较器”来进行排序，这个比较器只需要实现 Comparator 接口即可。</p><h3 id="Comparator-的定义"><a href="#Comparator-的定义" class="headerlink" title="Comparator 的定义"></a>Comparator 的定义</h3><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Comparator</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(T o1, T o2)</span></span>;    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">equals</span><span class="hljs-params">(Object obj)</span></span>;&#125;</code></pre><h3 id="使用-Comparator-的注意事项"><a href="#使用-Comparator-的注意事项" class="headerlink" title="使用 Comparator 的注意事项"></a>使用 Comparator 的注意事项</h3><ul><li>若一个类要实现 Comparator 接口，必须要有<code>compare</code>函数，<code>equals</code>函数可写可不写</li><li><code>int compare(T o1, T o2)</code>函数是比较 o1 和 o2 的大小，返回负数意味着 o1 比 o2 小，返回 0 意味着 o1 等于 o2，返回正数代表 o1 大于 o2</li></ul><h3 id="Comparator-的示例"><a href="#Comparator-的示例" class="headerlink" title="Comparator 的示例"></a>Comparator 的示例</h3><h2 id="Comparable-和-Comparator-的比较"><a href="#Comparable-和-Comparator-的比较" class="headerlink" title="Comparable 和 Comparator 的比较"></a>Comparable 和 Comparator 的比较</h2><p>Comparable 是排序接口，若一个类实现了 Comparable 接口，就意味着“该类支持排序”。</p><p>Comparator 是比较器，我们若需要控制某个类的次序，可以建立一个“该类的比较器”来进行排序。</p><p>Comparable 相当于“内部比较器”，而 Comparator 相当于“外部比较器”。</p><p>两种方法各有优劣， 用 Comparable 简单， 只要实现 Comparable 接口的对象直接就成为一个可以比较的对象，但是需要修改源代码。</p><p>用 Comparator 的好处是不需要修改源代码， 而是另外实现一个比较器， 当某个自定义的对象需要作比较的时候，把比较器和对象一起传递过去就可以比大小了， 并且在 Comparator 里面用户可以自己实现复杂的可以通用的逻辑，使其可以匹配一些比较简单的对象，那样就可以节省很多重复劳动了。</p><p>比如你引入了别人写的一个类，需要对这个类的实例进行比较或者排序，若要使用实现 Comparable 接口的方法，则你需要对引入的类进行源代码的修改，而如果使用实现 Comparator 接口的方式，则不需要对引入的类进行修改，只需要重新写一个引入类的比较器类就可以了。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/gaoBlog/p/10754935.html">java 学习–自定义类的实例的大小比较和排序</a></p><p><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html?is-external=true">Comparable 官方文档</a></p><p><a href="https://docs.oracle.com/javase/1.5.0/docs/api/java/util/Comparator.html">Comparator 官方文档</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux 常用解压命令</title>
+    <link href="/2020/05/26/linux-unzip-commands/"/>
+    <url>/2020/05/26/linux-unzip-commands/</url>
+    
+    <content type="html"><![CDATA[<p>Linux 常用的解压命令</p><a id="more"></a><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Linux 下常见的压缩包格式为 <code>zip tar.gz tar.bz2 tar.xz tar.Z</code><br>其中 <code>tar</code> 是打包格式，<code>gz2 bz2</code> 等后缀是指代压缩方式</p><h2 id="filename-zip"><a href="#filename-zip" class="headerlink" title="filename.zip"></a>filename.zip</h2><pre><code class="hljs bash">$ unzip filename.zip</code></pre><h2 id="filename-tar-gz"><a href="#filename-tar-gz" class="headerlink" title="filename.tar.gz"></a>filename.tar.gz</h2><pre><code class="hljs bash">$ tar -zxvf filename.tar.gz</code></pre><p>-z：gzip - 压缩格式<br>-x：extract - 解压<br>-v：verbose - 详细信息<br>-f：file - 文件</p><h2 id="filename-tar-bz2"><a href="#filename-tar-bz2" class="headerlink" title="filename.tar.bz2"></a>filename.tar.bz2</h2><pre><code class="hljs bash">$ tar -jxvf filename.tar.bz2</code></pre><p>-j：bz2 压缩方式</p><h2 id="filename-tar-xz"><a href="#filename-tar-xz" class="headerlink" title="filename.tar.xz"></a>filename.tar.xz</h2><pre><code class="hljs bash">$ tar -Jxvf filename.tar.xz</code></pre><p>注意 J 大写</p><h2 id="filename-tar-Z"><a href="#filename-tar-Z" class="headerlink" title="filename.tar.Z"></a>filename.tar.Z</h2><pre><code class="hljs bash">$ tar -Zxvf filename.tar.Z</code></pre><p>注意 Z 大写</p><h2 id="简便写法"><a href="#简便写法" class="headerlink" title="简便写法"></a>简便写法</h2><p>首先，使用 <code>tar --version</code> 查看版本，从 1.15 版本以后可以直接使用 <code>tar -xvf</code> 来智能识别格式</p><p>参考自<a href="https://www.cnblogs.com/cursorhu/p/5891699.html">Linux 下的解压命令小结 - cursorhu</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>通过 Travis CI 将 Hexo 博客部署到 GitHub Pages</title>
+    <link href="/2020/05/25/deploy-hexo-to-github-pages-with-travis-ci/"/>
+    <url>/2020/05/25/deploy-hexo-to-github-pages-with-travis-ci/</url>
+    
+    <content type="html"><![CDATA[<p>纯萌新遇到的一些坑</p><a id="more"></a><h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>使用 Hexo 搭建完博客之后，翻了一下官网，结果发现还可以用 <code>Travis CI</code> 来做自动生成部署啊！正好今天整了一天的 <code>Travis CI</code>，也差不多熟悉了，就直接按照官方文档去照着做了</p><h2 id="Travis-CI-介绍"><a href="#Travis-CI-介绍" class="headerlink" title="Travis CI 介绍"></a>Travis CI 介绍</h2><p>Travis CI 是一个持续集成工具，因为我只使用了一天，还不太了解。详细原理可以去搜一下，这里就简单讲一下：就是你提交了一次 <code>commit</code> 后，这个工具按照你的 repo 里的 <code>.travis.yml</code> 来自动执行一些操作，如果构建通过了显示 <code>passing</code>，不通过显示 <code>failing</code>。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><a href="https://hexo.io/zh-cn/docs/github-pages">Hexo 官方的使用 Travis CI 教程</a>有点小坑啊，现在的 <code>GitHub Pages</code> 的部署分支必须是 <code>master</code> 分支了，但是官网的教程是部署到 <code>gh-pages</code> 分支上的，官网说可以切换 <code>GitHub Pages</code> 部署分支到 <code>gh-pages</code> 分支上，<strong>完全没说别的</strong>，作为刚使用一天的选手，我就是想把生成的分支改为 <code>master</code>，但是我在官方给的配置文件中根本没找到 <code>gh-pages</code>！，这里附带官网的配置文件（其中还要添加 <code>GH_TOKEN</code> 环境变量，这里就不展开说了）：</p><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span><span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span><span class="hljs-attr">node_js:</span>  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span><span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span><span class="hljs-attr">branches:</span>  <span class="hljs-attr">only:</span>    <span class="hljs-bullet">-</span> <span class="hljs-string">master</span> <span class="hljs-comment"># 仅仅构建 master 分支</span><span class="hljs-attr">script:</span>  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span><span class="hljs-attr">deploy:</span>  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span>  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span>  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span>  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span>  <span class="hljs-attr">on:</span>    <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span>  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span></code></pre><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>我去网上找来找去，找到了几个类似的解决办法：</p><ul><li><a href="https://garryshield.github.io/2019/04/08/travis-ci/">通过 Travis CI 自动部署 Hexo 到 Github</a> - 这个实现方法，和官方的实现方法不太一样，我一般比较喜欢官方的实现方法，要是实在找不到解决办法才会用</li><li><a href="https://notes.iissnan.com/2016/publishing-github-pages-with-travis-ci/">使用 Travis CI 自动更新 GitHub Pages</a> - 这个说的也和官方的不太一样</li></ul><p>找来找去，结果在 <a href="https://docs.travis-ci.com/user/deployment/pages/">官方 pages 部署的文档</a> 里面找到了，原来这个部署的默认分支就是 <code>gh-pages</code>！可以通过进一步配置 <code>target_branch</code> 来修改！所以我把所有的源代码移到了 <code>source</code> 分支上，然后将配置文件改成了下面这样，就可以正常访问了。</p><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span><span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span><span class="hljs-attr">node_js:</span>  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span><span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span><span class="hljs-attr">branches:</span>  <span class="hljs-attr">only:</span>    <span class="hljs-bullet">-</span> <span class="hljs-string">source</span> <span class="hljs-comment"># 仅仅构建 source 分支</span><span class="hljs-attr">script:</span>  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span><span class="hljs-attr">deploy:</span>  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span>  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span>  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span>  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span>  <span class="hljs-attr">on:</span>    <span class="hljs-attr">branch:</span> <span class="hljs-string">source</span>  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span>  <span class="hljs-attr">target_branch:</span> <span class="hljs-string">master</span></code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Travis CI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>编程中的 KISS 原则</title>
+    <link href="/2020/05/25/the-kiss-rules-in-programming/"/>
+    <url>/2020/05/25/the-kiss-rules-in-programming/</url>
+    
+    <content type="html"><![CDATA[<p>参考<a href="https://zhuanlan.zhihu.com/p/110031390">知乎文章 - 编程中的 kiss 原则是什么</a></p><a id="more"></a><h2 id="KISS-表示的是什么"><a href="#KISS-表示的是什么" class="headerlink" title="KISS 表示的是什么"></a>KISS 表示的是什么</h2><p>KISS 是 Keep It Stupid Simple 或 Keep It Simple,Stupid 的缩写。</p><h2 id="KISS-的含义"><a href="#KISS-的含义" class="headerlink" title="KISS 的含义"></a>KISS 的含义</h2><p>该原则在<a href="https://www.zhihu.com/people/san-guo-you-xi-da-shi">作者</a>的多年的软件工程生涯中取得关键、巨大的成功。当今的软件工程师和开发者们有个共同的问题，那就是他们总是慢慢地使得问题复杂化。正确的做法应该是当开发者遇到一个问题后，把问题拆分成一个个能够明白的小块，然后进入编码阶段。<br><a href="https://www.zhihu.com/people/san-guo-you-xi-da-shi">作者</a>认为，10 个开发者中有 8 个或 9 个都没有把问题分解成足够小或可以理解的足够小的部分。这就导致了即使是一个非常简单的问题最后也变成了非常复杂的实现，另外一个副作用就是意大利面代码，在 BASIC 里只是一个 goto 语句的事情，在 Java 中却需要 500 到 1000 行代码，每个方法都有几百行代码。</p><p>你需要先想好问题的解决步骤一共分为几步，然后再进入编码。而不是拿到需求后，就开始一边写代码一边去满足需求。这样做的好处就是你的代码会变的足够容易理解和足够清晰。</p><h2 id="我们能从-KISS-中获取到什么好处"><a href="#我们能从-KISS-中获取到什么好处" class="headerlink" title="我们能从 KISS 中获取到什么好处"></a>我们能从 KISS 中获取到什么好处</h2><ul><li>你可以更好地解决更多问题。</li><li>你将可以通过很少的几行代码去解决复杂的问题。</li><li>你将可以产出高质量的代码。</li><li>你将可以构建更大更易维护的系统。</li><li>当新的需求来了后，你的代码将会更加的灵活，易于扩展、易于修改和重构。</li><li>你将完成比你想象得更多的事情。</li><li>你将能够工作在一个大型开发团队和大型项目中，因为所有的代码都是 stupid simple。</li></ul><h2 id="我如何把-KISS-原则用到我的工作中"><a href="#我如何把-KISS-原则用到我的工作中" class="headerlink" title="我如何把 KISS 原则用到我的工作中"></a>我如何把 KISS 原则用到我的工作中</h2><p><a href="https://www.zhihu.com/people/san-guo-you-xi-da-shi">作者</a>推荐了几个简单的步骤可供执行，但有一定挑战。就像说起来的那么简单，keep it simple，主要是需要耐心，更多的靠你自己。</p><ul><li>要谦虚，不要认为自己是个天才，这是你第一个误解。只有谦虚了，你才能真正达到超级天才的水平，即使不行，who cares！你的代码那么 stupid simple，所以你<strong>不需要是个天才</strong>！</li><li>将你的任务分解为 4 - 12 小时的子任务。</li><li>把你的问题拆分成多个小问题。每个问题用一个或者很少的几个类来解决掉。</li><li>保持你的方法足够小，每个方法永远不要超过 30 - 40 行代码。每个方法都应该只处理一个小小的问题，不要搞太多 uses case 进去。如果你的方法中有多个分支，尝试把他们拆分成多个小的方法。这样不仅容易阅读和维护，找 bug 也更快。慢慢的你将学会爱。</li><li>让你的类也小点，原则和上面的方法是一样的。</li><li>先解决问题，然后开始编码。不要一边编码，一边解决问题。这样做也没什么错，但你有能力提前把事情切分成多个小的块，然后开始编码可能是比较好的。但也请你不要害怕一遍遍重构你的代码。另外行数还不是为了衡量质量的标准，只是有个基本的尺子而已。</li><li>不要害怕干掉代码。重构和重做是两个非常重要的方面。如果你遵循上面的建议，重写代码的数量将会最小化，如果你不遵循，那么代码很可能会被重写。</li><li>其他的任何场景，都请你尝试尽可能的简单，simple，这也是最难的一步，但一旦你拥有了它，你再回头看，就会说，之前的事情就是一坨屎。</li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zhuanlan.zhihu.com/p/110031390">知乎文章 - 编程中的 kiss 原则是什么</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>思想</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>KISS</tag>
+      
+      <tag>编程原则</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Unity 2D 平台跳跃游戏角色转身</title>
+    <link href="/2019/10/19/unity-character-turn-around/"/>
+    <url>/2019/10/19/unity-character-turn-around/</url>
+    
+    <content type="html"><![CDATA[<p>Unity 2D 平台跳跃游戏角色转身的一些方法</p><a id="more"></a><h2 id="方法-1-设置-Transform-中-Scale-属性为-1"><a href="#方法-1-设置-Transform-中-Scale-属性为-1" class="headerlink" title="方法 1 - 设置 Transform 中 Scale 属性为-1"></a>方法 1 - 设置 Transform 中 Scale 属性为-1</h2><p>具体实现方法如下</p><pre><code class="hljs csharp"><span class="hljs-built_in">int</span> faceDirection = Input.GetAxisRaw(<span class="hljs-string">&quot;horizontal&quot;</span>);<span class="hljs-keyword">if</span> (!Mathf.Approximately(faceDirection, <span class="hljs-number">0.0f</span>))&#123;    transform.localScale = <span class="hljs-keyword">new</span> Vector3(faceDirection, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);&#125;</code></pre><h2 id="方法-2-在动画器中新建相反方向的动画"><a href="#方法-2-在动画器中新建相反方向的动画" class="headerlink" title="方法 2 - 在动画器中新建相反方向的动画"></a>方法 2 - 在动画器中新建相反方向的动画</h2><p>在动画控制器中，新建一个 x 轴反转的属性，在我之前学习的教程中有具体描述</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>哔哩哔哩作者 <a href="https://space.bilibili.com/370283072/">M_studio</a> 的视频</p><p><a href="https://www.bilibili.com/video/BV154411f7Pa">Unity 教程 Your First Game|入门 Tutorial:05 角色方向&amp;跳跃</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Unity 游戏引擎</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>对单例模式的理解</title>
+    <link href="/2019/10/11/some-understanding-to-singleton-pattern/"/>
+    <url>/2019/10/11/some-understanding-to-singleton-pattern/</url>
+    
+    <content type="html"><![CDATA[<p>对单例模式的一些理解</p><a id="more"></a><h2 id="单例模式概述"><a href="#单例模式概述" class="headerlink" title="单例模式概述"></a>单例模式概述</h2><p>单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p><p>注意：</p><ul><li>单例类只能有一个实例</li><li>单例类必须创建自己的唯一实例</li><li>单例类必须给所有其他对象提供这一实例</li></ul><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p><h3 id="主要解决"><a href="#主要解决" class="headerlink" title="主要解决"></a>主要解决</h3><p>一个全局使用的类频繁地创建与销毁。</p><h3 id="何时使用"><a href="#何时使用" class="headerlink" title="何时使用"></a>何时使用</h3><p>当您想控制实例数目，节省系统资源的时候。</p><h3 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h3><p>判断系统是否已经有这个单例，如果有则返回，如果没有则创建。</p><h3 id="关键代码"><a href="#关键代码" class="headerlink" title="关键代码"></a>关键代码</h3><p>构造函数是私有的。</p><h3 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h3><ol><li>一个班级只有一个班主任</li><li>Windows是多进程多线程的，在操作一个文件的时候，就不可避免的出现多个进程或线程同时操作一个文件的情况，所以所有文件的处理必须通过唯一实例运行</li><li>设备管理器经常设计为单例模式，比如一个电脑有两个打印机，在输出的时候不能两台打印机处理同一文件</li></ol><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol><li>在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。</li><li>避免对资源的多重占用（比如写文件操作）。</li></ol><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ol><li><p>要求生产唯一序列号。</p></li><li><p>WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来。</p></li><li><p>创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</p></li></ol><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h3><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton _instance = <span class="hljs-keyword">new</span> Singleton();    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123;&#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">return</span> _instance;    &#125;&#125;</code></pre><h3 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h3><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton _instance = <span class="hljs-keyword">new</span> Singleton2();    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">if</span> (_instance != <span class="hljs-keyword">null</span>) &#123;            _instance = <span class="hljs-keyword">new</span> Singleton();        &#125;        <span class="hljs-keyword">return</span> _instance;    &#125;&#125;</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.runoob.com/design-pattern/singleton-pattern.html">runoob.com - 单例模式</a></p><p><a href="https://refactoringguru.cn/design-patterns/singleton">refactoringguru.cn - 单例设计模式</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>设计模式</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>

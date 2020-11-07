@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="mazixiang">
+  <meta name="keywords" content="">
+  <title>MySQL Server 8 的远程连接错误 ERROR 2003 解决办法 - mazixiang</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>mazixiang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="MySQL Server 8 的远程连接错误 ERROR 2003 解决办法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-09-12 22:02" pubdate>
+        2020年9月12日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL Server 8 的远程连接错误 ERROR 2003 解决办法</h1>
+            
+            <div class="markdown-body">
+              <p>简单介绍 MySQL Server 8 的远程连接错误 ERROR 2003 解决办法</p>
+<a id="more"></a>
+
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>购买了一台阿里云服务器，但是我的域名没法备案，无法用来存放网页，所以想将其作为数据库服务器，在服务器上运行了 MySQL Server 8.0 数据库软件，之后发现无法通过 DataGrip 软件连接，开始排查原因。</p>
+<h2 id="服务器环境"><a href="#服务器环境" class="headerlink" title="服务器环境"></a>服务器环境</h2><p>服务器是阿里云的最低配服务器，安装的是 Ubuntu20.04 - LTS 系统，有基础的开发环境</p>
+<h2 id="数据库用户问题"><a href="#数据库用户问题" class="headerlink" title="数据库用户问题"></a>数据库用户问题</h2><p>远程连接数据库并且通过 MySQL Shell 创建并授权一个用户</p>
+<div class="hljs"><pre><code class="hljs SQL"><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;tone&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">identified</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123123&#x27;</span>;
+
+<span class="hljs-keyword">grant</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">privileges</span> <span class="hljs-keyword">on</span> *.* <span class="hljs-keyword">to</span> <span class="hljs-string">&#x27;tone&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">grant</span> <span class="hljs-keyword">option</span>;</code></pre></div>
+
+<p>之后打开本地电脑上面的软件，发现 DataGrip 报错，输出</p>
+<div class="hljs"><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">
+[08S01] Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+java.net.ConnectException: Connection refused: connect.</code></pre></div>
+
+<p>怀疑是密码的问题，于是查看了一下，默认的密码格式为 <code>caching_sha2_password</code>，但 <code>root</code> 用户的密码格式为 <code>mysql_native_password</code>，所以进行了操作修改了密码格式</p>
+<div class="hljs"><pre><code class="hljs SQL"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;zhangsan&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-keyword">IDENTIFIED</span> <span class="hljs-keyword">WITH</span> mysql_native_password <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;zhangsan111&#x27;</span>;</code></pre></div>
+
+<p>发现仍然无法连接</p>
+<h2 id="防火墙端口问题"><a href="#防火墙端口问题" class="headerlink" title="防火墙端口问题"></a>防火墙端口问题</h2><p>查阅网上对 <code>jdbc</code> 的 <code>java.net.ConnectException: Connection refused: connect.</code> 的说明，可能是端口问题，于是开始排查服务器的防火墙。</p>
+<p>首先，打开阿里云控制台的安全组，将 MySQL 运行的端口（默认为 3306）对所有 IP 地址开放，还是无法连接，然后在 Linux 上安装 nmap 软件查看开放的端口</p>
+<div class="hljs"><pre><code class="hljs bash">$ sudo apt install nmap
+...
+$ nmap localhost
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-12 22:22 CST
+Nmap scan report <span class="hljs-keyword">for</span> localhost (127.0.0.1)
+Host is up (0.0000030s latency).
+Other addresses <span class="hljs-keyword">for</span> localhost (not scanned): ::1
+Not shown: 997 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+3306/tcp open  mysql
+
+Nmap <span class="hljs-keyword">done</span>: 1 IP address (1 host up) scanned <span class="hljs-keyword">in</span> 0.05 seconds</code></pre></div>
+
+<p>发现所有端口均开放正常，也没有防火墙之类的问题，于是继续排查问题</p>
+<h2 id="服务器端配置"><a href="#服务器端配置" class="headerlink" title="服务器端配置"></a>服务器端配置</h2><p>为了更加精确地排查错误，我使用了 Ubuntu - WSL 安装了 MySQL-Client-8.0</p>
+<div class="hljs"><pre><code class="hljs bash">$ sudo apt install mysql-client-8.0
+...</code></pre></div>
+
+<p>使用本地的 MySQL 客户端连接服务器后，才精准地定位到了错误：</p>
+<div class="hljs"><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">Enter password:
+ERROR 2003 (HY000): Can&#39;t connect to MySQL server on &#39;47.101.58.125&#39; (111)</code></pre></div>
+
+<p>于是开始上网查找 ERROR 2003 的解决方法，发现了提示：ERROR 2003 有可能和服务器端的配置有关系，马上找到 <code>/etc/mysql/my.cnf</code></p>
+<div class="hljs"><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">!includedir &#x2F;etc&#x2F;mysql&#x2F;conf.d&#x2F;
+!includedir &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;</code></pre></div>
+
+<p>发现有两个目录：</p>
+<div class="hljs"><pre><div class="caption"><span>Text</span></div><code class="hljs Plain">&#x2F;etc&#x2F;mysql&#x2F;conf.d
+├── mysql.cnf
+└── mysqldump.cnf
+
+&#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d
+├── mysql.cnf
+└── mysqld.cnf</code></pre></div>
+
+<p>分别查看这四个文件，发现只有 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 有一些内容，其中，网上的资料说可能与 <code>bind-address=127.0.0.1</code> 有关系，而这个文件正好有一行，所以尝试修改为我的服务器的 IP 地址，发现不行。于是去查了一下有关这个属性的资料，得知，这个属性是指定 TCP/IP 的配置，将其注释掉，重启 MySQL 服务，DataGrip 连接成功，MySQL 客户端连接成功。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我本以为远程连接服务器上的数据库是非常简单的，只需要一个用户和密码就可以连接了。但是，实际操作服务器时，还是有很多的细节没有注意，导致了多次的失败，所以对于任何事情一定要多去实践，只有多实践才能知道有哪些不足。纸上得来终觉浅，绝知此事要躬行。</p>
+<p>许多事情，不要觉得简单就去用图形界面，拿这次举例，DataGrip 是 JetBrains 公司推出的带有图形界面的数据库管理软件，但是他连接失败只报出了 <code>java.net.ConnectException</code> 错误，导致我排查错误的方向不对，而命令行上面的 <code>mysql-client</code> 直接报告了错误的详细信息，让我有了更精准的排查方式。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><h3 id="数据库用户"><a href="#数据库用户" class="headerlink" title="数据库用户"></a>数据库用户</h3><p>创建用户并授权：<a target="_blank" rel="noopener" href="http://netsite.win/2018/06/13/mysql/mysql8%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%8F%8A%E6%8E%88%E6%9D%83-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5-%E5%9D%91/">mysql8 创建用户及授权-远程连接(坑) | 永无止境</a></p>
+<p>修改密码格式：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_22860341/article/details/85061819">mysql8 创建用户并授权_飞奔的波大爷的博客-CSDN 博客</a></p>
+<h3 id="防火墙和端口"><a href="#防火墙和端口" class="headerlink" title="防火墙和端口"></a>防火墙和端口</h3><p>对 <code>java.net.ConnectException: Connection refused: connect.</code> 错误的解决方法：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011314442/article/details/80926682">解决： java.net.ConnectException: Connection refused: connect_愿我如星君如月 … 夜夜流光相皎洁 …-CSDN 博客</a></p>
+<p>查看正在使用的端口：<a target="_blank" rel="noopener" href="https://blog.csdn.net/q361239731/article/details/53180126">linux 如何查看正在使用的端口_萝卜 Master 的博客-CSDN 博客</a></p>
+<p>查看开放的端口：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/kerrycode/p/5609010.html">Linux 查看服务器开放的端口号 - 潇湘隐者 - 博客园</a></p>
+<h3 id="服务器端配置问题"><a href="#服务器端配置问题" class="headerlink" title="服务器端配置问题"></a>服务器端配置问题</h3><p>ERROR 2003 解决方法：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qustdjx/article/details/26937325">MySQL 远程连接 ERROR 2003 (HY000):Cant connect to MySQL server onXXXXX(111) 的问题_qustdjx 的博客-CSDN 博客</a></p>
+<p>ERROR 2003 解决方法：<a target="_blank" rel="noopener" href="https://blog.csdn.net/a5nan/article/details/72864249">MySQL 远程访问报错 ERROR 2003 (HY000):Cant connect to MySQL server onXXXXX(111)_没事就写点-CSDN 博客</a></p>
+<h3 id="对-bind-address-属性的解释"><a href="#对-bind-address-属性的解释" class="headerlink" title="对 bind-address 属性的解释"></a>对 bind-address 属性的解释</h3><p>官方：<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_tmpdir">MySQL :: MySQL 8.0 Reference Manual :: 5.1.8 Server System Variables</a>，Chrome 80 以上点击 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#docs-body:~:text=a-,bind_address%20system">此链接</a>，可以直达 <code>bind-address</code> 处</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%B8%A9%E5%9D%91/">踩坑</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/MySQL/">MySQL</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！</p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

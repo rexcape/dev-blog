@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="mazixiang">
+  <meta name="keywords" content="">
+  <title>ns3 网络模拟软件的安装和起步 - mazixiang</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>mazixiang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ns3 网络模拟软件的安装和起步">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-06-24 19:23" pubdate>
+        2020年6月24日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      707 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ns3 网络模拟软件的安装和起步</h1>
+            
+            <div class="markdown-body">
+              <p>ns3 网络模拟软件的安装和使用</p>
+<a id="more"></a>
+
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>运行 <code>ns3</code> 需要安装 <code>Linux</code> 虚拟机或者是 <code>WSL</code>，Windows 无法直接跑，本文中使用 <code>VMWare Workstation 15.5</code> 的 <code>Ubuntu 20.04LTS</code> 为环境，其他 <code>Linux</code> 发行版本大同小异，请前往参考中的官网文档</p>
+<p>建议用 <code>WSL</code> 跑，虚拟机会消耗一些性能</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>首先，进入<a target="_blank" rel="noopener" href="https://www.nsnam.org/releases/">ns 的 release 网页（官方）</a></p>
+<p><img src="https://s1.ax1x.com/2020/06/24/Nwenq1.png" srcset="/img/loading.gif" alt="website"></p>
+<p>下载最新版本的 tar 包，传入虚拟机中，使用 <code>tar -xvf</code> 命令解压文件，得到文件夹，我的是 <code>ns-allinone-3.30.1</code></p>
+<h2 id="使用-apt-安装依赖"><a href="#使用-apt-安装依赖" class="headerlink" title="使用 apt 安装依赖"></a>使用 apt 安装依赖</h2><p>首先使用以下命令安装依赖</p>
+<div class="hljs"><pre><code class="hljs bash">$ sudo apt install g++ python3
+...
+g++ is already the newest version (4:9.3.0-1ubuntu2).
+python3 is already the newest version (3.8.2-0ubuntu2).
+0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.</code></pre></div>
+
+<p><code>Ununtu 20.04LTS</code> 版本中已经安装好了 <code>g++</code> 和 <code>Python3</code></p>
+<h2 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h2><p>确保工作目录是在 <code>ns-allinone-3.30.1</code> 下，在命令行中执行如下命令开始构建，时间可能会很长，请耐心等待。</p>
+<div class="hljs"><pre><code class="hljs bash">$ ./build.py --enable-tests --enable-examples
+...
+Leaving directory `./ns-3.30.1<span class="hljs-string">&#x27;</span></code></pre></div>
+
+<p>得到以下输出，说明构建成功</p>
+<p><img src="https://s1.ax1x.com/2020/06/24/Nwmb9S.jpg" srcset="/img/loading.gif" alt="构建成功"></p>
+<p>如果失败，请删除文件夹重新再来一遍（我就是这么做的，重来了几遍，最后可以正常运行了）</p>
+<h2 id="进一步构建"><a href="#进一步构建" class="headerlink" title="进一步构建"></a>进一步构建</h2><p>据官方文档所说，上一步是构建好运行时需要的库，这一步是进行真实构建。</p>
+<p>切换工作目录到文件夹中的 <code>ns-*</code> 目录（我的是 <code>ns-3.30.1</code>），在命令行中执行如下命令，向 Waf 解释它应该进行包括示例和测试的优化构建</p>
+<div class="hljs"><pre><code class="hljs bash">$ ./waf clean
+<span class="hljs-string">&#x27;clean&#x27;</span> finished successfully (0.398s)
+$ ./waf configure --build-profile=optimized --enable-examples --enable-tests
+...
+<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.899s)</code></pre></div>
+
+<p>切换回包含示例和测试的调试（debug）版本。</p>
+<div class="hljs"><pre><code class="hljs bash">$ ./waf clean
+$ ./waf configure --build-profile=debug --enable-examples --enable-tests
+...
+<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.618s)</code></pre></div>
+
+<p>开始构建</p>
+<div class="hljs"><pre><code class="hljs bash">$ ./waf
+...
+<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (20m15.146s)
+...</code></pre></div>
+
+<p>如果出现了下图的结果，说明构建成功</p>
+<p><img src="https://s1.ax1x.com/2020/06/24/NwuTSS.jpg" srcset="/img/loading.gif" alt="进一步构建成功"></p>
+<h2 id="测试-ns3（可跳过）"><a href="#测试-ns3（可跳过）" class="headerlink" title="测试 ns3（可跳过）"></a>测试 ns3（可跳过）</h2><p>命令行中执行 <code>./test.py</code> 来运行测试脚本，出现一大堆 <code>PASS</code> 说明测试成功（图就不放了，太大了）</p>
+<p>这个时间很长，如果没耐心可以跳过，基本上来说前几步正常进行的话都没问题</p>
+<h2 id="运行一个脚本"><a href="#运行一个脚本" class="headerlink" title="运行一个脚本"></a>运行一个脚本</h2><p>命令行中执行如下命令</p>
+<div class="hljs"><pre><code class="hljs bash">$ ./waf --run hello-simulator
+Build commands will be stored <span class="hljs-keyword">in</span> build/compile_commands.json
+<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (0.844s)
+Hello Simulator</code></pre></div>
+
+<p>出现和上面相同的结果说明运行成功，成功入门</p>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jhcelue/p/6905943.html">NS3 网络仿真（2）：first.py - jhcelue - 博客园</a></p>
+<p>这个是系列教程，作者很牛逼</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/deep_kang/article/details/73350350">NS3 网络仿真_deep_keng 的博客-CSDN 博客_ns3 使用 netanim 仿真 wifi 节点</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fe77a15a1eb4">用 NS3 进行虚拟仿真 - 简书</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.nsnam.org/wiki/Installation">ns3 官方安装指南（英）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nsnam.org/docs/release/3.30/tutorial/html/getting-started.html">ns3 官方构建文档（英）</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%B8%A9%E5%9D%91/">踩坑</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ns3-%E7%BD%91%E7%BB%9C%E6%A8%A1%E6%8B%9F%E8%BD%AF%E4%BB%B6/">ns3 网络模拟软件</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！</p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

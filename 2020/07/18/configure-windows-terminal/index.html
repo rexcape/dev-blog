@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="mazixiang">
+  <meta name="keywords" content="">
+  <title>配置 Windows Terminal - mazixiang</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>mazixiang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="配置 Windows Terminal">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-07-18 17:57" pubdate>
+        2020年7月18日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      725 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      9
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">配置 Windows Terminal</h1>
+            
+            <div class="markdown-body">
+              <p>最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何配置与美化 Windows Terminal</p>
+<a id="more"></a>
+
+<h2 id="打开-Windows-Terminal-配置文件"><a href="#打开-Windows-Terminal-配置文件" class="headerlink" title="打开 Windows Terminal 配置文件"></a>打开 Windows Terminal 配置文件</h2><p>在 <code>Windows Terminal</code> 窗口下按 <code>Ctrl + ,</code> （或者点击新建标签页旁边的向下箭头-设置）来用编辑器打开配置文件，我的电脑中是用 <code>VS Code</code> 打开的</p>
+<h2 id="Dracula-主题"><a href="#Dracula-主题" class="headerlink" title="Dracula 主题"></a>Dracula 主题</h2><p>去 <a target="_blank" rel="noopener" href="https://draculatheme.com/windows-terminal">Dracula 主题网站的 Windows Terminal 页面</a>，将主题的配置复制到 <code>schemes</code> 项下面</p>
+<div class="hljs"><pre><code class="hljs json">&quot;schemes&quot;: [
+    &#123;
+        <span class="hljs-attr">&quot;name&quot;</span> : <span class="hljs-string">&quot;Dracula&quot;</span>,
+        <span class="hljs-attr">&quot;background&quot;</span> : <span class="hljs-string">&quot;#272935&quot;</span>,
+        <span class="hljs-attr">&quot;black&quot;</span> : <span class="hljs-string">&quot;#21222C&quot;</span>,
+        <span class="hljs-attr">&quot;blue&quot;</span> : <span class="hljs-string">&quot;#BD93F9&quot;</span>,
+        <span class="hljs-attr">&quot;cyan&quot;</span> : <span class="hljs-string">&quot;#8BE9FD&quot;</span>,
+        <span class="hljs-attr">&quot;foreground&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,
+        <span class="hljs-attr">&quot;green&quot;</span> : <span class="hljs-string">&quot;#50FA7B&quot;</span>,
+        <span class="hljs-attr">&quot;purple&quot;</span> : <span class="hljs-string">&quot;#FF79C6&quot;</span>,
+        <span class="hljs-attr">&quot;red&quot;</span> : <span class="hljs-string">&quot;#FF5555&quot;</span>,
+        <span class="hljs-attr">&quot;white&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,
+        <span class="hljs-attr">&quot;yellow&quot;</span> : <span class="hljs-string">&quot;#FFB86C&quot;</span>,
+        <span class="hljs-attr">&quot;brightBlack&quot;</span> : <span class="hljs-string">&quot;#6272A4&quot;</span>,
+        <span class="hljs-attr">&quot;brightBlue&quot;</span> : <span class="hljs-string">&quot;#D6ACFF&quot;</span>,
+        <span class="hljs-attr">&quot;brightCyan&quot;</span> : <span class="hljs-string">&quot;#A4FFFF&quot;</span>,
+        <span class="hljs-attr">&quot;brightGreen&quot;</span> : <span class="hljs-string">&quot;#69FF94&quot;</span>,
+        <span class="hljs-attr">&quot;brightPurple&quot;</span> : <span class="hljs-string">&quot;#FF92DF&quot;</span>,
+        <span class="hljs-attr">&quot;brightRed&quot;</span> : <span class="hljs-string">&quot;#FF6E6E&quot;</span>,
+        <span class="hljs-attr">&quot;brightWhite&quot;</span> : <span class="hljs-string">&quot;#F8F8F2&quot;</span>,
+        <span class="hljs-attr">&quot;brightYellow&quot;</span> : <span class="hljs-string">&quot;#FFFFA5&quot;</span>
+    &#125;
+]</code></pre></div>
+
+<p>之后在 <code>Profiles</code> 中的 <code>defaults</code> 下配置默认主题</p>
+<div class="hljs"><pre><code class="hljs json">&quot;defaults&quot;:
+&#123;
+    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>
+&#125;</code></pre></div>
+
+<h2 id="添加到右键菜单"><a href="#添加到右键菜单" class="headerlink" title="添加到右键菜单"></a>添加到右键菜单</h2><h3 id="自动添加注册表"><a href="#自动添加注册表" class="headerlink" title="自动添加注册表"></a>自动添加注册表</h3><p>新建 <code>wt.reg</code> 文件，用记事本打开，将如下代码拷贝到其中</p>
+<div class="hljs"><pre><code class="hljs reg">Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\wt]
+@&#x3D;&quot;Windows Terminal Here&quot;
+&quot;Extended&quot;&#x3D;&quot;&quot;
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
+@&#x3D;&quot;C:\\Users\\你的用户名\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe&quot;</code></pre></div>
+
+<h3 id="手动添加注册表"><a href="#手动添加注册表" class="headerlink" title="手动添加注册表"></a>手动添加注册表</h3><p>按下 <code>Win + R</code> 打开运行，输入 <code>regedit</code> 打开注册表编辑器，找到 <code>HKEY_CLASSES_ROOT\Directory\Background\shell</code>，新建一项（名字随便起，这里叫做 wt）</p>
+<p><img src="https://s1.ax1x.com/2020/07/19/UW3rz4.png" srcset="/img/loading.gif" alt="新建 wt 项"></p>
+<p>wt 项的默认值的数据就是右键菜单的文本内容，我将其配置为“通过 Terminal 打开”</p>
+<p>再新建一个字符串值，名称为 <code>Icon</code>，数据是 Windows Terminal 图标的绝对路径（可以通过网上下载到 <code>Windows Terminal</code> 的图标</p>
+<p>我的 wt 项配置如下</p>
+<p><img src="https://s1.ax1x.com/2020/07/19/UW82cQ.png" srcset="/img/loading.gif" alt="wt 项配置"></p>
+<div class="note note-primary">
+            <p>如果想添加快捷键，新建的项默认值是 <code>通过 Terminal 打开 (&amp;T)</code>，其中， <code>&amp;</code> 后面是你想添加的快捷键</p>
+          </div>
+
+<p>再在 wt 项下建立 command 项，默认值的数据是到达你的 <code>wt.exe</code> 的绝对路径，一般来说是 <code>C:\Users\[你的用户名]\AppData\Local\Microsoft\WindowsApps\wt.exe</code></p>
+<h2 id="更改启动路径"><a href="#更改启动路径" class="headerlink" title="更改启动路径"></a>更改启动路径</h2><p>经过以上操作，完成了右键菜单的添加，这部分介绍如何更改默认的启动路径</p>
+<p>在配置文件 <code>settings.json</code> 中，<code>Profiles</code> 下面的 <code>defaults</code> 下配置默认启动路径，让每次的启动路径都是右键点击的路径</p>
+<div class="hljs"><pre><code class="hljs json">&quot;defaults&quot;:
+&#123;
+    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>,
+    <span class="hljs-attr">&quot;startingDirectory&quot;</span>: <span class="hljs-string">&quot;.&quot;</span>
+&#125;</code></pre></div>
+
+<p>这样 <code>Windows Terminal</code> 的美化和配置就完成了</p>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>更多配置信息可以通过 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/terminal/">Microsoft - Windows 终端</a> 去了解</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="draculatheme.com">Dracula 主题网站</a></p>
+<p>自动添加注册表</p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/Garwih/b4ec0d853e0f3093874e919ace7fce2f">Garwih - 将 Windows Terminal 添加到右键菜单</a></p>
+<p>手动添加注册表</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011532601/article/details/106305373">Huelse - 将 Windows Terminal 添加到右键菜单</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AE%9E%E7%94%A8/">实用</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Windows-Terminal/">Windows Terminal</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BE%8E%E5%8C%96/">美化</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！</p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
