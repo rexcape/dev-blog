@@ -25,6 +25,7 @@ categories:
 |        [Data Preview](https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview)        |      用表格、文本、图标方式预览 json 等数据文件       |
 |               [docs-markdown](https://marketplace.visualstudio.com/items?itemName=docsmsft.docs-markdown)               |                   Markdown 写作帮助                   |
 |                  [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)                   |                  ECMAScript 代码提示                  |
+|                   [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)                   |                    Git 可视化显示                     |
 |                     [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)                      |                       Git 加强                        |
 |                      [jshint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.jshint)                      |                  JavaScript 语言提示                  |
 |                [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)                 |                   实时预览 Web 页面                   |
@@ -39,6 +40,7 @@ categories:
 |             [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)             |                     SSH 远程开发                      |
 |             [Remote - WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)             |                       WSL 开发                        |
 |                       [Rust](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust)                        |                     Rust 语言工具                     |
+|                     [shellman](https://marketplace.visualstudio.com/items?itemName=Remisa.shellman)                     |                  Shell 脚本自动补全                   |
 |                 [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)                  |                 快速查看代码中的 TODO                 |
 |            [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)            |              突出显示代码后面多余的空格               |
 | [Web Template Studio](https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WebTemplateStudio-dev-nightly) |    互联网应用框架脚手架，会捆绑安装 Azure 相关插件    |
