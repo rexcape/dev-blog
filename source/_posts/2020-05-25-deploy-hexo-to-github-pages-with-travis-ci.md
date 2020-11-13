@@ -1,8 +1,9 @@
 ---
-title: 通过 Travis CI 将 Hexo 博客部署到 GitHub Pages
+title: 通过 Travis CI 或者 GitHub Actions 将 Hexo 博客部署到 GitHub Pages
 date: 2020-05-25 22:30:00
 tags:
   - Travis CI
+  - GitHub Actions
 categories:
   - 踩坑
 ---
@@ -10,6 +11,80 @@ categories:
 纯萌新遇到的一些坑
 
 <!--more-->
+
+## 更新
+
+目前，**[Hexo 英文文档](https://hexo.io/docs/github-pages)**已经使用 `GitHub Actions` 来部署到 GitHub Pages 上了，但是中文文档没有同步更新，所以更新一下对应的方法
+
+### 预先检查
+
+首先，确定你项目的源文件全部在 source 分支上，然后进行对应的操作
+
+### 检查是否存在脚本
+
+检查一下 `package.json` 文件下有没有如下两行，如果没有，添加进去
+
+```json
+{
+  "scripts": {
+    "build": "hexo generate"
+  },
+```
+
+### 推送到 GitHub 分支
+
+在你的项目目录下面运行如下命令，将你博客的 source 分支推送到远程的对应分支上
+
+```bash
+$ git push -u origin source
+...
+```
+
+### 新建 GitHub Workflow
+
+在你的项目文件夹下新建 `.github/workflows/pages.yml`
+
+```yaml
+name: Pages
+
+on:
+  push:
+    branches:
+      - source # 默认部署分支
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: master # 部署到的分支
+```
+
+### 更改 GitHub 仓库设置
+
+更改你的 GitHub 仓库设置，到 `GitHub Pages` 部分，将 `source` 分支改为 `master`
+
+注意：如果你有自定义域名，请将 `CNAME` 文件放入 `source` 文件夹
 
 ## 流程
 
