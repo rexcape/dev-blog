@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>构建 Docker 镜像</title>
+    <link href="/2021/01/22/build-custom-docker-images/"/>
+    <url>/2021/01/22/build-custom-docker-images/</url>
+    
+    <content type="html"><![CDATA[<p>构建 Docker 镜像的方法</p><a id="more"></a><p>构建 Docker 镜像可以让别人也可以构建出相同的环境</p><h2 id="commit"><a href="#commit" class="headerlink" title="commit"></a>commit</h2><h3 id="查看更改"><a href="#查看更改" class="headerlink" title="查看更改"></a>查看更改</h3><p>在终端中输入 <code>docker diff CONTAINER</code> 来查看容器的变动，其中 A 是新增的文件，C 是修改的文件，D 是删除的文件</p><h3 id="提交更改"><a href="#提交更改" class="headerlink" title="提交更改"></a>提交更改</h3><p>在终端中输入 <code>docker commit CONTAINER username/image-name:tag</code> 来提交更改，username 是自己定义的用户名，image-name 是镜像名称，<code>tag</code> 是标签（版本号），可以是数字、字符串等</p><p>示例：<code>docker commit foobar mazixiang/foobar:0.1.0</code></p><p>之后就可以在本地看到提交的 Docker 镜像了</p><h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><p>在项目文件夹下新建 Dockerfile 文件，然后添加字段</p><ul><li><code>FROM</code> 表示构建镜像的基础</li><li><code>RUN</code> 构建镜像时执行的命令</li><li><code>WORKDIR</code> 定义工作目录</li><li><code>COPY</code> 将本机文件拷贝到容器中</li><li><code>CMD</code> 指定容器运行时要执行什么命令，只能有一个</li></ul><p>在项目文件夹下执行 <code>docker build -t username/image-name:tag .</code> 来构建容器</p><p>例</p><figure class="highlight dockerfile"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> ubuntu<br><span class="hljs-keyword">RUN</span><span class="bash"> sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt install nodejs -y</span><br><span class="hljs-keyword">WORKDIR</span><span class="bash"> /app</span><br><span class="hljs-keyword">COPY</span><span class="bash"> . .</span><br><span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">&quot;node&quot;</span>, <span class="hljs-string">&quot;test.js&quot;</span>]</span><br></code></pre></div></td></tr></table></figure><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.docker.com/engine/reference/builder/">Dockerfile 参考文档</a></p><p><a href="https://www.bilibili.com/video/BV1v5411G7xc">BiliBili 自建 Docker 镜像 - CodingStartip</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>基础 Docker 命令</title>
+    <link href="/2021/01/21/basic-docker-commands/"/>
+    <url>/2021/01/21/basic-docker-commands/</url>
+    
+    <content type="html"><![CDATA[<p>介绍一些基础的 Docker 命令</p><a id="more"></a><h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a><code>docker ps</code></h2><p><code>ps</code> 命令用于查看正在运行的镜像的状态</p><p><code>ps -a</code> 命令可以查看所有容器</p><h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a><code>docker run</code></h2><p>run 命令用于建立并运行一个容器，常用参数有</p><ul><li><code>-i</code>：与这个容器互动</li><li><code>-t</code>：创建一个终端</li><li><code>--name 容器名称</code>：容器的名称</li><li><code>-p 本机端口:虚拟机端口</code>：容器的端口映射</li><li><code>-d</code>：启动为 detached 模式，不进入容器中</li><li><code>-v 本机路径:虚拟机路径</code>：将电脑中的文件映射到容器中，允许容器获取指定位置的文件</li></ul><p>例 <code>docker run -it --name ubuntu -p 8080:80 -v $(pwd):/app ubuntu:lts</code></p><h2 id="容器匹配"><a href="#容器匹配" class="headerlink" title="容器匹配"></a>容器匹配</h2><p>下面几个命令中的 CONTAINER 可以是：</p><ul><li>容器名称</li><li>容器 ID</li><li>容器 ID 的前几位，Docker 会进行模糊匹配</li></ul><h2 id="docker-start-CONTAINER"><a href="#docker-start-CONTAINER" class="headerlink" title="docker start CONTAINER"></a><code>docker start CONTAINER</code></h2><p><code>start</code> 命令用于启动一个已经停止的容器</p><h2 id="docker-stop-CONTAINER"><a href="#docker-stop-CONTAINER" class="headerlink" title="docker stop CONTAINER"></a><code>docker stop CONTAINER</code></h2><p><code>stop</code> 命令用于停止一个正在运行的容器</p><h2 id="docker-attach-CONTAINER"><a href="#docker-attach-CONTAINER" class="headerlink" title="docker attach CONTAINER"></a><code>docker attach CONTAINER</code></h2><p><code>attach</code> 命令用于进入到一个正在运行的容器中</p><h2 id="docker-rm-CONTAINER"><a href="#docker-rm-CONTAINER" class="headerlink" title="docker rm CONTAINER"></a><code>docker rm CONTAINER</code></h2><p><code>rm</code> 命令用于移除一个容器</p><h2 id="docker-image-ls"><a href="#docker-image-ls" class="headerlink" title="docker image ls"></a><code>docker image ls</code></h2><p><code>image ls</code> 命令可以查看所有本地镜像</p><h2 id="docker-rmi"><a href="#docker-rmi" class="headerlink" title="docker rmi"></a><code>docker rmi</code></h2><p><code>rmi</code> 命令可以删除指定的本地镜像，释放空间</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.bilibili.com/video/BV1vD4y1X7ce">BiliBili 初探 Docker - CodingStartup</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>实用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Ubuntu 设置锐捷客户端为自启动</title>
     <link href="/2020/10/19/set-ruijie-client-to-self-start-on-ubuntu/"/>
     <url>/2020/10/19/set-ruijie-client-to-self-start-on-ubuntu/</url>

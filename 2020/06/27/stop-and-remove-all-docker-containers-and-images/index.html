@@ -59,7 +59,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.3.0"></head>
 
 
 <body>
@@ -243,12 +243,9 @@
 <a id="more"></a>
 
 <h2 id="停止所有-Docker-容器"><a href="#停止所有-Docker-容器" class="headerlink" title="停止所有 Docker 容器"></a>停止所有 Docker 容器</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ docker stop $(docker ps -aq)<br><span class="hljs-comment"># 你的所有 Docker 容器的 ID</span><br></code></pre></div></td></tr></table></figure>
-
 <p>其中 <code>docker ps -aq</code> 的作用是列出所有 <code>Docker</code> 容器的 ID</p>
 <h2 id="删除所有-Docker-容器"><a href="#删除所有-Docker-容器" class="headerlink" title="删除所有 Docker 容器"></a>删除所有 Docker 容器</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ docker rm $(docker ps -aq)<br><span class="hljs-comment"># 你的所有 Docker 容器的 ID</span><br></code></pre></div></td></tr></table></figure>
-
 <h2 id="删除所有-Docker-镜像"><a href="#删除所有-Docker-镜像" class="headerlink" title="删除所有 Docker 镜像"></a>删除所有 Docker 镜像</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ docker rmi $(docker images -aq)<br><span class="hljs-comment"># 你的所有 Docker 镜像的 ID</span><br></code></pre></div></td></tr></table></figure>
-
 <p>其中 <code>docker images -aq</code> 的作用是列出所有 <code>Docker</code> 镜像的 ID</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://colobu.com/2018/05/15/Stop-and-remove-all-docker-containers-and-images/">停止、删除所有的 docker 容器和镜像 | 鸟窝</a></p>
 

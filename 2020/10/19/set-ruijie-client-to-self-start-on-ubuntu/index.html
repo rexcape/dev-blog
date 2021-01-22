@@ -59,7 +59,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.3.0"></head>
 
 
 <body>
@@ -256,24 +256,19 @@
 <h2 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h2><p>这里使用 minieap 作为认证客户端，minieap 的 <a target="_blank" rel="noopener" href="https://github.com/updateing/minieap">GitHub 链接</a></p>
 <p>首先，克隆仓库</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ git <span class="hljs-built_in">clone</span> https://github.com/updateing/minieap.git<br><span class="hljs-comment"># clone github repo</span><br></code></pre></div></td></tr></table></figure>
-
 <p>转到仓库 <code>cd minieap</code></p>
 <p>安装依赖 <code>sudo apt install gcc g++ cmake</code></p>
 <p>进行编译 <code>make</code></p>
 <p>可以直接使用 <code>$&#123;你的 minieap 目录路径&#125;/minieap -h</code> 来查看文档，说明基本命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ <span class="hljs-variable">$&#123;你的 minieap 目录路径&#125;</span>/minieap -u <span class="hljs-variable">$&#123;你的用户名&#125;</span> -p <span class="hljs-variable">$&#123;你的密码&#125;</span> -n <span class="hljs-variable">$&#123;你的网卡名&#125;</span> -b 1<br><span class="hljs-comment"># -b 1 是在后台运行的意思</span><br></code></pre></div></td></tr></table></figure>
-
 <p>就可以使用基本的认证功能了</p>
 <h2 id="设置开机自启动"><a href="#设置开机自启动" class="headerlink" title="设置开机自启动"></a>设置开机自启动</h2><h3 id="新方案"><a href="#新方案" class="headerlink" title="新方案"></a>新方案</h3><p>使用一段事件之后，发现旧办法似乎只能在重新启动时生效，在纯开机时无法生效，这里介绍一种新的办法：通过 systemd 系统服务管理来设置开机启动，下面介绍步骤：</p>
 <p>使用管理员权限在 <code>/lib/systemd/system/</code> 下建立新文件 <code>minieap.service</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ sudo touch /lib/systemd/system/minieap.service<br><span class="hljs-comment"># create minieap.service in /lib/systemd/system/</span><br></code></pre></div></td></tr></table></figure>
-
 <p>使用文本编辑器打开此文件，这里使用 vim 文本编辑器</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ sudo vim /lib/systemd/system/minieap.service<br><span class="hljs-comment"># edit /lib/systemd/system/minieap.service with vim</span><br></code></pre></div></td></tr></table></figure>
-
 <p>输入如下内容</p>
 <figure class="highlight plain"><figcaption><span>text</span></figcaption><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain">[Unit]<br>Description&#x3D;Minieap authentication service<br>After&#x3D;etcd.service<br><br>[Service]<br>Type&#x3D;simple<br>ExecStart&#x3D;sudo &#x2F;opt&#x2F;minieap&#x2F;minieap<br>ExecStop&#x3D;sudo &#x2F;opt&#x2F;minieap&#x2F;minieap -k<br>RestartSec&#x3D;10<br>Restart&#x3D;on-failure<br><br>[Install]<br>WantedBy&#x3D;multi-user.target<br></code></pre></div></td></tr></table></figure>
-
 <p>简单介绍一下各个字段</p>
 <ul>
 <li>Description：此服务单元的描述，可以随便写</li>

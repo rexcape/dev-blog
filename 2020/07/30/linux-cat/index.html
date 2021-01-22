@@ -59,7 +59,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.3.0"></head>
 
 
 <body>
@@ -244,7 +244,6 @@
 
 <h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p><code>Linux</code> 中的 <code>cat</code> 命令用于输出文件内容，基础用法如下</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat ([args]) [filename]<br></code></pre></div></td></tr></table></figure>
-
 <h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><table>
 <thead>
 <tr>
@@ -301,25 +300,18 @@
 </tbody></table>
 <h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><h3 id="输出文件内容"><a href="#输出文件内容" class="headerlink" title="输出文件内容"></a>输出文件内容</h3><p>显示文件 <code>FILE</code> 的内容</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat FILE<br></code></pre></div></td></tr></table></figure>
-
 <p>显示文件 <code>FILE</code> 的内容加上行号，需要加上参数 <code>-n</code>。行号从 <code>1</code> 开始。使用 <code>-n</code> 参数时，所有空行也会显示行号</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat -n FILE<br></code></pre></div></td></tr></table></figure>
-
 <p>忽略掉空行，用 <code>-b</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat -b FILE<br></code></pre></div></td></tr></table></figure>
-
 <p>当遇到有连续两行以上的空白行，就代换为一行的空白行，可以使用 <code>-s</code> 参数</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat -s FILE<br></code></pre></div></td></tr></table></figure>
-
 <h3 id="保存内容"><a href="#保存内容" class="headerlink" title="保存内容"></a>保存内容</h3><p>将标准输入保存到文件 <code>FILE</code> 中，如果文件已经存在，则覆盖掉原来的</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat &gt; FILE<br></code></pre></div></td></tr></table></figure>
-
 <p>将标准输入追加到文件 <code>FILE</code> 末尾</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat &gt;&gt; FILE<br></code></pre></div></td></tr></table></figure>
-
 <h3 id="合并文件"><a href="#合并文件" class="headerlink" title="合并文件"></a>合并文件</h3><p>将两个文件 <code>FILE1</code> 和 <code>FILE2</code> 的内容合并为一个文件 <code>FILE</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat FILE1 FILE2 &gt; FILE<br></code></pre></div></td></tr></table></figure>
-
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://my.oschina.net/HJCui/blog/756476">HJCui,HJCui,Linux 中 用 cat 输出文件内容 - HJCui 嘀咕屋,OSCHINA 博客</a></p>
 
             </div>

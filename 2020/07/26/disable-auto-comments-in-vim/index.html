@@ -59,7 +59,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.3.0"></head>
 
 
 <body>
@@ -244,11 +244,9 @@
 
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><code>Vim</code> 编辑器下，当你输入了一整行注释</p>
 <figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// This is the comment</span><br></code></pre></div></td></tr></table></figure>
-
 <p>再按下回车，<code>Vim</code> 编辑器会自动给你在新的一行加上 <code>//</code>，这在有的时候非常不方便，我希望关闭这一项功能</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在你的 <code>.vimrc</code> 中加入</p>
 <figure class="highlight vim"><figcaption><span>script</span></figcaption><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs vim"><span class="hljs-keyword">autocmd</span> FileType * <span class="hljs-keyword">setlocal</span> formatoptions-=<span class="hljs-keyword">c</span> formatoptions-=r formatoptions-=<span class="hljs-keyword">o</span><br></code></pre></div></td></tr></table></figure>
-
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://vim.fandom.com/wiki/Disable_automatic_comment_insertion">Disable automatic comment insertion | Vim Tips Wiki | Fandom</a></p>
 <p>给出了更多种解决方案，包括针对单种编程语言</p>
 

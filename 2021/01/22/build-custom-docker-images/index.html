@@ -17,9 +17,25 @@
   <meta name="description" content="">
   <meta name="author" content="mazixiang">
   <meta name="keywords" content="">
-  <title>标签 - CSS - mazixiang</title>
+  <title>构建 Docker 镜像 - mazixiang</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/dracula.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -47,7 +63,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -158,17 +174,50 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="标签 - CSS">
+            <span class="h2" id="subtitle" title="构建 Docker 镜像">
               
             </span>
 
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-22 11:24" pubdate>
+        2021年1月22日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      297 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      3
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
-          
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
           
         </div>
       </div>
@@ -177,46 +226,88 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 2 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/05/30/align-items-to-center-using-css/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">将 HTML 元素居中的方法</span>
-      <time style="float: right;">05-30</time>
-    </a>
-  
-    
-    <a href="/2020/05/28/commonly-used-css-units/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">CSS 常用单位</span>
-      <time style="float: right;">05-28</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">构建 Docker 镜像</h1>
+            
+            <div class="markdown-body">
+              <p>构建 Docker 镜像的方法</p>
+<a id="more"></a>
 
+<p>构建 Docker 镜像可以让别人也可以构建出相同的环境</p>
+<h2 id="commit"><a href="#commit" class="headerlink" title="commit"></a>commit</h2><h3 id="查看更改"><a href="#查看更改" class="headerlink" title="查看更改"></a>查看更改</h3><p>在终端中输入 <code>docker diff CONTAINER</code> 来查看容器的变动，其中 A 是新增的文件，C 是修改的文件，D 是删除的文件</p>
+<h3 id="提交更改"><a href="#提交更改" class="headerlink" title="提交更改"></a>提交更改</h3><p>在终端中输入 <code>docker commit CONTAINER username/image-name:tag</code> 来提交更改，username 是自己定义的用户名，image-name 是镜像名称，<code>tag</code> 是标签（版本号），可以是数字、字符串等</p>
+<p>示例：<code>docker commit foobar mazixiang/foobar:0.1.0</code></p>
+<p>之后就可以在本地看到提交的 Docker 镜像了</p>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><p>在项目文件夹下新建 Dockerfile 文件，然后添加字段</p>
+<ul>
+<li><code>FROM</code> 表示构建镜像的基础</li>
+<li><code>RUN</code> 构建镜像时执行的命令</li>
+<li><code>WORKDIR</code> 定义工作目录</li>
+<li><code>COPY</code> 将本机文件拷贝到容器中</li>
+<li><code>CMD</code> 指定容器运行时要执行什么命令，只能有一个</li>
+</ul>
+<p>在项目文件夹下执行 <code>docker build -t username/image-name:tag .</code> 来构建容器</p>
+<p>例</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> ubuntu<br><span class="hljs-keyword">RUN</span><span class="bash"> sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt install nodejs -y</span><br><span class="hljs-keyword">WORKDIR</span><span class="bash"> /app</span><br><span class="hljs-keyword">COPY</span><span class="bash"> . .</span><br><span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">&quot;node&quot;</span>, <span class="hljs-string">&quot;test.js&quot;</span>]</span><br></code></pre></div></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">Dockerfile 参考文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1v5411G7xc">BiliBili 自建 Docker 镜像 - CodingStartip</a></p>
 
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AE%9E%E7%94%A8/">实用</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Docker/">Docker</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！</p>
+              
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -296,9 +387,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 

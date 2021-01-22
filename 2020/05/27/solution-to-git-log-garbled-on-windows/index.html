@@ -59,7 +59,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.3.0"></head>
 
 
 <body>
@@ -246,11 +246,9 @@
 <p>永久写入需要把 <code>export</code> 语句直接写入 <code>.bashrc</code> 或者 <code>.zshrc</code> 中</p>
 <h2 id="检查环境变量"><a href="#检查环境变量" class="headerlink" title="检查环境变量"></a>检查环境变量</h2><p>打开 cmd 或者 powershell，输入</p>
 <figure class="highlight powershell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">echo</span> %LANG%<br></code></pre></div></td></tr></table></figure>
-
 <p>查看 <code>LANG</code> 变量，如果输出 <code>zh_CN.UTF-8</code> 则继续进行，如果输出别的，新建一个环境变量 <code>LANG</code>，值设为 <code>zh_CN.UTF-8</code>，重启 cmd</p>
 <h2 id="修改-git-config"><a href="#修改-git-config" class="headerlink" title="修改 git config"></a>修改 git config</h2><p>在 cmd 或者 powershell 中，输入</p>
 <figure class="highlight powershell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershell">&gt; git config -<span class="hljs-literal">-global</span> i18n.commitencoding utf<span class="hljs-literal">-8</span><br>&gt; git config -<span class="hljs-literal">-global</span> i18n.logoutputencoding utf<span class="hljs-literal">-8</span><br></code></pre></div></td></tr></table></figure>
-
 <p>并新建一条环境变量 <code>LESSCHARSET</code>，值设为 <code>utf-8</code></p>
 <h2 id="暂时设置环境变量"><a href="#暂时设置环境变量" class="headerlink" title="暂时设置环境变量"></a>暂时设置环境变量</h2><p>在 cmd 或者 powershell 中输入 <code>set LANG=zh_CN.UTF-8</code>，可以暂时起作用，但重新启动后就没用了</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fb47a39f3578">git log 中文乱码 - 简书</a></p>
