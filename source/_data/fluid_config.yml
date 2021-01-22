@@ -1,5 +1,7 @@
 favicon: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico"
 
+custom_html: '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />'
+
 code:  # 代码块相关的配置
   copy_btn: true  # 是否开启复制代码的按钮
   highlight:  # 代码高亮
@@ -27,6 +29,8 @@ about:
   icons:
     - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang', tip: 'GitHub' }
     - { class: 'iconfont icon-mail', link: 'mailto:mazixiang2012@gmail.com', tip: 'Mail' }
+    - { class: 'iconfont icon-codepen-fill', link: 'https://codepen.io/mazixiang', tip: 'CodePen' }
+    - { class: 'fab fa-free-code-camp', link: 'https://www.freecodecamp.org/mazixiang', tip: 'FreeCodeCamp' }
     - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/', tip: 'Steam' }
 
 navbar:
