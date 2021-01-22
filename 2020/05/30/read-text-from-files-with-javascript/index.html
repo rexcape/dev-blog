@@ -19,22 +19,22 @@
   <meta name="keywords" content="">
   <title>JavaScript 从选择的文件中读取文本 - mazixiang</title>
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
   <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
   
     
     
       
-      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/dracula.min.css" />
     
   
 
   
-    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
@@ -55,7 +55,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -168,7 +168,7 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      386 字
+      387 字
     </span>
   
 
@@ -228,11 +228,11 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
@@ -244,32 +244,11 @@
 
 <h2 id="FileReader"><a href="#FileReader" class="headerlink" title="FileReader"></a>FileReader</h2><p>首先介绍一下 <code>FileReader</code>，FileReader 对象允许 Web 应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 对象指定要读取的文件或数据，可以用 <code>const reader = new FileReader();</code> 来初始化，详细部分在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader">FileReader - Web API 接口参考 | MDN</a>中</p>
 <h2 id="读取-Input-标签文件内容"><a href="#读取-Input-标签文件内容" class="headerlink" title="读取 Input 标签文件内容"></a>读取 Input 标签文件内容</h2><p>以下是示例代码</p>
-<div class="hljs"><pre><code class="hljs JavaScript"><span class="hljs-comment">// 获取 input 标签对应的元素</span>
-<span class="hljs-keyword">const</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);
-<span class="hljs-comment">// 读取文件</span>
-<span class="hljs-keyword">const</span> file = fileInput.files[<span class="hljs-number">0</span>];</code></pre></div>
+<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs JavaScript"><span class="hljs-comment">// 获取 input 标签对应的元素</span><br><span class="hljs-keyword">const</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);<br><span class="hljs-comment">// 读取文件</span><br><span class="hljs-keyword">const</span> file = fileInput.files[<span class="hljs-number">0</span>];<br></code></pre></div></td></tr></table></figure>
 
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><div class="hljs"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);
-<span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];
-<span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
-<span class="hljs-keyword">let</span> text;
-reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;
-  text = reader.result;
-&#125;);
-reader.readAsText(file);</code></pre></div>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);<br><span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];<br><span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();<br><span class="hljs-keyword">let</span> text;<br>reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>  text = reader.result;<br>&#125;);<br>reader.readAsText(file);<br></code></pre></div></td></tr></table></figure>
 
-<h2 id="在-React-有状态组件中实现"><a href="#在-React-有状态组件中实现" class="headerlink" title="在 React 有状态组件中实现"></a>在 React 有状态组件中实现</h2><div class="hljs"><pre><code class="hljs JavaScript"><span class="hljs-function"><span class="hljs-title">handleFileChange</span>(<span class="hljs-params"></span>)</span> &#123;
-  <span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);
-  <span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];
-  <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
-  reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;
-    <span class="hljs-built_in">this</span>.setState(&#123;
-      text: reader.result,
-    &#125;);
-    fileInput.value = <span class="hljs-string">&quot;&quot;</span>;
-  &#125;);
-  reader.readAsText(file);
-&#125;</code></pre></div>
+<h2 id="在-React-有状态组件中实现"><a href="#在-React-有状态组件中实现" class="headerlink" title="在 React 有状态组件中实现"></a>在 React 有状态组件中实现</h2><figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs JavaScript"><span class="hljs-function"><span class="hljs-title">handleFileChange</span>(<span class="hljs-params"></span>)</span> &#123;<br>  <span class="hljs-keyword">let</span> fileInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;file-input&quot;</span>);<br>  <span class="hljs-keyword">let</span> file = fileInput.files[<span class="hljs-number">0</span>];<br>  <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();<br>  reader.addEventListener(<span class="hljs-string">&quot;loadend&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-built_in">this</span>.setState(&#123;<br>      text: reader.result,<br>    &#125;);<br>    fileInput.value = <span class="hljs-string">&quot;&quot;</span>;<br>  &#125;);<br>  reader.readAsText(file);<br>&#125;<br></code></pre></div></td></tr></table></figure>
 
 <blockquote>
 <p>注意：因为是加载文件，所以加载完一次后要清除所选文件，否则下次加载同样的文件无法触发 <code>handleFileCHange</code> 函数，无法使状态改变了</p>
@@ -375,23 +354,20 @@ reader.readAsText(file);</code></pre></div>
 
 <!-- SCRIPTS -->
 
-  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
 
   <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
     NProgress.start()
-    document.addEventListener('DOMContentLoaded', function() {
-      window.NProgress && window.NProgress.inc();
-    })
     window.addEventListener('load', function() {
       NProgress.done();
     })
   </script>
 
 
-<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
-<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
 <script  src="/js/debouncer.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
@@ -409,25 +385,26 @@ reader.readAsText(file);</code></pre></div>
 
 
 
-  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
 
 
 
-  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;

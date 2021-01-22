@@ -19,22 +19,22 @@
   <meta name="keywords" content="">
   <title>通过 Travis CI 或者 GitHub Actions 将 Hexo 博客部署到 GitHub Pages - mazixiang</title>
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
   <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
   
     
     
       
-      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/dracula.min.css" />
     
   
 
   
-    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
@@ -55,7 +55,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -168,7 +168,7 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      968 字
+      963 字
     </span>
   
 
@@ -228,11 +228,11 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
@@ -245,73 +245,20 @@
 <h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>目前，**<a target="_blank" rel="noopener" href="https://hexo.io/docs/github-pages">Hexo 英文文档</a>**已经使用 <code>GitHub Actions</code> 来部署到 GitHub Pages 上了，但是中文文档没有同步更新，所以更新一下对应的方法</p>
 <h3 id="预先检查"><a href="#预先检查" class="headerlink" title="预先检查"></a>预先检查</h3><p>首先，确定你项目的源文件全部在 source 分支上，然后进行对应的操作</p>
 <h3 id="检查是否存在脚本"><a href="#检查是否存在脚本" class="headerlink" title="检查是否存在脚本"></a>检查是否存在脚本</h3><p>检查一下 <code>package.json</code> 文件下有没有如下两行，如果没有，添加进去</p>
-<div class="hljs"><pre><code class="hljs json">&#123;
-  <span class="hljs-attr">&quot;scripts&quot;</span>: &#123;
-    <span class="hljs-attr">&quot;build&quot;</span>: <span class="hljs-string">&quot;hexo generate&quot;</span>
-  &#125;,</code></pre></div>
+<figure class="highlight json"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json">&#123;<br>  <span class="hljs-attr">&quot;scripts&quot;</span>: &#123;<br>    <span class="hljs-attr">&quot;build&quot;</span>: <span class="hljs-string">&quot;hexo generate&quot;</span><br>  &#125;,<br></code></pre></div></td></tr></table></figure>
 
 <h3 id="推送到-GitHub-分支"><a href="#推送到-GitHub-分支" class="headerlink" title="推送到 GitHub 分支"></a>推送到 GitHub 分支</h3><p>在你的项目目录下面运行如下命令，将你博客的 source 分支推送到远程的对应分支上</p>
-<div class="hljs"><pre><code class="hljs bash">$ git push -u origin <span class="hljs-built_in">source</span>
-...</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ git push -u origin <span class="hljs-built_in">source</span><br>...<br></code></pre></div></td></tr></table></figure>
 
 <h3 id="新建-GitHub-Workflow"><a href="#新建-GitHub-Workflow" class="headerlink" title="新建 GitHub Workflow"></a>新建 GitHub Workflow</h3><p>在你的项目文件夹下新建 <code>.github/workflows/pages.yml</code></p>
-<div class="hljs"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Pages</span>
-
-<span class="hljs-attr">on:</span>
-  <span class="hljs-attr">push:</span>
-    <span class="hljs-attr">branches:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">source</span> <span class="hljs-comment"># 默认部署分支</span>
-
-<span class="hljs-attr">jobs:</span>
-  <span class="hljs-attr">pages:</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v2</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Use</span> <span class="hljs-string">Node.js</span> <span class="hljs-number">14</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v1</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;14&#x27;</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Cache</span> <span class="hljs-string">NPM</span> <span class="hljs-string">dependencies</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/cache@v2</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">path:</span> <span class="hljs-string">node_modules</span>
-          <span class="hljs-attr">key:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">runner.OS</span> <span class="hljs-string">&#125;&#125;-npm-cache</span>
-          <span class="hljs-attr">restore-keys:</span> <span class="hljs-string">|</span>
-            <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">runner.OS</span> <span class="hljs-string">&#125;&#125;-npm-cache</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Dependencies</span>
-        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span>
-        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">run</span> <span class="hljs-string">build</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">peaceiris/actions-gh-pages@v3</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">github_token:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">&#125;&#125;</span>
-          <span class="hljs-attr">publish_dir:</span> <span class="hljs-string">./public</span>
-          <span class="hljs-attr">publish_branch:</span> <span class="hljs-string">master</span> <span class="hljs-comment"># 部署到的分支</span></code></pre></div>
+<figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Pages</span><br><br><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">push:</span><br>    <span class="hljs-attr">branches:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">source</span> <span class="hljs-comment"># 默认部署分支</span><br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">pages:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v2</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Use</span> <span class="hljs-string">Node.js</span> <span class="hljs-number">14</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v1</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;14&#x27;</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Cache</span> <span class="hljs-string">NPM</span> <span class="hljs-string">dependencies</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/cache@v2</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">path:</span> <span class="hljs-string">node_modules</span><br>          <span class="hljs-attr">key:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">runner.OS</span> <span class="hljs-string">&#125;&#125;-npm-cache</span><br>          <span class="hljs-attr">restore-keys:</span> <span class="hljs-string">|</span><br>            <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">runner.OS</span> <span class="hljs-string">&#125;&#125;-npm-cache</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Dependencies</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">run</span> <span class="hljs-string">build</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">peaceiris/actions-gh-pages@v3</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">github_token:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">publish_dir:</span> <span class="hljs-string">./public</span><br>          <span class="hljs-attr">publish_branch:</span> <span class="hljs-string">master</span> <span class="hljs-comment"># 部署到的分支</span><br></code></pre></div></td></tr></table></figure>
 
 <h3 id="更改-GitHub-仓库设置"><a href="#更改-GitHub-仓库设置" class="headerlink" title="更改 GitHub 仓库设置"></a>更改 GitHub 仓库设置</h3><p>更改你的 GitHub 仓库设置，到 <code>GitHub Pages</code> 部分，将 <code>source</code> 分支改为 <code>master</code></p>
 <p>注意：如果你有自定义域名，请将 <code>CNAME</code> 文件放入 <code>source</code> 文件夹</p>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>使用 Hexo 搭建完博客之后，翻了一下官网，结果发现还可以用 <code>Travis CI</code> 来做自动生成部署啊！正好今天整了一天的 <code>Travis CI</code>，也差不多熟悉了，就直接按照官方文档去照着做了</p>
 <h2 id="Travis-CI-介绍"><a href="#Travis-CI-介绍" class="headerlink" title="Travis CI 介绍"></a>Travis CI 介绍</h2><p>Travis CI 是一个持续集成工具，因为我只使用了一天，还不太了解。详细原理可以去搜一下，这里就简单讲一下：就是你提交了一次 <code>commit</code> 后，这个工具按照你的 repo 里的 <code>.travis.yml</code> 来自动执行一些操作，如果构建通过了显示 <code>passing</code>，不通过显示 <code>failing</code>。</p>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/github-pages">Hexo 官方的使用 Travis CI 教程</a>有点小坑啊，现在的 <code>GitHub Pages</code> 的部署分支必须是 <code>master</code> 分支了，但是官网的教程是部署到 <code>gh-pages</code> 分支上的，官网说可以切换 <code>GitHub Pages</code> 部署分支到 <code>gh-pages</code> 分支上，<strong>完全没说别的</strong>，作为刚使用一天的选手，我就是想把生成的分支改为 <code>master</code>，但是我在官方给的配置文件中根本没找到 <code>gh-pages</code>！，这里附带官网的配置文件（其中还要添加 <code>GH_TOKEN</code> 环境变量，这里就不展开说了）：</p>
-<div class="hljs"><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span>
-<span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span>
-<span class="hljs-attr">node_js:</span>
-  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span>
-<span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span>
-<span class="hljs-attr">branches:</span>
-  <span class="hljs-attr">only:</span>
-    <span class="hljs-bullet">-</span> <span class="hljs-string">master</span> <span class="hljs-comment"># 仅仅构建 master 分支</span>
-<span class="hljs-attr">script:</span>
-  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span>
-<span class="hljs-attr">deploy:</span>
-  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span>
-  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span>
-  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span>
-  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span>
-  <span class="hljs-attr">on:</span>
-    <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span>
-  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span></code></pre></div>
+<figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span><br><span class="hljs-attr">node_js:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span><br><span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span><br><span class="hljs-attr">branches:</span><br>  <span class="hljs-attr">only:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">master</span> <span class="hljs-comment"># 仅仅构建 master 分支</span><br><span class="hljs-attr">script:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span><br><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span><br>  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span><br>  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">on:</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span><br>  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span><br></code></pre></div></td></tr></table></figure>
 
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>我去网上找来找去，找到了几个类似的解决办法：</p>
 <ul>
@@ -319,25 +266,7 @@
 <li><a target="_blank" rel="noopener" href="https://notes.iissnan.com/2016/publishing-github-pages-with-travis-ci/">使用 Travis CI 自动更新 GitHub Pages</a> - 这个说的也和官方的不太一样</li>
 </ul>
 <p>找来找去，结果在 <a target="_blank" rel="noopener" href="https://docs.travis-ci.com/user/deployment/pages/">官方 pages 部署的文档</a> 里面找到了，原来这个部署的默认分支就是 <code>gh-pages</code>！可以通过进一步配置 <code>target_branch</code> 来修改！所以我把所有的源代码移到了 <code>source</code> 分支上，然后将配置文件改成了下面这样，就可以正常访问了。</p>
-<div class="hljs"><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span>
-<span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span>
-<span class="hljs-attr">node_js:</span>
-  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span>
-<span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span>
-<span class="hljs-attr">branches:</span>
-  <span class="hljs-attr">only:</span>
-    <span class="hljs-bullet">-</span> <span class="hljs-string">source</span> <span class="hljs-comment"># 仅仅构建 source 分支</span>
-<span class="hljs-attr">script:</span>
-  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span>
-<span class="hljs-attr">deploy:</span>
-  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span>
-  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span>
-  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span>
-  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span>
-  <span class="hljs-attr">on:</span>
-    <span class="hljs-attr">branch:</span> <span class="hljs-string">source</span>
-  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span>
-  <span class="hljs-attr">target_branch:</span> <span class="hljs-string">master</span></code></pre></div>
+<figure class="highlight yaml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">language:</span> <span class="hljs-string">node_js</span><br><span class="hljs-attr">node_js:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-number">10</span> <span class="hljs-comment"># 使用 nodejs 的长期支持版本</span><br><span class="hljs-attr">cache:</span> <span class="hljs-string">npm</span><br><span class="hljs-attr">branches:</span><br>  <span class="hljs-attr">only:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">source</span> <span class="hljs-comment"># 仅仅构建 source 分支</span><br><span class="hljs-attr">script:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span> <span class="hljs-comment"># 生成静态文件</span><br><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">provider:</span> <span class="hljs-string">pages</span><br>  <span class="hljs-attr">skip-cleanup:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">github-token:</span> <span class="hljs-string">$GH_TOKEN</span><br>  <span class="hljs-attr">keep-history:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">on:</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">source</span><br>  <span class="hljs-attr">local-dir:</span> <span class="hljs-string">public</span><br>  <span class="hljs-attr">target_branch:</span> <span class="hljs-string">master</span><br></code></pre></div></td></tr></table></figure>
 
             </div>
             <hr>
@@ -436,23 +365,20 @@
 
 <!-- SCRIPTS -->
 
-  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
 
   <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
     NProgress.start()
-    document.addEventListener('DOMContentLoaded', function() {
-      window.NProgress && window.NProgress.inc();
-    })
     window.addEventListener('load', function() {
       NProgress.done();
     })
   </script>
 
 
-<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
-<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
 <script  src="/js/debouncer.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
@@ -470,25 +396,26 @@
 
 
 
-  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
 
 
 
-  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;

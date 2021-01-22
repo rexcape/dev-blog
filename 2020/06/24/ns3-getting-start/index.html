@@ -19,22 +19,22 @@
   <meta name="keywords" content="">
   <title>ns3 网络模拟软件的安装和起步 - mazixiang</title>
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
   <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
   
     
     
       
-      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/dracula.min.css" />
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/dracula.min.css" />
     
   
 
   
-    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
@@ -55,7 +55,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -168,7 +168,7 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      707 字
+      712 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      9
        分钟
     </span>
   
@@ -228,11 +228,11 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
@@ -248,50 +248,31 @@
 <p><img src="https://s1.ax1x.com/2020/06/24/Nwenq1.png" srcset="/img/loading.gif" alt="website"></p>
 <p>下载最新版本的 tar 包，传入虚拟机中，使用 <code>tar -xvf</code> 命令解压文件，得到文件夹，我的是 <code>ns-allinone-3.30.1</code></p>
 <h2 id="使用-apt-安装依赖"><a href="#使用-apt-安装依赖" class="headerlink" title="使用 apt 安装依赖"></a>使用 apt 安装依赖</h2><p>首先使用以下命令安装依赖</p>
-<div class="hljs"><pre><code class="hljs bash">$ sudo apt install g++ python3
-...
-g++ is already the newest version (4:9.3.0-1ubuntu2).
-python3 is already the newest version (3.8.2-0ubuntu2).
-0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ sudo apt install g++ python3<br>...<br>g++ is already the newest version (4:9.3.0-1ubuntu2).<br>python3 is already the newest version (3.8.2-0ubuntu2).<br>0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.<br></code></pre></div></td></tr></table></figure>
 
 <p><code>Ununtu 20.04LTS</code> 版本中已经安装好了 <code>g++</code> 和 <code>Python3</code></p>
 <h2 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h2><p>确保工作目录是在 <code>ns-allinone-3.30.1</code> 下，在命令行中执行如下命令开始构建，时间可能会很长，请耐心等待。</p>
-<div class="hljs"><pre><code class="hljs bash">$ ./build.py --enable-tests --enable-examples
-...
-Leaving directory `./ns-3.30.1<span class="hljs-string">&#x27;</span></code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ ./build.py --enable-tests --enable-examples<br>...<br>Leaving directory `./ns-3.30.1<span class="hljs-string">&#x27;</span><br></code></pre></div></td></tr></table></figure>
 
 <p>得到以下输出，说明构建成功</p>
 <p><img src="https://s1.ax1x.com/2020/06/24/Nwmb9S.jpg" srcset="/img/loading.gif" alt="构建成功"></p>
 <p>如果失败，请删除文件夹重新再来一遍（我就是这么做的，重来了几遍，最后可以正常运行了）</p>
 <h2 id="进一步构建"><a href="#进一步构建" class="headerlink" title="进一步构建"></a>进一步构建</h2><p>据官方文档所说，上一步是构建好运行时需要的库，这一步是进行真实构建。</p>
 <p>切换工作目录到文件夹中的 <code>ns-*</code> 目录（我的是 <code>ns-3.30.1</code>），在命令行中执行如下命令，向 Waf 解释它应该进行包括示例和测试的优化构建</p>
-<div class="hljs"><pre><code class="hljs bash">$ ./waf clean
-<span class="hljs-string">&#x27;clean&#x27;</span> finished successfully (0.398s)
-$ ./waf configure --build-profile=optimized --enable-examples --enable-tests
-...
-<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.899s)</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ ./waf clean<br><span class="hljs-string">&#x27;clean&#x27;</span> finished successfully (0.398s)<br>$ ./waf configure --build-profile=optimized --enable-examples --enable-tests<br>...<br><span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.899s)<br></code></pre></div></td></tr></table></figure>
 
 <p>切换回包含示例和测试的调试（debug）版本。</p>
-<div class="hljs"><pre><code class="hljs bash">$ ./waf clean
-$ ./waf configure --build-profile=debug --enable-examples --enable-tests
-...
-<span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.618s)</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ ./waf clean<br>$ ./waf configure --build-profile=debug --enable-examples --enable-tests<br>...<br><span class="hljs-string">&#x27;configure&#x27;</span> finished successfully (2.618s)<br></code></pre></div></td></tr></table></figure>
 
 <p>开始构建</p>
-<div class="hljs"><pre><code class="hljs bash">$ ./waf
-...
-<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (20m15.146s)
-...</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ ./waf<br>...<br><span class="hljs-string">&#x27;build&#x27;</span> finished successfully (20m15.146s)<br>...<br></code></pre></div></td></tr></table></figure>
 
 <p>如果出现了下图的结果，说明构建成功</p>
 <p><img src="https://s1.ax1x.com/2020/06/24/NwuTSS.jpg" srcset="/img/loading.gif" alt="进一步构建成功"></p>
 <h2 id="测试-ns3（可跳过）"><a href="#测试-ns3（可跳过）" class="headerlink" title="测试 ns3（可跳过）"></a>测试 ns3（可跳过）</h2><p>命令行中执行 <code>./test.py</code> 来运行测试脚本，出现一大堆 <code>PASS</code> 说明测试成功（图就不放了，太大了）</p>
 <p>这个时间很长，如果没耐心可以跳过，基本上来说前几步正常进行的话都没问题</p>
 <h2 id="运行一个脚本"><a href="#运行一个脚本" class="headerlink" title="运行一个脚本"></a>运行一个脚本</h2><p>命令行中执行如下命令</p>
-<div class="hljs"><pre><code class="hljs bash">$ ./waf --run hello-simulator
-Build commands will be stored <span class="hljs-keyword">in</span> build/compile_commands.json
-<span class="hljs-string">&#x27;build&#x27;</span> finished successfully (0.844s)
-Hello Simulator</code></pre></div>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ ./waf --run hello-simulator<br>Build commands will be stored <span class="hljs-keyword">in</span> build/compile_commands.json<br><span class="hljs-string">&#x27;build&#x27;</span> finished successfully (0.844s)<br>Hello Simulator<br></code></pre></div></td></tr></table></figure>
 
 <p>出现和上面相同的结果说明运行成功，成功入门</p>
 <h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jhcelue/p/6905943.html">NS3 网络仿真（2）：first.py - jhcelue - 博客园</a></p>
@@ -398,23 +379,20 @@ Hello Simulator</code></pre></div>
 
 <!-- SCRIPTS -->
 
-  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
 
   <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
     NProgress.start()
-    document.addEventListener('DOMContentLoaded', function() {
-      window.NProgress && window.NProgress.inc();
-    })
     window.addEventListener('load', function() {
       NProgress.done();
     })
   </script>
 
 
-<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
-<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
 <script  src="/js/debouncer.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
@@ -432,25 +410,26 @@ Hello Simulator</code></pre></div>
 
 
 
-  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
 
 
 
-  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
 
 
 
-  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
