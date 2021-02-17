@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="mazixiang">
+  <meta name="keywords" content="">
+  <title>Java 笔记 - 注解 - mazixiang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/dracula.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>mazixiang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java 笔记 - 注解">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-02-17 21:07" pubdate>
+        2021年2月17日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      14
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java 笔记 - 注解</h1>
+            
+            <div class="markdown-body">
+              <p>Java 注解的笔记</p>
+<a id="more"></a>
+
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>注解是代码里的特殊标记，这些标记可以在编译、类加载和运行时被读取并执行相应的处理。通过使用注解，程序员可以在不改变程序原有逻辑的情况下在源文件中嵌入一些补充信息。代码分析工具、开发工具和部署工具可以通过这些补充信息进行验证或者进行部署</p>
+<p>注解可以像修饰符一样被树勇，可用于修饰包、类、构造器、方法、成员变量、参数、局部变量的声明，这些信息被保存在注解的 <code>name=value</code> 对中</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>生成文档相关的注解</p>
+<p>在编译时进行格式检查</p>
+<p>JDK 内置三个注解</p>
+<ul>
+<li><code>@Override</code>：重写父类<strong>方法</strong></li>
+<li><code>@Deprecated</code>：表示所修饰的元素已经过时</li>
+<li><code>@SuppressWarnings</code>：抑制编译器警告</li>
+</ul>
+<p>跟踪代码依赖性，实现替代配置文件的功能</p>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><ul>
+<li>定义新的 <code>Annotation</code> 类型使用 <code>@interface</code> 关键字</li>
+<li>自定义注解自动继承了 <code>java.lang.annotation.Annotation</code> 接口</li>
+<li><code>Annotation</code> 的成员变量在 <code>Annotation</code> 定义中以无参数方法的形式来声明。其方法名和返回值定义了该成员的名字和类型。我们称为配置参数。类型只能是八种基本数据类型、 <code>String</code> 类型、<code>Class</code> 类型、<code>enum</code> 类型、 <code>Annotation</code> 类型以上所有类型的数组。</li>
+<li>可以在定义 <code>Annotation</code> 的成员变量时为其指定初始值，指定成员变量的初始值可使用 <code>default</code> 关键字</li>
+<li>如果只有一个参数成员，建议使用参数名为 <code>value</code></li>
+<li>如果定义的注解含有配置参数，那么使用时必须指定参数值，除非它有默认值。格式是<code>参数名=参数值</code>，如果只有一个参数成员，且名称为 <code>value</code>，可以省略 <code>value=</code></li>
+<li>没有成员定义的 <code>Annotation</code> 称为标记；包含成员变量的 <code>Annotation</code> 称为元数据 <code>Annotation</code></li>
+<li>注意：自定义注解必须配上注解的信息处理流程（使用反射）才有意义</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> MyAnnotation &#123;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;Hello&quot;</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><p>JDK 的元注解对现有的注解进行解释</p>
+<p>JDK5 提供了四个标准的元注解类型，分别是</p>
+<ul>
+<li><code>Retention</code>：只能用于修饰一个 <code>Annotation</code> 定义，用于指定该 <code>Annotation</code> 的生命周期，<code>@Rentention</code> 包含一个 <code>RetentionPolicy</code> 类型的成员变量,使用 <code>@Rentention</code> 时必须为该 <code>value</code>成员变量指定值<ul>
+<li><code>RetentionPolicy.SOURCE</code>：在源文件中有效（即源文件保留），编译器直接丢弃这种策眳的注释</li>
+<li><code>RetentionPolicy.CLASS</code>：在 <code>class</code> 文件中有效（即 <code>class</code> 保留），当运行 Java 程序时，JVM 不会保留注解。这是默认值</li>
+<li><code>RetentionPolicy.RUNTIME</code>：在运行时有效（即运行时保留），当运行 Java 程序时，JVM 会保留注释。程序可以通过反射获取该注释</li>
+</ul>
+</li>
+<li><code>Target</code>：用于指定被修饰的注解能用于修饰哪些元素，包含一个名为 value 的成员变量，类型为 <code>ElementType</code> 数组<ul>
+<li><code>CONSTRUCTOR</code>：用于描述构造器</li>
+<li><code>FIELD</code>：用于描述字段</li>
+<li><code>LOCAL_VARIABLE</code>：用于描述局部变量</li>
+<li><code>METHOD</code>：用于描述方法</li>
+<li><code>PACKAGE</code>：用于描述包</li>
+<li><code>PARAMETER</code>：用于描述参数</li>
+<li><code>TYPE</code>：用于描述类、接口（包括注解类型）或 <code>enum</code> 声明</li>
+</ul>
+</li>
+<li><code>Documented</code>：用于指定被该元注解修饰的注解类将被 javadoc 工具提取成文档。默认情况下，<code>javadoc</code> 是不包括注解的。定义为 <code>Document</code> 的注解必须设置 <code>Retention</code> 值为 <code>RUNTIME</code></li>
+<li><code>Inherited</code>：被它修饰的类具有继承性，如果某个类使用了被 <code>Inherited</code> 修饰的注解，则其子类自动具有该注解，实际使用中使用较少</li>
+</ul>
+<p>自定义注解通常会指明两个元注解：<code>Retention</code> 和 <code>Target</code></p>
+<h2 id="JDK8-注解新特性"><a href="#JDK8-注解新特性" class="headerlink" title="JDK8 注解新特性"></a>JDK8 注解新特性</h2><h3 id="可重复注解"><a href="#可重复注解" class="headerlink" title="可重复注解"></a>可重复注解</h3><p>如果想使用两个相同的注解</p>
+<ul>
+<li>在 <code>MyAnnotation</code> 声明 <code>@Repeatable</code>，成员值为 <code>MyAnnotations.class</code></li>
+<li><code>MyAnnotation</code> 的 <code>Target</code>、<code>Retention</code> 和 <code>Inherited</code> 必须和 <code>MyAnnotations</code> 的相同</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// before jdk8</span><br><span class="hljs-comment">// err</span><br><span class="hljs-comment">// @MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-comment">// @Myannotation(&quot;abc&quot;)</span><br><span class="hljs-meta">@MyAnnotations(&#123;@MyAnnotation(&quot;hi&quot;), @Myannotation(&quot;abc&quot;)&#125;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeClass</span> </span>&#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// after jdk8</span><br><span class="hljs-meta">@MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-meta">@Myannotation(&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeClass</span> </span>&#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@Repeatable(MyAnnotations.class)</span><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
+<h3 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h3><p><code>ElementType</code> 里面多了两个：<code>TYPE_PARAMETER</code>，<code>TYPE_USE</code></p>
+<p>在 Java8 之前，注解只能是在声明的地方使用，Java8 开始，注解可以应用在任何地方</p>
+<ul>
+<li><code>TYPE_PARAMETER</code>：表示该注解能写在类型变量的声明语句中（如泛型声明）</li>
+<li><code>TYPE_USE</code>：表示该注解能写在使用类型的任何语句中</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span>&lt;@<span class="hljs-title">TypeDefine</span>() <span class="hljs-title">U</span>&gt; </span>&#123;<br>    <span class="hljs-keyword">private</span> U u;<br>    <span class="hljs-keyword">public</span> &lt;<span class="hljs-meta">@TypeDefine()</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">test</span><span class="hljs-params">(T t)</span> </span>&#123;&#125;<br>&#125;<br><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE_PARAMETER&#125;)</span><br><span class="hljs-meta">@interface</span> TypeDefine &#123;&#125;<br></code></pre></div></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Java-%E6%B3%A8%E8%A7%A3/">Java 注解</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！</p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
