@@ -1,58 +1,84 @@
-favicon: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico"
+favicon: 'https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico'
 
 custom_html: '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />'
 
-code:  # 代码块相关的配置
-  copy_btn: true  # 是否开启复制代码的按钮
-  highlight:  # 代码高亮
-    enable: true
-    lib: 'highlightjs'  # 实现高亮的库，可选：highlightjs | prismjs，对应下面的配置项
-    highlightjs:
-      style: 'Dracula'  # 高亮样式见：https://highlightjs.org/static/demo/  在页面挑选 style 填入
-      bg_color: true  # 是否根据 style 改变代码背景色，**如果 style 是深色背景别忘了开启此项**
-    prismjs:
-      style: 'default'  # 高亮样式见：https://prismjs.com/  在页面右侧的圆形按钮挑选 style 填入，也可以直接填入 css 链接
-      preprocess: true  # 设为 true 高亮将本地静态生成（并只支持部分 prismjs 插件），设为 false 高亮将在浏览器通过 js 生成
-index:
-  slogan:  # 首页副标题的独立设置
-    enable: true  # 为 false 则不显示任何内容
-    text: 'Keep it simple, stupid.'  # 为空则按 hexo config.subtitle 显示
+custom_css: /css/font-awesome.css
 
-dark_mode:   # 主题暗色模式，开启后菜单中会出现切换按钮，用户浏览器会存储切换选项，并且会遵循 prefers-color-scheme 自动切换
+code: # 代码块相关的配置
+  copy_btn: true # 是否开启复制代码的按钮
+  highlight: # 代码高亮
+    enable: true
+    lib: 'highlightjs' # 实现高亮的库，可选：highlightjs | prismjs，对应下面的配置项
+    highlightjs:
+      style: 'Dracula' # 高亮样式见：https://highlightjs.org/static/demo/  在页面挑选 style 填入
+      bg_color: true # 是否根据 style 改变代码背景色，**如果 style 是深色背景别忘了开启此项**
+    prismjs:
+      style: 'default' # 高亮样式见：https://prismjs.com/  在页面右侧的圆形按钮挑选 style 填入，也可以直接填入 css 链接
+      preprocess: true # 设为 true 高亮将本地静态生成（并只支持部分 prismjs 插件），设为 false 高亮将在浏览器通过 js 生成
+index:
+  slogan: # 首页副标题的独立设置
+    enable: true # 为 false 则不显示任何内容
+    text: 'Keep it simple, stupid.' # 为空则按 hexo config.subtitle 显示
+
+dark_mode: # 主题暗色模式，开启后菜单中会出现切换按钮，用户浏览器会存储切换选项，并且会遵循 prefers-color-scheme 自动切换
   enable: true
-  default: auto  # 默认的模式：auto | light | dark，选择 auto 时优先遵循 prefers-color-scheme，其次按用户本地时间 18 点到次日 6 点之间进入暗色模式，**注意：当用户手动切换后则不再按照默认模式**
+  default: auto # 默认的模式：auto | light | dark，选择 auto 时优先遵循 prefers-color-scheme，其次按用户本地时间 18 点到次日 6 点之间进入暗色模式，**注意：当用户手动切换后则不再按照默认模式**
 
 about:
-  avatar: "https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg"
+  avatar: 'https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg'
   name: mazixiang
-  introduce: "没有天赋"
+  introduce: '没有天赋'
   icons:
-    - { class: 'iconfont icon-github-fill', link: 'https://github.com/mazixiang', tip: 'GitHub' }
-    - { class: 'iconfont icon-mail', link: 'mailto:mazixiang2012@gmail.com', tip: 'Mail' }
-    - { class: 'iconfont icon-codepen-fill', link: 'https://codepen.io/mazixiang', tip: 'CodePen' }
-    - { class: 'fab fa-free-code-camp', link: 'https://www.freecodecamp.org/mazixiang', tip: 'FreeCodeCamp' }
-    - { class: 'iconfont icon-steam', link: 'https://steamcommunity.com/id/thehunchn/', tip: 'Steam' }
+    - {
+        class: 'fab fa-github',
+        link: 'https://github.com/mazixiang',
+        tip: 'GitHub',
+      }
+    - {
+        class: 'far fa-envelope',
+        link: 'mailto:mazixiang2012@gmail.com',
+        tip: 'Mail',
+      }
+    - {
+        class: 'fab fa-codepen',
+        link: 'https://codepen.io/mazixiang',
+        tip: 'CodePen',
+      }
+    - {
+        class: 'fab fa-free-code-camp',
+        link: 'https://www.freecodecamp.org/mazixiang',
+        tip: 'FreeCodeCamp',
+      }
+    - {
+        class: 'iconfont icon-steam',
+        link: 'https://steamcommunity.com/id/thehunchn/',
+        tip: 'Steam',
+      }
 
 navbar:
   blog_title: mazixiang
-  menu:  # 可自行增减，key 用来关联 languages/*.yml，如不存在关联则显示 key 本身的值；icon 是 css class，可以省略；增加 name 可以强制显示指定名称
+  menu: # 可自行增减，key 用来关联 languages/*.yml，如不存在关联则显示 key 本身的值；icon 是 css class，可以省略；增加 name 可以强制显示指定名称
     - { key: 'home', link: '/', icon: 'iconfont icon-home-fill' }
     - { key: 'archive', link: '/archives/', icon: 'iconfont icon-archive-fill' }
-    - { key: 'category', link: '/categories/', icon: 'iconfont icon-category-fill' }
+    - {
+        key: 'category',
+        link: '/categories/',
+        icon: 'iconfont icon-category-fill',
+      }
     - { key: 'tag', link: '/tags/', icon: 'iconfont icon-tags-fill' }
     - { key: 'about', link: '/about/', icon: 'iconfont icon-user-fill' }
-    - { key: 'links', link: '/links/', icon: 'iconfont icon-link-fill' }  # 友链页，把前面#去掉即可展示
+    - { key: 'links', link: '/links/', icon: 'iconfont icon-link-fill' } # 友链页，把前面#去掉即可展示
 
 post:
-  copyright:  # 版权声明
+  copyright: # 版权声明
     enable: true
     content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！'
-  prev_next:  # 文章底部上一篇下一篇功能
+  prev_next: # 文章底部上一篇下一篇功能
     enable: false
-  toc:  # 文章右侧目录
+  toc: # 文章右侧目录
     enable: true
     headingSelector: h2,h3,h4,h5,h6
-    collapseDepth: 0  # 层级的折叠深度，0 是全部折叠，6 是全部不折叠
+    collapseDepth: 0 # 层级的折叠深度，0 是全部折叠，6 是全部不折叠
 
 #---------------------------
 # 友链页
@@ -60,26 +86,25 @@ post:
 #---------------------------
 links:
   banner_img: /img/default.png
-  banner_img_height: 60  # available: 0 - 100
-  banner_mask_alpha: 0.3  # available: 0 - 1.0
-  subtitle:  # 打字机内容
-  items:  # intro 与 image 可省略
+  banner_img_height: 60 # available: 0 - 100
+  banner_mask_alpha: 0.3 # available: 0 - 1.0
+  subtitle: # 打字机内容
+  items: # intro 与 image 可省略
     - {
-      title: 'Fluid Docs',
-      intro: '主题使用指南',
-      link: 'https://hexo.fluid-dev.com/docs/',
-      image: '/img/favicon.png'
-    }
+        title: 'Fluid Docs',
+        intro: '主题使用指南',
+        link: 'https://hexo.fluid-dev.com/docs/',
+        image: '/img/favicon.png',
+      }
     - {
-      title: 'Fluid Repo',
-      intro: '主题 GitHub 仓库',
-      link: 'https://github.com/fluid-dev/hexo-theme-fluid',
-      image: '/img/favicon.png'
-    }
+        title: 'Fluid Repo',
+        intro: '主题 GitHub 仓库',
+        link: 'https://github.com/fluid-dev/hexo-theme-fluid',
+        image: '/img/favicon.png',
+      }
     - {
-      title: 'Fluid Example',
-      intro: '主题操作示例',
-      link: 'https://hexo.fluid-dev.com/docs/example/',
-      image: '/img/favicon.png'
-    }
-
+        title: 'Fluid Example',
+        intro: '主题操作示例',
+        link: 'https://hexo.fluid-dev.com/docs/example/',
+        image: '/img/favicon.png',
+      }
