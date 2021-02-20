@@ -44,3 +44,7 @@ root@<container-id>:/#
 `-t` 是为我们分配了一个伪终端
 
 `-i` `-t` 一起使用时，就可以看到命令提示符了
+
+## 参考
+
+[进入容器 - Docker —— 从入门到实践](https://yeasy.gitbook.io/docker_practice/container/attach_exec)
