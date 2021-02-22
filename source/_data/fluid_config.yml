@@ -50,9 +50,9 @@ about:
         tip: 'FreeCodeCamp',
       }
     - {
-        class: 'iconfont icon-steam',
-        link: 'https://steamcommunity.com/id/thehunchn/',
-        tip: 'Steam',
+        class: 'fab fa-linkedin',
+        link: 'https://www.linkedin.com/in/mazixiang/',
+        tip: 'Linkedin',
       }
 
 navbar:
