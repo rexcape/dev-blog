@@ -386,7 +386,7 @@ public class URLTest {
         InputStream is = null;
         FileOutputStream fos = null;
         try {
-            URL url = new URL("https://www.baidu.com");
+            URL url = new URL("http://example.org/api");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.connect();
             is = urlConnection.getInputStream();
