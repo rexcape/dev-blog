@@ -10,6 +10,8 @@ categories:
 
 介绍 Java 8 中主要的新特性：Lambda 表达式、函数式接口、方法引用与构造器引用、Stream API 和 Optional 类
 
+<!--more-->
+
 ## Lambda 表达式
 
 ### 举例
