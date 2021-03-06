@@ -73,7 +73,7 @@ TS 不能被 JS 解析器直接执行，TS 代码要编译为 JS
 
 语法
 
-```tsx
+```typescript
 let 变量: 类型;
 let 变量: 类型 = 值;
 function func(参数: 类型, 参数: 类型): 类型 {
@@ -104,7 +104,7 @@ function func(参数: 类型, 参数: 类型): 类型 {
 
 ### `number` 类型
 
-```tsx
+```typescript
 let decimal: number = 6;
 let hex: number = 0xf00d;
 let binary: number = 0b1010;
@@ -116,7 +116,7 @@ let big: bigint = 100n;
 
 可以使用 `|` 连接多个类型
 
-```tsx
+```typescript
 let x: boolean | string;
 // 字面量
 let y: 'male' | 'female';
@@ -128,7 +128,7 @@ let y: 'male' | 'female';
 
 声明变量如果不指定类型，则 TS 解析器会自动判断变量的类型为 `any`
 
-```tsx
+```typescript
 let x: any;
 x = 1; // 不会报错
 x = true; // 不会报错
@@ -138,7 +138,7 @@ let y; // d: any
 
 同时，`any` 类型的变量可以给任何类型的变量赋值
 
-```tsx
+```typescript
 let x;
 x = 10;
 x = 'hello';
@@ -152,7 +152,7 @@ y = x; // 不会报错
 
 `unknown` 表示未知类型，是类型安全的 `any`
 
-```tsx
+```typescript
 let x: unknown;
 x = 10;
 x = 'hello';
@@ -171,7 +171,7 @@ if (typeof x === 'number') {
 
 类型断言，可以告诉解析器 `unknown` 变量的实际类型
 
-```tsx
+```typescript
 let x: unknown;
 x = 10;
 
@@ -191,7 +191,7 @@ y = <number>e; // 不会报错
 
 `never` 表示永远不会返回结果
 
-```tsx
+```typescript
 function fn(): void {} // 不会报错
 
 function fn2(): never {} // 报错
@@ -209,7 +209,7 @@ function fn4(): never {
 
 object 就是 JS 里面的对象，**不太实用**（JS 的一切都是对象）
 
-```tsx
+```typescript
 let x: object;
 x = {};
 x = function () {}; // 函数也是对象
@@ -219,7 +219,7 @@ x = function () {}; // 函数也是对象
 
 `{}` 里面可以指定对象中包含哪些属性，必须**完全相同**
 
-```tsx
+```typescript
 let x: { name: string };
 x = { name: 'abc' }; // 不会报错
 x = { name: 'abc', age: 22 }; // 会报错
@@ -227,7 +227,7 @@ x = { name: 'abc', age: 22 }; // 会报错
 
 可有可无的字段后面加 `?`
 
-```tsx
+```typescript
 let x: { name: string; age?: number };
 x = { name: 'abc' }; // 不会报错
 x = { name: 'abc', age: 22 }; // 不会报错
@@ -235,7 +235,7 @@ x = { name: 'abc', age: 22 }; // 不会报错
 
 要对某一字段有特定要求，不限制其他字段
 
-```tsx
+```typescript
 let x: { name: string; [propname: string]: any };
 x = { name: 'test', a: 1, b: 2, c: 3 }; // 不会报错
 x = { a: 1, b: 2, c: 3 }; // 会报错
@@ -243,7 +243,7 @@ x = { a: 1, b: 2, c: 3 }; // 会报错
 
 函数结构的类型声明
 
-```tsx
+```typescript
 let func: (a: number, b: number) => number;
 func = function (x, y): number {
   return x + y;
@@ -254,7 +254,7 @@ func = function (x, y): number {
 
 类似 JS 的数组
 
-```tsx
+```typescript
 let arr: number[]; // number 类型的数组
 let arr2: Array<number>; // number 类型的数组
 ```
@@ -267,7 +267,7 @@ let arr2: Array<number>; // number 类型的数组
 
 当数组元素的数量是固定的，可以用元组
 
-```tsx
+```typescript
 let t: [string, string];
 t = ['hello', 'world']; // 不会报错
 t = ['hello']; // 数量不对
@@ -278,7 +278,7 @@ t = ['hello', 123]; // 类型不对
 
 枚举在处理数据，有一些数据是在几个值之间选择（比如性别只能是男或者女）
 
-```tsx
+```typescript
 enum Gender {
   Male,
   Female,
@@ -295,7 +295,7 @@ person = {
 
 & 表示同时满足左右两边的字段
 
-```tsx
+```typescript
 let person: { name: string } & { age: number };
 person = { name: 'hello' }; // 报错
 person = { name: 'hello', age: 40 }; // 不会报错
@@ -303,14 +303,14 @@ person = { name: 'hello', age: 40 }; // 不会报错
 
 ### 类型别名
 
-```tsx
+```typescript
 let num: 1 | 2 | 3 | 4 | 5;
 let num2: 1 | 2 | 3 | 4 | 5; // 复杂
 ```
 
 使用类型别名来定义复杂的结构
 
-```tsx
+```typescript
 type myType = 1 | 2 | 3 | 4 | 5;
 let num: myType;
 let num2: myType;
@@ -673,7 +673,7 @@ module.exports = {
 
 定义类的语法
 
-```tsx
+```typescript
 class 类名 {
   属性名: 类型;
   readonly 只读属性名: 类型;
@@ -704,7 +704,7 @@ class 类名 {
 
 extends 表示继承
 
-```tsx
+```typescript
 class 子类 extends 父类 {}
 ```
 
@@ -765,7 +765,7 @@ getter 方法用来读取属性 setter 方法用来设置属性
 
 TS 中设置 getter 方法的方式
 
-```tsx
+```typescript
 class Person {
   private name: string;
   get name() {
@@ -783,7 +783,7 @@ console.log(person.name);
 
 TS 可以直接把属性定义在构造函数中
 
-```tsx
+```typescript
 class Person {
   constructor(public name: string, public age: number) {}
 }
@@ -795,7 +795,7 @@ class Person {
 
 泛型的定义方式
 
-```tsx
+```typescript
 function func<T>(arg: T): T {
   return arg;
 }
@@ -811,7 +811,7 @@ function func2<T, S>(a: T, b: S): T {
 
 也可以指定泛型
 
-```tsx
+```typescript
 interface MyInterface {
   length: number;
 }
