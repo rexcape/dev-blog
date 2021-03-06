@@ -15,7 +15,7 @@ Sass 笔记
 
 SASS 语言有两种形式，一种是 SASS 形式，使用缩进来取代大括号，严格限制缩进：
 
-```sass
+```scss
 h1
   font-family: $main-fonts;
   color: $headings-color;
@@ -23,7 +23,7 @@ h1
 
 另一种是 SCSS，保留完整的大括号，不限制缩进：
 
-```sass
+```scss
 h1 {
   font-family: $main-fonts;
   color: $headings-color;
