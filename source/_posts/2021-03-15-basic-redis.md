@@ -13,9 +13,9 @@ categories:
 
 ## 安装
 
-我使用 Docker 来进行安装
+我使用 Docker 来进行安装，官网提供了 Linux 源代码，可以自行 make
 
-```shell
+```bash
 $ docker run -d -p 6379:6379 --name redis-docker redis
 ...
 Status: Downloaded newer image for redis:latest
@@ -41,7 +41,7 @@ Alessia Merz 是一位意大利舞女、女演员。 Redis 作者 Antirez 早年
 
 使用 `docker exec -it ID /bin/sh` 进入容器，使用 redis 命令进入命令行：
 
-```bash
+```markdown
 # redis-cli
 127.0.0.1:6379>
 ```
@@ -60,7 +60,7 @@ string 类型是 redis 最基本的类型，一个 key 对应一个 value
 
 用法：
 
-```plain text
+```shell
 127.0.0.1:6379> set hello world
 OK
 127.0.0.1:6379> get hello
@@ -75,7 +75,7 @@ hash 是一个键值对集合
 
 用法：
 
-```plain text
+```bash
 127.0.0.1:6379> hmset hello field1 value1 field2 value2
 OK
 127.0.0.1:6379> hget hello field1
@@ -90,7 +90,7 @@ Redis 列表是简单的字符串列表，按照插入顺序排序。你可以�
 
 用法：
 
-```plain text
+```bash
 127.0.0.1:6379> lpush hello redis
 (integer) 1
 127.0.0.1:6379> lpush hello mongodb
@@ -110,7 +110,7 @@ set 是 string 类型的无序集合
 
 用法：
 
-```plain text
+```bash
 127.0.0.1:6379> sadd hello redis
 (integer) 1
 127.0.0.1:6379> sadd hello mongodb
@@ -134,7 +134,7 @@ zset 的成员是唯一的，但分数（score）可重复
 
 用法：
 
-```plain text
+```bash
 127.0.0.1:6379> zadd hello redis
 (integer) 1
 127.0.0.1:6379> zadd hello mongodb
