@@ -3,6 +3,7 @@ title: MySQL Server 8 的远程连接错误 ERROR 2003 解决办法
 date: 2020-09-12 22:02:26
 tags:
   - MySQL
+  - 数据库
 categories:
   - 踩坑
 ---
@@ -31,7 +32,7 @@ grant all privileges on *.* to 'tone'@'%' with grant option;
 
 之后打开本地电脑上面的软件，发现 DataGrip 报错，输出
 
-```Plain Text
+```plain
 
 [08S01] Communications link failure
 
@@ -83,21 +84,21 @@ $ sudo apt install mysql-client-8.0
 
 使用本地的 MySQL 客户端连接服务器后，才精准地定位到了错误：
 
-```Plain Text
+```plain
 Enter password:
 ERROR 2003 (HY000): Can't connect to MySQL server on '47.101.58.125' (111)
 ```
 
 于是开始上网查找 ERROR 2003 的解决方法，发现了提示：ERROR 2003 有可能和服务器端的配置有关系，马上找到 `/etc/mysql/my.cnf`
 
-```Plain Text
+```plain
 !includedir /etc/mysql/conf.d/
 !includedir /etc/mysql/mysql.conf.d/
 ```
 
 发现有两个目录：
 
-```Plain Text
+```plain
 /etc/mysql/conf.d
 ├── mysql.cnf
 └── mysqldump.cnf

@@ -80,7 +80,7 @@ $ sudo vim /lib/systemd/system/minieap.service
 
 输入如下内容
 
-```plain text
+```plain
 [Unit]
 Description=Minieap authentication service
 After=etcd.service

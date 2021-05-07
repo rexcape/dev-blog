@@ -3,15 +3,24 @@ title: 在 Oracle Linux 8 中安装 Oracle Database EE 19c
 date: 2021-05-07 19:41:35
 tags:
   - 数据库
-  - SQL
-  - Oracle 数据库
 categories:
   - 踩坑
 ---
 
-介绍如何在 Oracle Linux 中安装 Oracle Database EE 19c
+介绍如何在 Oracle Linux 中安装 Oracle Database EE 19c。我是初学者，不懂其中的原理，所以大多数的操作都是从网上搜索得来的。使用 RPM 安装的方法我重复了10次，最后还是无法进行连接。下面的步骤我重复了 8 次，最后成功使用 Navicat 软件连接。每个人环境都不相同，仅提供参考
 
 <!--more-->
+
+## 环境
+
+### 硬件环境
+
+VMWare 虚拟机
+
+### 软件环境
+
+- Oracle Linux 8.3
+- Oracle Database Enterprise Edition 19c
 
 ## 准备
 
@@ -26,7 +35,7 @@ Linux 安装好之后直接新建一个用户，用户名叫 oracle，密码随�
 
 以 root 身份登录，新建一个用户组叫做 oinstall，执行以下命令为 Oracle 新建一个文件夹并将权限转移到 oracle 用户。
 
-```plain text
+```plain
 # mkdir -p /u01/app/oracle
 # mkdir -p /u01/app/oraInventory
 # chown -R oracle:oinstall /u01/app/oracle
@@ -51,7 +60,7 @@ $ unzip -q /tmp/db_home.zip
 
 安装相关的依赖
 
-```plain text
+```plain
 # yum -y install oracle-database-preinstall-19c
 ```
 
@@ -84,7 +93,7 @@ Password 处需要记住，最好包含大小写和数字，不会抛出异常
 
 编辑 `/home/oracle/.bashrc`，在末尾处添加以下内容
 
-```plain text
+```plain
 export TMP=/tmp
 export TMPDIR=$TMP
 
@@ -115,7 +124,7 @@ export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
 
 首先需要配置 SqlPlus 来进行数据库的启动，执行如下命令来安装 SqlPlus
 
-```plain text
+```plain
 # yum -y install oracle-instantclient-release-el8.x86_64
 # yum -y install instantclient-sqlplus
 ```
@@ -164,9 +173,9 @@ SQL> exec dbms_xdb_config.SetGlobalPortEnabled(TRUE)
 
 ## 使用数据库管理软件连接
 
-首先执行如下命令来打开电脑的 1521 端口
+首先执行如下命令来打开电脑的 `1521` 端口
 
-```plain text
+```plain
 # firewall-cmd --add-port=1521/tcp --permanent
 success
 # firewall-cmd --reload
@@ -180,5 +189,7 @@ success
 - [Install Oracle 19c RDBMS on Oracle Linux 8 – avoid [WARNING] [INS-08101] Unexpected error while executing the action at state: ‘supportedOSCheck’ – martinberger.com](https://www.martinberger.com/2020/05/install-oracle-19c-rdbms-on-oracle-linux-8-avoid-warning-ins-08101-unexpected-error-while-executing-the-action-at-state-supportedoscheck/)
 - [Running RPM Packages to Install Oracle Database](https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/running-rpm-packages-to-install-oracle-database.html#GUID-BB7C11E3-D385-4A2F-9EAF-75F4F0AACF02)
 - [Running Oracle Database Setup Wizard to Install Oracle Database](https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/running-oracle-universal-installer-to-install-oracle-database.html#GUID-DD4800E9-C651-4B08-A6AC-E5ECCC6512B9)
+- [CentOS 8 系统安装 Oracle 19c 数据库 | RULTR](https://www.rultr.com/tutorials/4047.html)
 - [Oracle日常运维操作总结-数据库的启动和关闭 - 云+社区 - 腾讯云](https://cloud.tencent.com/developer/article/1027411)
 - [CentOS 7 启动Oracle_EricRan__的博客-CSDN博客_centos启动oracle数据库](https://blog.csdn.net/qq_36659897/article/details/84100308)
+- [Oracle 12c - Can not login to Enterprise Manager - XDB Login prompt - Database Administrators Stack Exchange](https://dba.stackexchange.com/questions/186235/oracle-12c-can-not-login-to-enterprise-manager-xdb-login-prompt)
