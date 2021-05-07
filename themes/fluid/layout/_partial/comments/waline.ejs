@@ -1,7 +1,7 @@
-<% if(theme.waline.serverURL){ %>
+<% if (theme.waline.serverURL) { %>
   <div id="waline"></div>
   <script type="text/javascript">
-    Fluid.utils.waitElementVisible('waline', function() {
+    Fluid.utils.loadComments('#waline', function() {
       Fluid.utils.createScript('<%= url_join(theme.static_prefix.waline, 'Waline.min.js') %>', function () {
         new Waline({
           el: "#waline",
@@ -13,15 +13,15 @@
           lang: "<%= theme.waline.lang %>",
           highlight: <%= theme.waline.highlight %>,
           serverURL: "<%= theme.waline.serverURL %>",
+          avatarCDN: "<%= theme.waline.avatarCDN %>",
           avatarForce: <%= theme.waline.avatarForce %>,
           requiredFields: <%- JSON.stringify(theme.waline.requiredFields || []) %>,
           emojiCDN: "<%= theme.waline.emojiCDN %>",
           emojiMaps: <%- JSON.stringify(theme.waline.emojiMaps) %>,
+          anonymous: <%= theme.waline.anonymous || 'null' %>,
         });
       });
     });
   </script>
-  <noscript>Please enable JavaScript to view the
-    <a href="https://waline.js.org" rel="nofollow noopener">comments powered by Waline.</a>
-  </noscript>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 <% } %>
