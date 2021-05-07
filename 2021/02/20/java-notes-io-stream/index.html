@@ -14,9 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  
-    <meta name="description" content="Java 笔记 - IO 流">
-  
+  <meta name="description" content="Java 笔记 - IO 流">
   <meta name="author" content="mazixiang">
   <meta name="keywords" content="">
   
@@ -32,7 +30,7 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github.min.css" />
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github.min.css" />
     
   
 
@@ -62,7 +60,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"blog.mazixiang.me","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -160,13 +158,13 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
                 class="iconfont icon-search"></i>&nbsp;</a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i
+            <a class="nav-link" target="_self">&nbsp;<i
                 class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
@@ -337,7 +335,7 @@
 <li>输出字符流：<code>Writer</code></li>
 </ul>
 <p>由这四个类派生出来的子类名称都是以其父类名作为子类名后缀</p>
-<p><img src="https://s3.ax1x.com/2021/02/20/y5fF5n.png" srcset="/img/loading.gif" alt="IO 流体系"></p>
+<p><img src="https://s3.ax1x.com/2021/02/20/y5fF5n.png" srcset="/img/loading.gif" lazyload alt="IO 流体系"></p>
 <p>IO 流体系</p>
 <div class="note note-warning">
             <p><strong>注意</strong></p><p>不能用字符流来处理图片等字节数据</p>
@@ -391,7 +389,7 @@
 <p><code>Unicode</code>：国际标准码，融合了目前人类使用的所有字符。为每个字符分配唯一的字符码。所有的字符都用两个字节表示</p>
 <p><code>UTF-8</code>：变长的编码方式，可用 1-4 字节表示一个字符（修正后是 1-6）</p>
 <p><code>UCS Transfer Format</code>，面向传输的众多标准出现了，<code>UTF-8</code> 就是每次 8 个位传输数据，<code>UTF-16</code> 就是每次 16 个位。这是为传输而涉及的编码，并使编码无国界，这样就可以现实全世界上所有文化的字符了</p>
-<p><img src="https://s3.ax1x.com/2021/02/20/y5W1c8.png" srcset="/img/loading.gif" alt="unicode 和 utf-8 编码"></p>
+<p><img src="https://s3.ax1x.com/2021/02/20/y5W1c8.png" srcset="/img/loading.gif" lazyload alt="unicode 和 utf-8 编码"></p>
 <p>字符编码</p>
 <p><code>ANSI</code> 编码，通常指的是平台的默认编码，例如英文的操作系统中是 <code>ISO-8859-1</code>，中文系统是 <code>GBK</code></p>
 <p><code>Unicode</code> 字符集只定义字符的集合和唯一编号，<code>Unicode</code> 编码则是对 <code>UTF-8</code>、<code>UCS-2</code>/<code>UTF-16</code> 等具体编码方案的统称，并不是具体的编码方案</p>
@@ -614,8 +612,9 @@
   
 </footer>
 
-<!-- SCRIPTS -->
 
+  <!-- SCRIPTS -->
+  
   <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
 
@@ -628,9 +627,8 @@
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
 <script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/debouncer.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
@@ -638,7 +636,7 @@
 
 
   
-    <script  src="/js/lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -647,7 +645,7 @@
 
 
 
-  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
@@ -659,7 +657,7 @@
 
 
 
-  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
 
 
 
@@ -708,7 +706,6 @@
 
 <!-- 主题的启动项 保持在最底部 -->
 <script  src="/js/boot.js" ></script>
-
 
 
 </body>
