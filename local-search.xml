@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>解决 WordPress WP REST API 404 问题</title>
+    <link href="/2021/07/20/fix-wp-restapi-404/"/>
+    <url>/2021/07/20/fix-wp-restapi-404/</url>
+    
+    <content type="html"><![CDATA[<p>解决 WordPress 更新失败时 404 问题</p><a id="more"></a><p>在想更新文章时，显示 WordPress 更新失败，此响应不是合法的 json 响应，这种错误有四种情况</p><ul><li>WordPress 编辑器插件的问题</li><li>WordPress WP RestAPI 的问题</li><li>系统镜像的问题</li><li>伪静态的问题</li></ul><p>打开控制台看到 <code>404</code> 错误，判断为第二种错误</p><h2 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h2><p>OS: Ubuntu Server 20.04<br>Apache: Apache2.4.41<br>WordPress: 5.7.2_zh_CN</p><h2 id="Apache2-配置"><a href="#Apache2-配置" class="headerlink" title="Apache2 配置"></a>Apache2 配置</h2><p>首先修改 /etc/apache2/apache2.conf，找到下面的语句</p><figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain">&lt;Directory &#x2F;var&#x2F;www&#x2F;&gt;<br>    Options Indexes FollowSymLinks<br>    AllowOverride None<br>    Require all granted<br>&lt;&#x2F;Directory&gt;<br></code></pre></div></td></tr></table></figure><p>把 <code>AllowOverride</code> 改为 <code>All</code></p><h2 id="使用-rewrite-模块"><a href="#使用-rewrite-模块" class="headerlink" title="使用 rewrite 模块"></a>使用 rewrite 模块</h2><p>改了上面那些还不够，查看 WordPress 根目录下面的 .htaccess 文件</p><figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># BEGIN WordPress<br># 在“BEGIN WordPress”与“END WordPress”之间的指令（行）是<br># 动态生成的，只应被WordPress过滤器修改。<br># 任何对标记之间的指令的修改都会被覆盖。<br>&lt;IfModule mod_rewrite.c&gt;<br>RewriteEngine On<br>RewriteRule .* - [E&#x3D;HTTP_AUTHORIZATION:%&#123;HTTP:Authorization&#125;]<br>RewriteBase &#x2F;<br>RewriteRule ^index\.php$ - [L]<br>RewriteCond %&#123;REQUEST_FILENAME&#125; !-f<br>RewriteCond %&#123;REQUEST_FILENAME&#125; !-d<br>RewriteRule . &#x2F;index.php [L]<br>&lt;&#x2F;IfModule&gt;<br><br># END WordPress<br></code></pre></div></td></tr></table></figure><p>可以发现需要启用 mod_rewrite.c 模块</p><figure class="highlight sh"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs sh">$ sudo a2enmod rewrite<br>Enabling module rewrite.<br>To activate the new configuration, you need to run:<br>  systemctl restart apache2<br><br>$ systemctl restart apache2<br></code></pre></div></td></tr></table></figure><p>重启服务后，问题就解决了</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://cloud.tencent.com/developer/article/1769015">[已解决]wordpress网站发布失败：此响应不是合法的JSON响应 - 云+社区 - 腾讯云 - 晓得博客</a></li><li><a href="http://www.iasptk.com/enable-apache-mod_rewrite-ubuntu-14-04-lts/">Enable apache mod_rewrite in Ubuntu 14.04 LTS</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>踩坑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Apache2</tag>
+      
+      <tag>WordPress</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>在 Oracle Linux 8 中安装 Oracle Database EE 19c</title>
     <link href="/2021/05/07/install-oracle-database-on-oracle-linux-8/"/>
     <url>/2021/05/07/install-oracle-database-on-oracle-linux-8/</url>
