@@ -80,3 +80,4 @@ $ systemctl restart apache2
 
 - [[已解决]wordpress网站发布失败：此响应不是合法的JSON响应 - 云+社区 - 腾讯云 - 晓得博客](https://cloud.tencent.com/developer/article/1769015)
 - [Enable apache mod_rewrite in Ubuntu 14.04 LTS](http://www.iasptk.com/enable-apache-mod_rewrite-ubuntu-14-04-lts/)
+- [Stack Overflow](https://stackoverflow.com/questions/34670533/wordpress-rest-api-wp-api-404-error-cannot-access-the-wordpress-rest-api)
