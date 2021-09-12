@@ -45,34 +45,53 @@ public class Test {
 
 ## 解决方案
 
-新建 `IntegerListTypeHandler` 类
+新建 `IntegerListTypeHandler` 类，别忘了判空
 
 ```java
 @MappedJdbcTypes(JdbcType.VARCHAR)
 @MappedTypes(List.class)
 public class IntegerListTypeHandler extends BaseTypeHandler<List<Integer>> {
-
-    public IntegerListTypeHandler() {
-    }
-
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, List<Integer> integers, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setString(i, integers.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        if (integers == null) {
+            preparedStatement.setString(i, null);
+        } else {
+            preparedStatement.setString(i, integers.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
     }
 
     @Override
     public List<Integer> getNullableResult(ResultSet resultSet, String s) throws SQLException {
-        return Arrays.stream(resultSet.getString(s).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = resultSet.getString(s);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
+
     }
 
     @Override
     public List<Integer> getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        return Arrays.stream(resultSet.getString(i).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = resultSet.getString(i);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
     }
 
     @Override
     public List<Integer> getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        return Arrays.stream(callableStatement.getString(i).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = callableStatement.getString(i);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
     }
 }
 ```
@@ -161,28 +180,47 @@ import java.util.stream.Collectors;
 @MappedJdbcTypes(JdbcType.VARCHAR)
 @MappedTypes(List.class)
 public class IntegerListTypeHandler extends BaseTypeHandler<List<Integer>> {
-
-    public IntegerListTypeHandler() {
-    }
-
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, List<Integer> integers, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setString(i, integers.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        if (integers == null) {
+            preparedStatement.setString(i, null);
+        } else {
+            preparedStatement.setString(i, integers.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
     }
 
     @Override
     public List<Integer> getNullableResult(ResultSet resultSet, String s) throws SQLException {
-        return Arrays.stream(resultSet.getString(s).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = resultSet.getString(s);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
+
     }
 
     @Override
     public List<Integer> getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        return Arrays.stream(resultSet.getString(i).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = resultSet.getString(i);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
     }
 
     @Override
     public List<Integer> getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        return Arrays.stream(callableStatement.getString(i).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        String str = callableStatement.getString(i);
+
+        if (str == null) {
+            return null;
+        } else {
+            return Arrays.stream(str.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
     }
 }
 
