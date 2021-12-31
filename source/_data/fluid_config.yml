@@ -25,13 +25,13 @@ dark_mode: # 主题暗色模式，开启后菜单中会出现切换按钮，用�
   default: auto # 默认的模式：auto | light | dark，选择 auto 时优先遵循 prefers-color-scheme，其次按用户本地时间 18 点到次日 6 点之间进入暗色模式，**注意：当用户手动切换后则不再按照默认模式**
 
 about:
-  avatar: 'https://cdn.jsdelivr.net/gh/mazixiang/assets@master/picgo/20200525222232.jpg'
-  name: mazixiang
+  avatar: 'https://cdn.jsdelivr.net/gh/rexcape/assets@master/picgo/20200525222232.jpg'
+  name: rexcape
   introduce: '没有天赋'
   icons:
     - {
         class: 'fab fa-github',
-        link: 'https://github.com/mazixiang',
+        link: 'https://github.com/rexcape',
         tip: 'GitHub',
       }
     - {
@@ -56,7 +56,7 @@ about:
       }
 
 navbar:
-  blog_title: mazixiang
+  blog_title: rexcape
   menu: # 可自行增减，key 用来关联 languages/*.yml，如不存在关联则显示 key 本身的值；icon 是 css class，可以省略；增加 name 可以强制显示指定名称
     - { key: 'home', link: '/', icon: 'iconfont icon-home-fill' }
     - { key: 'archive', link: '/archives/', icon: 'iconfont icon-archive-fill' }
