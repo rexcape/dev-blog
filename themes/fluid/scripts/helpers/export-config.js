@@ -3,6 +3,7 @@
 'use strict';
 
 const url = require('url');
+const urlJoin = require('../utils/url-join');
 
 /**
  * Export theme config to js
@@ -20,7 +21,8 @@ hexo.extend.helper.register('export_config', function() {
     image_zoom   : theme.post.image_zoom,
     toc          : theme.post.toc,
     lazyload     : theme.lazyload,
-    web_analytics: theme.web_analytics
+    web_analytics: theme.web_analytics,
+    search_path  : urlJoin(config.root, theme.search.path)
   };
   return `<script id="fluid-configs">
     var Fluid = window.Fluid || {};
