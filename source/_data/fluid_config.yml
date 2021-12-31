@@ -72,7 +72,7 @@ navbar:
 post:
   copyright: # 版权声明
     enable: true
-    content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除！'
+    content: '本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0 协议</a> 。转载请注明出处！<br>如有错误或侵权，请<a href="mailto:mazixiang2012@gmail.com"><strong>点击这里，给我发邮件</strong></a>，我会马上修改或删除!'
   prev_next: # 文章底部上一篇下一篇功能
     enable: false
   toc: # 文章右侧目录
@@ -107,4 +107,10 @@ links:
         intro: '主题操作示例',
         link: 'https://hexo.fluid-dev.com/docs/example/',
         image: '/img/favicon.png',
+      }
+    - {
+        title: 'V2方圆',
+        intro: '发掘稀缺资源',
+        link: 'https://v2fy.com/',
+        image: 'https://v2fy.com/wp-content/uploads/2021/03/cropped-v2fy-ico-192x192.png',
       }
