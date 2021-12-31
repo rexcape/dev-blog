@@ -1,4 +1,4 @@
-favicon: 'https://cdn.jsdelivr.net/gh/mazixiang/assets@master/icon/main_icon.ico'
+favicon: 'https://cdn.jsdelivr.net/gh/rexcape/assets@master/icon/main_icon.ico'
 
 custom_html: '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />'
 
@@ -38,21 +38,6 @@ about:
         class: 'far fa-envelope',
         link: 'mailto:mazixiang2012@gmail.com',
         tip: 'Mail',
-      }
-    - {
-        class: 'fab fa-codepen',
-        link: 'https://codepen.io/mazixiang',
-        tip: 'CodePen',
-      }
-    - {
-        class: 'fab fa-free-code-camp',
-        link: 'https://www.freecodecamp.org/mazixiang',
-        tip: 'FreeCodeCamp',
-      }
-    - {
-        class: 'fab fa-linkedin',
-        link: 'https://www.linkedin.com/in/mazixiang/',
-        tip: 'Linkedin',
       }
 
 navbar:
