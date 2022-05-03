@@ -10,6 +10,7 @@ specifiers:
   hexo-renderer-marked: ^3.3.0
   hexo-renderer-stylus: ^2.0.1
   hexo-server: ^2.0.0
+  hexo-util: ^2.6.1
 
 dependencies:
   hexo: 5.4.2
@@ -21,6 +22,7 @@ dependencies:
   hexo-renderer-marked: 3.3.0
   hexo-renderer-stylus: 2.0.1
   hexo-server: 2.0.0
+  hexo-util: 2.6.1
 
 packages:
 
