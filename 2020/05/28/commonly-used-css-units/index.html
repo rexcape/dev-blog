@@ -24,7 +24,7 @@
 <meta property="og:description" content="简单介绍 CSS 常用单位">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-28T00:48:01.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.015Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="CSS">
 <meta property="article:tag" content="基础知识">
@@ -76,7 +76,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -256,15 +256,18 @@
             
             <div class="markdown-body">
               <p>简单介绍 CSS 常用单位</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="px"><a href="#px" class="headerlink" title="px"></a>px</h2><p><code>px</code> 是最常用的<strong>绝对单位</strong>，全称是 <code>pixel</code> ，代表屏幕上的像素点，用法如下</p>
 <figure class="highlight css"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-tag">div</span> &#123;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">18px</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="em"><a href="#em" class="headerlink" title="em"></a>em</h2><p><code>em</code> 是一个相对单位，代表相对父元素字体大小的倍数，用法如下</p>
 <figure class="highlight css"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-tag">div</span> &#123;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;<br>&#125;<br><span class="hljs-selector-tag">div</span> <span class="hljs-selector-tag">h1</span> &#123;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.8em</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
 <p>此时的 <code>div</code> 中的 <code>h1</code> 元素字体大小为 <code>20px * 0.8em = 16px</code></p>
 <h2 id="rem"><a href="#rem" class="headerlink" title="rem"></a>rem</h2><p><code>rem</code> 也是一个相对单位，代表相对根（root）元素字体大小的倍数，用法如下</p>
 <figure class="highlight css"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-tag">html</span> &#123;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">10px</span>;<br>&#125;<br><br><span class="hljs-selector-tag">h1</span> &#123;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.8rem</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
 <p>此时的 <code>div</code> 中的 <code>h1</code> 元素字体大小为 <code>10px * 0.8em = 8px</code>，并且不受父容器字体大小的限制</p>
 <h2 id="vw-和-vh"><a href="#vw-和-vh" class="headerlink" title="vw 和 vh"></a>vw 和 vh</h2><p><code>vw</code> 和 <code>vh</code> 即是 <code>viewport width</code> 和 <code>viewport height</code> 的缩写，<code>viewport</code> 是目前看到的画面的大小，他们的值只能是 1 - 100，<code>50vw</code> 是占画面宽度的一半，<code>50vh</code> 是占画面高度的一半</p>
 <p>经常用到的是 <code>100vh</code> 和 <code>100 vw</code>，用来做水平垂直居中都很方便</p>

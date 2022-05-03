@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://z3.ax1x.com/2021/05/07/g3O1Ff.png">
 <meta property="article:published_time" content="2021-05-07T11:41:35.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.019Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary_large_image">
@@ -77,7 +77,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -215,7 +215,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.4k 字
+      3.2k 字
     </span>
   
 
@@ -224,7 +224,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      29 分钟
+      27 分钟
     </span>
   
 
@@ -257,7 +257,7 @@
             
             <div class="markdown-body">
               <p>介绍如何在 Oracle Linux 中安装 Oracle Database EE 19c</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <p>由于我还是是初学者，不懂其中的原理，所以大多数的操作都是从网上搜索得来的。使用 RPM 安装的方法我重复了10次，最后还是无法进行连接。下面的步骤我重复了 8 次，最后成功使用 Navicat 软件连接。每个人环境都不相同，仅提供参考</p>
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="硬件环境"><a href="#硬件环境" class="headerlink" title="硬件环境"></a>硬件环境</h3><p>VMWare 虚拟机</p>
@@ -272,28 +272,33 @@
 </ul>
 <h2 id="配置-Linux-操作系统"><a href="#配置-Linux-操作系统" class="headerlink" title="配置 Linux 操作系统"></a>配置 Linux 操作系统</h2><p>Linux 安装好之后直接新建一个用户，用户名叫 oracle，密码随意</p>
 <p>以 root 身份登录，新建一个用户组叫做 oinstall，执行以下命令为 Oracle 新建一个文件夹并将权限转移到 oracle 用户。</p>
-<figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># mkdir -p &#x2F;u01&#x2F;app&#x2F;oracle<br># mkdir -p &#x2F;u01&#x2F;app&#x2F;oraInventory<br># chown -R oracle:oinstall &#x2F;u01&#x2F;app&#x2F;oracle<br># chown -R oracle:oinstall &#x2F;u01&#x2F;app&#x2F;oraInventory<br># chmod -R 775 &#x2F;u01&#x2F;app<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># mkdir -p /u01/app/oracle<br># mkdir -p /u01/app/oraInventory<br># chown -R oracle:oinstall /u01/app/oracle<br># chown -R oracle:oinstall /u01/app/oraInventory<br># chmod -R 775 /u01/app<br></code></pre></div></td></tr></table></figure>
+
 <div class="note note-warning">
             <p>注意：代码块中的 <code>#</code> 符号代表以 root 身份执行，<code>$</code> 符号代表以用户身份运行。不代表 bash 注释</p>
           </div>
 
 <p>将你下载的 zip 压缩文件使用 WinSCP 进行传输，传输到 /tmp 文件夹下，假设文件名为 db_home.zip，以 oracle 用户的身份进行解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> mkdir -p /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta">$</span><span class="bash"> unzip -q /tmp/db_home.zip</span><br>...<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> -p /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">unzip -q /tmp/db_home.zip</span><br>...<br></code></pre></div></td></tr></table></figure>
+
 <p>安装相关的依赖</p>
-<figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># yum -y install oracle-database-preinstall-19c<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># yum -y install oracle-database-preinstall-19c<br></code></pre></div></td></tr></table></figure>
+
 <p>解压完成后，设置对应系统版本的环境变量（不设置会导致安装界面白屏），转换到对应目录执行安装程序</p>
 <div class="note note-danger">
             <p>注意：将下面的 <code>OEL8.3</code> 换成你下载的 Oracle Linux 的版本</p>
           </div>
 
-<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">export</span> CV_ASSUME_DISTID=OEL8.3</span><br><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta">$</span><span class="bash"> ./runInstaller</span><br>...<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">export</span> CV_ASSUME_DISTID=OEL8.3</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> /u01/app/oracle/product/19.0.0/dbhome_1</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">./runInstaller</span><br>...<br></code></pre></div></td></tr></table></figure>
+
 <p>按指示进行，如进行到第三步下图所示</p>
 <p><img src="https://z3.ax1x.com/2021/05/07/g3O1Ff.png" srcset="/img/loading.gif" lazyload alt="Step 3"></p>
 <p>Password 处需要记住，最好包含大小写和数字，不会抛出异常</p>
 <p>第四步 Root Script 处选择第一项，输入 root 用户的密码</p>
 <p>之后如果监测交换区内存大小出异常，选择 ignore all 忽略掉异常</p>
 <h2 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h2><p>编辑 <code>/home/oracle/.bashrc</code>，在末尾处添加以下内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain">export TMP&#x3D;&#x2F;tmp<br>export TMPDIR&#x3D;$TMP<br><br>export ORACLE_HOSTNAME&#x3D;oracle-db-19c<br>export ORACLE_UNQNAME&#x3D;oradb<br>export ORACLE_BASE&#x3D;&#x2F;u01&#x2F;app&#x2F;oracle<br>export ORACLE_HOME&#x3D;$ORACLE_BASE&#x2F;product&#x2F;19.0.0&#x2F;dbhome_1<br>export ORA_INVENTORY&#x3D;&#x2F;u01&#x2F;app&#x2F;oraInventory<br>export ORACLE_SID&#x3D;orcl<br>export PDB_NAME&#x3D;pdb<br>export DATA_DIR&#x3D;$ORACLE_BASE&#x2F;oradata<br>export PATH&#x3D;$ORACLE_HOME&#x2F;bin:$PATH<br>export LD_LIBRARY_PATH&#x3D;$ORACLE_HOME&#x2F;lib:&#x2F;lib:&#x2F;usr&#x2F;lib<br>export CLASSPATH&#x3D;$ORACLE_HOME&#x2F;jlib:$ORACLE_HOME&#x2F;rdbms&#x2F;jlib<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain">export TMP=/tmp<br>export TMPDIR=$TMP<br><br>export ORACLE_HOSTNAME=oracle-db-19c<br>export ORACLE_UNQNAME=oradb<br>export ORACLE_BASE=/u01/app/oracle<br>export ORACLE_HOME=$ORACLE_BASE/product/19.0.0/dbhome_1<br>export ORA_INVENTORY=/u01/app/oraInventory<br>export ORACLE_SID=orcl<br>export PDB_NAME=pdb<br>export DATA_DIR=$ORACLE_BASE/oradata<br>export PATH=$ORACLE_HOME/bin:$PATH<br>export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib<br>export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib<br></code></pre></div></td></tr></table></figure>
+
 <div class="note note-danger">
             <p>注意：将 ORACLE_SID 的值换成你在第四步设置的 <code>Global database name</code></p>
           </div>
@@ -301,15 +306,20 @@
 <p>执行 <code>source /home/oracle/.bashrc</code> 来更新环境变量</p>
 <p>更新完环境变量后执行 <code>lsnrctl start</code> 开始监听</p>
 <h2 id="安装-SqlPlus（Linux）"><a href="#安装-SqlPlus（Linux）" class="headerlink" title="安装 SqlPlus（Linux）"></a>安装 SqlPlus（Linux）</h2><p>首先需要配置 SqlPlus 来进行数据库的启动，执行如下命令来安装 SqlPlus</p>
-<figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># yum -y install oracle-instantclient-release-el8.x86_64<br># yum -y install instantclient-sqlplus<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># yum -y install oracle-instantclient-release-el8.x86_64<br># yum -y install instantclient-sqlplus<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="使用-SqlPlus-操作数据库"><a href="#使用-SqlPlus-操作数据库" class="headerlink" title="使用 SqlPlus 操作数据库"></a>使用 SqlPlus 操作数据库</h2><p>在监听开启的情况下，执行如下命令来使用 SqlPlus 连接并开启数据库</p>
-<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> sqlplus / as sysdba</span><br>SQL*Plus: Release 19.0.0.0.0 - Production on Fri May 7 08:39:13 2021<br>Version 19.3.0.0.0<br><br>Copyright (c) 1982, 2019, Oracle.  All rights reserved.<br><br>Connected to an idle instance.<br><br><span class="hljs-meta">SQL&gt;</span><span class="bash"> startup</span><br>ORACLE instance started.<br><br>Total System Global Area 2415918568 bytes<br>Fixed Size           9137640 bytes<br>Variable Size        536870912 bytes<br>Database Buffers     1862270976 bytes<br>Redo Buffers         7639040 bytes<br>Database mounted.<br>Database opened.<br><span class="hljs-meta">SQL&gt;</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sqlplus / as sysdba</span><br>SQL*Plus: Release 19.0.0.0.0 - Production on Fri May 7 08:39:13 2021<br>Version 19.3.0.0.0<br><br>Copyright (c) 1982, 2019, Oracle.  All rights reserved.<br><br>Connected to an idle instance.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">SQL&gt; </span><span class="language-bash">startup</span><br>ORACLE instance started.<br><br>Total System Global Area 2415918568 bytes<br>Fixed Size           9137640 bytes<br>Variable Size        536870912 bytes<br>Database Buffers     1862270976 bytes<br>Redo Buffers         7639040 bytes<br>Database mounted.<br>Database opened.<br><span class="hljs-meta prompt_">SQL&gt;</span><br></code></pre></div></td></tr></table></figure>
+
 <p>执行如下命令来关闭数据库</p>
-<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">SQL&gt;</span><span class="bash"> shutdown</span><br>Database closed.<br>Database dismounted.<br>ORACLE instance shut down.<br><span class="hljs-meta">SQL&gt;</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_">SQL&gt; </span><span class="language-bash">shutdown</span><br>Database closed.<br>Database dismounted.<br>ORACLE instance shut down.<br><span class="hljs-meta prompt_">SQL&gt;</span><br></code></pre></div></td></tr></table></figure>
+
 <p>浏览器可以前往 <code>https://localhost:5500/em</code> 进行图形化管理，使用sys和你刚才设置的密码进行登录，登录不成功的话执行如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">SQL&gt;</span><span class="bash"> <span class="hljs-built_in">exec</span> dbms_xdb_config.SetGlobalPortEnabled(TRUE)</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_">SQL&gt; </span><span class="language-bash"><span class="hljs-built_in">exec</span> dbms_xdb_config.SetGlobalPortEnabled(TRUE)</span><br></code></pre></div></td></tr></table></figure>
+
 <h2 id="使用数据库管理软件连接"><a href="#使用数据库管理软件连接" class="headerlink" title="使用数据库管理软件连接"></a>使用数据库管理软件连接</h2><p>首先执行如下命令来打开电脑的 <code>1521</code> 端口</p>
-<figure class="highlight plain"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># firewall-cmd --add-port&#x3D;1521&#x2F;tcp --permanent<br>success<br># firewall-cmd --reload<br>success<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs plain"># firewall-cmd --add-port=1521/tcp --permanent<br>success<br># firewall-cmd --reload<br>success<br></code></pre></div></td></tr></table></figure>
+
 <p>我使用 Navicat 进行连接。主机写 Linux 的 IP 地址，端口写 1521（默认），服务名就是你在第三步设置的默认数据库名称，默认就是 orcl，用户名是 sys，密码是你在第三步设置的密码，之后就可以连接了。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://www.martinberger.com/2020/05/install-oracle-19c-rdbms-on-oracle-linux-8-avoid-warning-ins-08101-unexpected-error-while-executing-the-action-at-state-supportedoscheck/">Install Oracle 19c RDBMS on Oracle Linux 8 – avoid [WARNING] [INS-08101] Unexpected error while executing the action at state: ‘supportedOSCheck’ – martinberger.com</a></li>

@@ -24,7 +24,7 @@
 <meta property="og:description" content="最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何用 oh-my-posh 美化 PowerShell">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-20T03:36:06.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.019Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="美化">
 <meta property="article:tag" content="PowerShell">
@@ -76,7 +76,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -256,16 +256,19 @@
             
             <div class="markdown-body">
               <p>最近重装了一遍系统，记录一下每次重装系统反复配置的软件，本文记录如何用 oh-my-posh 美化 PowerShell</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="开放许可"><a href="#开放许可" class="headerlink" title="开放许可"></a>开放许可</h2><p>首次在计算机上启动 <code>Windows PowerShell</code> 时，现用执行策略很可能是 Restricted（默认设置），这个策略是禁止运行任何脚本的，要想打开，只需在<strong>有管理员权限的</strong> <code>PowerShell</code> 下输入 <code>set-executionpolicy remotesigned</code>即可。</p>
 <h2 id="安装-oh-my-posh"><a href="#安装-oh-my-posh" class="headerlink" title="安装 oh-my-posh"></a>安装 oh-my-posh</h2><p>根据 <a target="_blank" rel="noopener" href="https://github.com/JanDeDobbeleer/oh-my-posh#installation">oh-my-posh 的说明</a>，执行以下命令：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">Install-Module</span> posh<span class="hljs-literal">-git</span> <span class="hljs-literal">-Scope</span> CurrentUser<br>&gt; <span class="hljs-built_in">Install-Module</span> <span class="hljs-built_in">oh</span><span class="hljs-literal">-my</span><span class="hljs-literal">-posh</span> <span class="hljs-literal">-Scope</span> CurrentUser<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershell">&gt; <span class="hljs-built_in">Install-Module</span> posh<span class="hljs-literal">-git</span> <span class="hljs-literal">-Scope</span> CurrentUser<br>&gt; <span class="hljs-built_in">Install-Module</span> <span class="hljs-built_in">oh</span><span class="hljs-literal">-my-posh</span> <span class="hljs-literal">-Scope</span> CurrentUser<br></code></pre></div></td></tr></table></figure>
+
 <p>如果有选项全通过就可以了</p>
 <h2 id="配置-oh-my-posh"><a href="#配置-oh-my-posh" class="headerlink" title="配置 oh-my-posh"></a>配置 oh-my-posh</h2><p>在 powershell 中输入 <code>notepad $PROFILE</code>，用记事本打开配置文件，将如下文本添加到其中即可成功配置。</p>
-<figure class="highlight plain"><figcaption><span>posh-git</span></figcaption><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershellImport-Module">Import-Module oh-my-posh<br>Set-Theme Paradox<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><figcaption><span>posh-git</span></figcaption><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershellImport-Module">Import-Module oh-my-posh<br>Set-Theme Paradox<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="安装-PowerLine-字体"><a href="#安装-PowerLine-字体" class="headerlink" title="安装 PowerLine 字体"></a>安装 PowerLine 字体</h2><p>此时通过 Windows Terminal 等软件打开会出现无法显示字符的情况，需要从 <a target="_blank" rel="noopener" href="https://github.com/microsoft/cascadia-code/releases">microsoft/cascadia-code</a> 或者其他途径安装 <code>PowerLine</code> 字体，最后将终端软件（如 <code>Windows Terminal</code> 的字体配置改为你下载的那个字体。</p>
-<figure class="highlight"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json">&quot;defaults&quot;:<br>&#123;<br>    <span class="hljs-comment">// Put settings here that you want to apply to all profiles.</span><br>    <span class="hljs-attr">&quot;colorScheme&quot;</span>: <span class="hljs-string">&quot;Dracula&quot;</span>,<br>    <span class="hljs-attr">&quot;startingDirectory&quot;</span>: <span class="hljs-string">&quot;.&quot;</span>,<br>    <span class="hljs-attr">&quot;fontFace&quot;</span>: <span class="hljs-string">&quot;Cascadia Mono PL&quot;</span><br>&#125;,<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs json"><span class="hljs-attr">&quot;defaults&quot;</span><span class="hljs-punctuation">:</span><br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-comment">// Put settings here that you want to apply to all profiles.</span><br>    <span class="hljs-attr">&quot;colorScheme&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Dracula&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;startingDirectory&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;.&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;fontFace&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Cascadia Mono PL&quot;</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br></code></pre></div></td></tr></table></figure>
+
 <p>这里推荐一个字体网站 <a target="_blank" rel="noopener" href="https://www.nerdfonts.com/">Nerd Fonts</a>，有很多 <code>PowerLine</code> 字体。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhaozhan/archive/2012/06/01/2529384.html">PowerShell 因为在此系统中禁止执行脚本解决方法 - Asharp - 博客园</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/JanDeDobbeleer/oh-my-posh">JanDeDobbeleer/oh-my-posh</a></p>

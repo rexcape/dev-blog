@@ -24,7 +24,7 @@
 <meta property="og:description" content="介绍 Java 8 中主要的新特性：Lambda 表达式、函数式接口、方法引用与构造器引用、Stream API 和 Optional 类">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-26T06:37:25.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.019Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Lambda">
@@ -76,7 +76,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -256,25 +256,32 @@
             
             <div class="markdown-body">
               <p>介绍 Java 8 中主要的新特性：Lambda 表达式、函数式接口、方法引用与构造器引用、Stream API 和 Optional 类</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>lambda 表达式使用举例</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Runnable r1 = <span class="hljs-keyword">new</span> Runnable() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;我爱北京天安门&quot;</span>);<br>    &#125;<br>&#125;;<br><br>r1.run();<br>System.out.println(<span class="hljs-string">&quot;===========&quot;</span>);<br>Runnable r2 = () -&gt; System.out.println(<span class="hljs-string">&quot;我爱北京故宫&quot;</span>);<br>r2.run();<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-type">Runnable</span> <span class="hljs-variable">r1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;我爱北京天安门&quot;</span>);<br>    &#125;<br>&#125;;<br><br>r1.run();<br>System.out.println(<span class="hljs-string">&quot;===========&quot;</span>);<br><span class="hljs-type">Runnable</span> <span class="hljs-variable">r2</span> <span class="hljs-operator">=</span> () -&gt; System.out.println(<span class="hljs-string">&quot;我爱北京故宫&quot;</span>);<br>r2.run();<br></code></pre></div></td></tr></table></figure>
+
 <h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><code>-&gt;</code>：Lambda 操作符</p>
 <p>左边是形参列表，其实就是接口中抽象方法的形参列表</p>
 <p>右边是 <code>Lambda</code> 体，其实就是抽象方法的方法体</p>
 <p>语法格式一：无参无返回值</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Runnable r2 = () -&gt; System.out.println(<span class="hljs-string">&quot;我爱北京故宫&quot;</span>);<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-type">Runnable</span> <span class="hljs-variable">r2</span> <span class="hljs-operator">=</span> () -&gt; System.out.println(<span class="hljs-string">&quot;我爱北京故宫&quot;</span>);<br></code></pre></div></td></tr></table></figure>
+
 <p>语法格式二：需要参数，无返回值</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Consumer&lt;String&gt; consumer = (String s) -&gt; System.out.println(s);<br></code></pre></div></td></tr></table></figure>
+
 <p>语法格式三：参数类型可以省略，可以由编译器推断得出</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Consumer&lt;String&gt; consumer = (s) -&gt; System.out.println(s);<br></code></pre></div></td></tr></table></figure>
+
 <p>语法格式四：如果只需要一个参数，参数的小括号可以省略</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Consumer&lt;String&gt; con = s -&gt; System.out.println(s);<br></code></pre></div></td></tr></table></figure>
+
 <p>语法格式五：需要两个或以上的参数，多条执行语句，可以有返回值</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Comparator&lt;Integer&gt; con = (x, y) -&gt; &#123;<br>    System.out.println(<span class="hljs-string">&quot;实现函数式接口方法&quot;</span>);<br>    <span class="hljs-keyword">return</span> Integer.compare(x, y);<br>&#125;;<br></code></pre></div></td></tr></table></figure>
+
 <p>语法格式六：当 Lambda 体只有一条语句时，<code>return</code> 和大括号都可以省略</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Consumer&lt;String&gt; con = s -&gt; System.out.println(s);<br>Comparator&lt;Integer&gt; con = (x, y) -&gt; Integer.compare(x, y);<br></code></pre></div></td></tr></table></figure>
+
 <h3 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h3><p>Lambda 表达式的本质是函数式接口的实例</p>
 <h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p>当一个接口只包含一个抽象方法，这个接口就是函数式接口</p>
 <p>可以通过 Lambda 表达式来创建这个接口的对象（若 Lambda 表达式抛出一个异常，那么该异常需要在目标接口的抽象方法上进行声明）</p>
@@ -289,21 +296,26 @@
 <ul>
 <li>情况一：对象<code>::</code>实例方法名</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Employee e = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">1001</span>, <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-number">23</span>, <span class="hljs-number">5600</span>);<br>Supplier&lt;String&gt; sup = () -&gt; e.getName();<br><span class="hljs-comment">// to</span><br>Supplier&lt;String&gt; sup2 = e::getName;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-type">Employee</span> <span class="hljs-variable">e</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-number">1001</span>, <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-number">23</span>, <span class="hljs-number">5600</span>);<br>Supplier&lt;String&gt; sup = () -&gt; e.getName();<br><span class="hljs-comment">// to</span><br>Supplier&lt;String&gt; sup2 = e::getName;<br></code></pre></div></td></tr></table></figure>
+
 <ul>
 <li>情况二：类<code>::</code>静态方法名</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Consumer&lt;String&gt; consumer = (s) -&gt; System.out.println(s);<br><span class="hljs-comment">// to</span><br>Consumer&lt;String&gt; consumer2 = System.out::println;<br><br>Comparator&lt;Integer&gt; com1 = (t1, t2) -&gt; Integer.compare(t1, t2);<br><span class="hljs-comment">// to</span><br>Comparator&lt;Integer&gt; com2 = Integer::compare;<br></code></pre></div></td></tr></table></figure>
+
 <ul>
 <li>情况三：类<code>::</code>实例方法名（特殊）</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Comparator&lt;String&gt; com1 = (s1, s2) -&gt; s1.compareTo(s2);<br><span class="hljs-comment">// to</span><br>Comparator&lt;String&gt; com2 = String::compareTo;<br><br>Function&lt;Employee, String&gt; func1 = e -&gt; e.getName();<br><span class="hljs-comment">// to</span><br>Function&lt;Employee, String&gt; func2 = e -&gt; Employee::getName;<br></code></pre></div></td></tr></table></figure>
+
 <p>使用情况：当要传递给 Lambda 体的操作已经有实现的方法了，可以用方法引用</p>
 <p>本质：方法引用本质上是 Lambda 表达式，Lambda 表达式作为函数式接口的实例。所以方法引用也是函数式接口的实例</p>
 <h3 id="构造器引用"><a href="#构造器引用" class="headerlink" title="构造器引用"></a>构造器引用</h3><p>构造器引用和方法引用类似，函数式接口的抽象方法的形参列表和构造器的形参列表一致。抽象方法的返回值类型即为构造器所属的类的类型</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Supplier&lt;Employee&gt; sup = () -&gt; <span class="hljs-keyword">new</span> Employee();<br><span class="hljs-comment">// to</span><br>Supplier&lt;Employee&gt; sup2 = Employee::<span class="hljs-keyword">new</span>;<br><br>Function&lt;Integer, Employee&gt; func = (id) -&gt; <span class="hljs-keyword">new</span> Employee(id);<br><span class="hljs-comment">// to</span><br>Function&lt;Integer, Employee&gt; func2 = Employee::<span class="hljs-keyword">new</span>;<br><br>BiFunction&lt;Integer, String, Employee&gt; bf1 = (id, name) -&gt; <span class="hljs-keyword">new</span> Employee(id, name);<br><span class="hljs-comment">// to</span><br>BiFunction&lt;Integer, String, Employee&gt; bf1 = Employee::<span class="hljs-keyword">new</span>;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Supplier&lt;Employee&gt; sup = () -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>();<br><span class="hljs-comment">// to</span><br>Supplier&lt;Employee&gt; sup2 = Employee::<span class="hljs-keyword">new</span>;<br><br>Function&lt;Integer, Employee&gt; func = (id) -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(id);<br><span class="hljs-comment">// to</span><br>Function&lt;Integer, Employee&gt; func2 = Employee::<span class="hljs-keyword">new</span>;<br><br>BiFunction&lt;Integer, String, Employee&gt; bf1 = (id, name) -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(id, name);<br><span class="hljs-comment">// to</span><br>BiFunction&lt;Integer, String, Employee&gt; bf1 = Employee::<span class="hljs-keyword">new</span>;<br></code></pre></div></td></tr></table></figure>
+
 <h3 id="数组引用"><a href="#数组引用" class="headerlink" title="数组引用"></a>数组引用</h3><p>可以把数组看作特殊的类，则写法与构造器引用相同</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Function&lt;Integer, String[]&gt; func = length -&gt; <span class="hljs-keyword">new</span> String[length];<br><span class="hljs-comment">// to</span><br>Function&lt;Integer, String[]&gt; func = String[]::<span class="hljs-keyword">new</span>;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Function&lt;Integer, String[]&gt; func = length -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[length];<br><span class="hljs-comment">// to</span><br>Function&lt;Integer, String[]&gt; func = String[]::<span class="hljs-keyword">new</span>;<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="强大的-Stream-API"><a href="#强大的-Stream-API" class="headerlink" title="强大的 Stream API"></a>强大的 Stream API</h2><p>Stream API（<code>java.util.stream</code>）把真正的函数式编程风格引入到 Java 中</p>
 <p>Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作</p>
 <h3 id="为什么要用-Stream-API"><a href="#为什么要用-Stream-API" class="headerlink" title="为什么要用 Stream API"></a>为什么要用 Stream API</h3><p>是集开发中，项目中多数数据源都来自 mySQL，Oracle 等。但现在数据源可以更多了，有 MongoDB，Redis 等，而这些 NoSQL 的数据需要 Java 层面处理。</p>
@@ -321,12 +333,16 @@
 <h3 id="创建-Stream-方式"><a href="#创建-Stream-方式" class="headerlink" title="创建 Stream 方式"></a>创建 Stream 方式</h3><p>方式一：通过集合</p>
 <p>Java8 中的 Collection 接口被扩展，提供了两个获取流的方法</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">List&lt;Integer&gt; list = Arrays.asList(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>);<br>Stream&lt;Integer&gt; stream = list.stream();<br>Stream&lt;Integer&gt; parallelStream = list.parallelStream();<br></code></pre></div></td></tr></table></figure>
+
 <p>方式二：通过数组</p>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">IntStream stream = Arrays.stream(<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;);<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-type">IntStream</span> <span class="hljs-variable">stream</span> <span class="hljs-operator">=</span> Arrays.stream(<span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;);<br></code></pre></div></td></tr></table></figure>
+
 <p>方式三：通过 Stream 的 of</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">Stream&lt;Integer&gt; stream = Stream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>);<br></code></pre></div></td></tr></table></figure>
+
 <p>方式四：创建无限流（不常用）</p>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 迭代</span><br>Stream.iterate(<span class="hljs-number">0</span>, t -&gt; t + <span class="hljs-number">2</span>).limit(<span class="hljs-number">10</span>).forEach(System.out::println);<br><span class="hljs-comment">// 生成</span><br>Stream.generate(Math::random).limit(<span class="hljs-number">10</span>).forEach(System.out::println);<br></code></pre></div></td></tr></table></figure>
+
 <h3 id="Stream-的中间操作"><a href="#Stream-的中间操作" class="headerlink" title="Stream 的中间操作"></a>Stream 的中间操作</h3><p>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理。而在终止操作时一次性全部处理，称为惰性求值</p>
 <p>筛选与切片：</p>
 <ul>
@@ -366,6 +382,7 @@
 <li><code>reduce(T identify, BinaryOperator&lt;T&gt; operator)</code>：将流中的元素反复结合起来，得到一个值，返回 <code>T</code>，第一个参数是初始值</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 求 1-10 的和</span><br>List&lt;Integer&gt; list = Arrays.asList(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>);<br>list.stream().reduce(<span class="hljs-number">0</span>, Integer::sum);<br></code></pre></div></td></tr></table></figure>
+
 <p>收集：</p>
 <ul>
 <li><code>collect(Collector c)</code>：将流转换为其他形式，接收一个 <code>Collector</code> 接口的实现，用于给 <code>Stream</code> 中的元素做汇总的方法</li>
@@ -378,6 +395,7 @@
 <li><code>toCollection()</code>：把流中元素收集到创建的集合，返回 <code>Collection&lt;T&gt;</code></li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">List&lt;Employee&gt; employeeList = employees.stream().collect(Collectors.toList());<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="Optional-类"><a href="#Optional-类" class="headerlink" title="Optional 类"></a>Optional 类</h2><p><code>Optional&lt;T&gt;</code> 类是一个容器类，可以保存类型 T 的值，代表这个值存在，或者仅仅保存 <code>null</code>，表示这个值不存在。原来用 <code>null</code> 表示一个值不存在，现在 <code>Optional</code> 可以更好地表达这个概念，并且可以避免空指针异常</p>
 <p>创建 <code>Optional</code> 对象的方法</p>
 <ul>

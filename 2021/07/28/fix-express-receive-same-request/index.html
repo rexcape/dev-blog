@@ -24,7 +24,7 @@
 <meta property="og:description" content="介绍如何解决 Express 收到两次请求">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-28T01:41:09.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.019Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Express">
@@ -76,7 +76,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -256,13 +256,15 @@
             
             <div class="markdown-body">
               <p>介绍如何解决 Express 收到两次请求</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h2><p>本来做一个服务器来接收 WebHook 请求，但是，一测试 WebHook 就会有两次请求进来，导致要执行的代码被重复执行两次，原代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">const</span> app = express();<br>app.use(express.json);<br><br><span class="hljs-comment">// Handle Functions...</span><br><br>app.listen(<span class="hljs-number">1919</span>);<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();<br>app.<span class="hljs-title function_">use</span>(express.<span class="hljs-property">json</span>);<br><br><span class="hljs-comment">// Handle Functions...</span><br><br>app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">1919</span>);<br></code></pre></div></td></tr></table></figure>
+
 <p>后来，打印出请求 IP 发现，会有两个值：<code>::ffff:127.0.0.1</code> 和 <code>::1</code>，经过搜索发现，这两个都是本机地址的 IPv6 标记，而如果监听 IPv6 地址，<code>net.Server</code> 也可能会监听 IPv4 地址导致收到两次重复请求。</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>上网找到如下解决方案：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">const</span> app = express();<br>app.use(express.json);<br><br><span class="hljs-comment">// Handle Functions...</span><br><br>app.listen(<span class="hljs-number">1919</span>, <span class="hljs-string">&quot;0.0.0.0&quot;</span>);<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();<br>app.<span class="hljs-title function_">use</span>(express.<span class="hljs-property">json</span>);<br><br><span class="hljs-comment">// Handle Functions...</span><br><br>app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">1919</span>, <span class="hljs-string">&quot;0.0.0.0&quot;</span>);<br></code></pre></div></td></tr></table></figure>
+
 <p>这样就可以只监听 IPv4 地址</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://codeplayer.vip/question/j7t0v/answer/j7t11">Node.js express 如何监听 IPv4 地址 - CodePlayer | 代码玩家</a></li>

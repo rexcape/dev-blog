@@ -24,7 +24,7 @@
 <meta property="og:description" content="Java 笔记 - 注解">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-17T13:07:36.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.832Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.019Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Java 注解">
@@ -76,7 +76,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -256,7 +256,7 @@
             
             <div class="markdown-body">
               <p>Java 笔记 - 注解</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>注解是代码里的特殊标记，这些标记可以在编译、类加载和运行时被读取并执行相应的处理。通过使用注解，程序员可以在不改变程序原有逻辑的情况下在源文件中嵌入一些补充信息。代码分析工具、开发工具和部署工具可以通过这些补充信息进行验证或者进行部署</p>
 <p>注解可以像修饰符一样被树勇，可用于修饰包、类、构造器、方法、成员变量、参数、局部变量的声明，这些信息被保存在注解的 <code>name=value</code> 对中</p>
@@ -279,7 +279,8 @@
 <li>没有成员定义的 <code>Annotation</code> 称为标记；包含成员变量的 <code>Annotation</code> 称为元数据 <code>Annotation</code></li>
 <li>注意：自定义注解必须配上注解的信息处理流程（使用反射）才有意义</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> MyAnnotation &#123;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;Hello&quot;</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> MyAnnotation &#123;<br>    String <span class="hljs-title function_">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> <span class="hljs-string">&quot;Hello&quot;</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><p>JDK 的元注解对现有的注解进行解释</p>
 <p>JDK5 提供了四个标准的元注解类型，分别是</p>
 <ul>
@@ -308,15 +309,18 @@
 <li>在 <code>MyAnnotation</code> 声明 <code>@Repeatable</code>，成员值为 <code>MyAnnotations.class</code></li>
 <li><code>MyAnnotation</code> 的 <code>Target</code>、<code>Retention</code> 和 <code>Inherited</code> 必须和 <code>MyAnnotations</code> 的相同</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// before jdk8</span><br><span class="hljs-comment">// err</span><br><span class="hljs-comment">// @MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-comment">// @Myannotation(&quot;abc&quot;)</span><br><span class="hljs-meta">@MyAnnotations(&#123;@MyAnnotation(&quot;hi&quot;), @Myannotation(&quot;abc&quot;)&#125;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeClass</span> </span>&#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// after jdk8</span><br><span class="hljs-meta">@MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-meta">@Myannotation(&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeClass</span> </span>&#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@Repeatable(MyAnnotations.class)</span><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// before jdk8</span><br><span class="hljs-comment">// err</span><br><span class="hljs-comment">// @MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-comment">// @Myannotation(&quot;abc&quot;)</span><br><span class="hljs-meta">@MyAnnotations(&#123;@MyAnnotation(&quot;hi&quot;), @Myannotation(&quot;abc&quot;)&#125;)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span> &#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; String <span class="hljs-title function_">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> <span class="hljs-string">&quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// after jdk8</span><br><span class="hljs-meta">@MyAnnotation(&quot;hi&quot;)</span><br><span class="hljs-meta">@Myannotation(&quot;abc&quot;)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SomeClass</span> &#123; <span class="hljs-comment">/* ... */</span>&#125;<br><br><span class="hljs-meta">@Repeatable(MyAnnotations.class)</span><br><span class="hljs-meta">@interface</span> MyAnnotation &#123; String <span class="hljs-title function_">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> <span class="hljs-string">&quot;hello&quot;</span>; &#125;<br><br><span class="hljs-meta">@interface</span> MyAnnotations &#123; MyAnnotation[] value(); &#125;<br></code></pre></div></td></tr></table></figure>
+
 <h3 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h3><p><code>ElementType</code> 里面多了两个：<code>TYPE_PARAMETER</code>，<code>TYPE_USE</code></p>
 <p>在 Java8 之前，注解只能是在声明的地方使用，Java8 开始，注解可以应用在任何地方</p>
 <ul>
 <li><code>TYPE_PARAMETER</code>：表示该注解能写在类型变量的声明语句中（如泛型声明）</li>
 <li><code>TYPE_USE</code>：表示该注解能写在使用类型的任何语句中</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span>&lt;@<span class="hljs-title">TypeDefine</span>() <span class="hljs-title">U</span>&gt; </span>&#123;<br>    <span class="hljs-keyword">private</span> U u;<br>    <span class="hljs-keyword">public</span> &lt;<span class="hljs-meta">@TypeDefine()</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">test</span><span class="hljs-params">(T t)</span> </span>&#123;&#125;<br>&#125;<br><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE_PARAMETER&#125;)</span><br><span class="hljs-meta">@interface</span> TypeDefine &#123;&#125;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span>&lt;<span class="hljs-meta">@TypeDefine()</span> U&gt; &#123;<br>    <span class="hljs-keyword">private</span> U u;<br>    <span class="hljs-keyword">public</span> &lt;<span class="hljs-meta">@TypeDefine()</span> T&gt; <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">(T t)</span> &#123;&#125;<br>&#125;<br><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE_PARAMETER&#125;)</span><br><span class="hljs-meta">@interface</span> TypeDefine &#123;&#125;<br></code></pre></div></td></tr></table></figure>
+
             </div>
             <hr>
             <div>

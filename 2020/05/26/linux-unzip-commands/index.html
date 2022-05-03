@@ -24,7 +24,7 @@
 <meta property="og:description" content="Linux 常用的解压命令">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-26T01:00:00.000Z">
-<meta property="article:modified_time" content="2022-04-11T07:42:58.828Z">
+<meta property="article:modified_time" content="2022-05-03T13:35:09.015Z">
 <meta property="article:author" content="rexcape">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -75,7 +75,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.3.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -255,17 +255,22 @@
             
             <div class="markdown-body">
               <p>Linux 常用的解压命令</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Linux 下常见的压缩包格式为 <code>zip tar.gz tar.bz2 tar.xz tar.Z</code><br>其中 <code>tar</code> 是打包格式，<code>gz2 bz2</code> 等后缀是指代压缩方式</p>
 <h2 id="filename-zip"><a href="#filename-zip" class="headerlink" title="filename.zip"></a>filename.zip</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ unzip filename.zip<br></code></pre></div></td></tr></table></figure>
+
 <h2 id="filename-tar-gz"><a href="#filename-tar-gz" class="headerlink" title="filename.tar.gz"></a>filename.tar.gz</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ tar -zxvf filename.tar.gz<br></code></pre></div></td></tr></table></figure>
+
 <p>-z：gzip - 压缩格式<br>-x：extract - 解压<br>-v：verbose - 详细信息<br>-f：file - 文件</p>
 <h2 id="filename-tar-bz2"><a href="#filename-tar-bz2" class="headerlink" title="filename.tar.bz2"></a>filename.tar.bz2</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ tar -jxvf filename.tar.bz2<br></code></pre></div></td></tr></table></figure>
+
 <p>-j：bz2 压缩方式</p>
 <h2 id="filename-tar-xz"><a href="#filename-tar-xz" class="headerlink" title="filename.tar.xz"></a>filename.tar.xz</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ tar -Jxvf filename.tar.xz<br></code></pre></div></td></tr></table></figure>
+
 <p>注意 J 大写</p>
 <h2 id="filename-tar-Z"><a href="#filename-tar-Z" class="headerlink" title="filename.tar.Z"></a>filename.tar.Z</h2><figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">$ tar -Zxvf filename.tar.Z<br></code></pre></div></td></tr></table></figure>
+
 <p>注意 Z 大写</p>
 <h2 id="简便写法"><a href="#简便写法" class="headerlink" title="简便写法"></a>简便写法</h2><p>首先，使用 <code>tar --version</code> 查看版本，从 1.15 版本以后可以直接使用 <code>tar -xvf</code> 来智能识别格式</p>
 <p>参考自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/cursorhu/p/5891699.html">Linux 下的解压命令小结 - cursorhu</a></p>
