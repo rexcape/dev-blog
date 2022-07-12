@@ -11,6 +11,12 @@ Docusaurus 设置中文菜单
 
 <!--more-->
 
+{% note warning %}
+
+注意：现在docusaurus官方已经改正该疑惑处
+
+{% endnote %}
+
 Docusaurus 是一个静态页面生成工具，其中每个文章的 Edit this page 和 Next 默认都是英文，在设置中设置 zh-CN 是无效的，需要设置为 zh-Hans
 
 在 `docusaurus.config.js` 文件的 `config` 字段中添加如下键值
