@@ -11,4 +11,6 @@ layout: about
 
 {% endnote %}
 
-应用软件开发者，Web 前端 react，Web 后端 springboot(java)、iris(go)，桌面开发 tauri(rust)
+~~我不知道~~
+
+工作中多数用 Vue、Spring 开发项目，偶尔会用 React、Nextjs、Rust 开发一些 side projects 或工具。目前正在学 Flutter、Clojure。
